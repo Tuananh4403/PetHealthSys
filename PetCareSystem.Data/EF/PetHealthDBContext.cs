@@ -14,7 +14,7 @@ namespace PetCareSystem.Data.EF
         public PetHealthDBContext(DbContextOptions options) : base(options)
         {
         }
-
+        public DbSet<User> Users { get; set; }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.ApplyConfiguration(new CustomerConfig());
