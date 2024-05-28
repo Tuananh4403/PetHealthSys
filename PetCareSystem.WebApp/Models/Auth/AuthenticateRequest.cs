@@ -1,12 +1,12 @@
 ﻿using System.ComponentModel.DataAnnotations;
-namespace PetHealthSys.PetCareSystem.WebApp.Models
+namespace PetCareSystem.WebApp.Models.Auth
 {
     public class AuthenticateRequest
     {
         [Required]
-        public string Email { get; set; }
-  
-        [Required] 
+        public string Username { get; set; }
+
+        [Required]
         public string Password { get; set; }
     }
 }
