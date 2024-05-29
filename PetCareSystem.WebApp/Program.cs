@@ -22,10 +22,11 @@ var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddControllers();
+builder.Services.AddSwaggerGen();
 
 // Register the DbContext, Repositories, and Services
 builder.Services.AddDbContext<PetHealthDBContext>(options =>
-    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+    options.UseSqlServer(builder.Configuration.GetConnectionString("PetHealthCareDb")));
 
 builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<IAuthService, AuthService>();
@@ -49,7 +50,7 @@ builder.Services.AddAuthentication(x =>
         ValidateAudience = false
     };
 });
-
+builder.Services.AddCors();
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -58,13 +59,26 @@ if (app.Environment.IsDevelopment())
     app.UseDeveloperExceptionPage();
 }
 
-app.UseHttpsRedirection();
+app.UseCors(x => x
+        .AllowAnyOrigin()
+        .AllowAnyMethod()
+        .AllowAnyHeader());
 
+
+app.UseHttpsRedirection();
 app.UseRouting();
+app.UseSwagger();
 
 app.UseAuthentication(); // Add this line
 app.UseAuthorization(); // Add this line
+app.UseSwaggerUI(c =>
+{
+    c.SwaggerEndpoint("/swagger/v1/swagger.json", "My API V1");
+});
+app.UseEndpoints(endpoints =>
+{
+    endpoints.MapControllers();
+});
 
-app.MapControllers();
 
-app.Run();
+app.Run("http://localhost:4000");
