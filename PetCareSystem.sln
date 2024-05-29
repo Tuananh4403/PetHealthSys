@@ -3,11 +3,17 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.9.34728.123
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PetCareSystem.WebApp", "PetCareSystem.WebApp\PetCareSystem.WebApp.csproj", "{A4EB4A73-90E5-40CB-A2D6-8B2FABBDDC59}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PetCareSystem.WebApp", "PetCareSystem.WebApp\PetCareSystem.WebApp.csproj", "{A4EB4A73-90E5-40CB-A2D6-8B2FABBDDC59}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PetCareSystem.Data", "PetCareSystem.Data\PetCareSystem.Data.csproj", "{7925DD94-91D6-4A02-BDAE-D327580EFD05}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PetCareSystem.Data", "PetCareSystem.Data\PetCareSystem.Data.csproj", "{7925DD94-91D6-4A02-BDAE-D327580EFD05}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PetCareSystem.Application", "PetCareSystem.Application\PetCareSystem.Application.csproj", "{EB6DD086-ED0B-444C-966C-D17C66F707EA}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PetCareSystem.Application", "PetCareSystem.Application\PetCareSystem.Application.csproj", "{EB6DD086-ED0B-444C-966C-D17C66F707EA}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PetCareSystem.BackendAPI", "PetCareSystem.BackendAPI\PetCareSystem.BackendAPI.csproj", "{CFB30BDA-CA22-40E2-B09E-6AF753D4E14A}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PetCareSystem.Utilitles", "PetCareSystem.Utilitles\PetCareSystem.Utilitles.csproj", "{604A3185-98A9-4D9B-9136-0F347C9B0EE7}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PetCareSystem.ViewModels", "PetCareSystem.ViewModels\PetCareSystem.ViewModels.csproj", "{1665C58E-BD6E-4A05-A349-7D7D527F1BBA}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -27,6 +33,18 @@ Global
 		{EB6DD086-ED0B-444C-966C-D17C66F707EA}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{EB6DD086-ED0B-444C-966C-D17C66F707EA}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{EB6DD086-ED0B-444C-966C-D17C66F707EA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{CFB30BDA-CA22-40E2-B09E-6AF753D4E14A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CFB30BDA-CA22-40E2-B09E-6AF753D4E14A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CFB30BDA-CA22-40E2-B09E-6AF753D4E14A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CFB30BDA-CA22-40E2-B09E-6AF753D4E14A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{604A3185-98A9-4D9B-9136-0F347C9B0EE7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{604A3185-98A9-4D9B-9136-0F347C9B0EE7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{604A3185-98A9-4D9B-9136-0F347C9B0EE7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{604A3185-98A9-4D9B-9136-0F347C9B0EE7}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1665C58E-BD6E-4A05-A349-7D7D527F1BBA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1665C58E-BD6E-4A05-A349-7D7D527F1BBA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1665C58E-BD6E-4A05-A349-7D7D527F1BBA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1665C58E-BD6E-4A05-A349-7D7D527F1BBA}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
