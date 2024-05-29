@@ -1,4 +1,5 @@
-﻿using System;
+﻿using PetCareSystem.Data.Configurations;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
@@ -21,5 +22,6 @@ namespace PetCareSystem.Data.Entites
         public string Email { get; set; }
         public int PhoneNumber { get; set; }
         public string Address { get; set; }
+        public List<Booking> Bookings { get; set; }
     }
 }
