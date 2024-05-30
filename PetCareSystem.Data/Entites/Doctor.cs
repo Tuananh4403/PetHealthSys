@@ -6,17 +6,11 @@ using System.Threading.Tasks;
 
 namespace PetCareSystem.Data.Entites
 {
-    public class Doctor
+    public class Doctor : BaseModel
     {
-        public int DoctorId { get; set; }
-        public string UserName { get; set; }
-        public string Password { get; set; }
-        public string FirstName { get; set; }
-        public string LastName { get; set; }
-        public DateTime Birthday { get; set; }
-        public string Email { get; set; }
-        public int PhoneNumber { get; set; }
-        public string Address { get; set; }
+        public int UserId { get; set; }
+        public virtual User User { get; set; }
+        public ICollection<Record> records { get; set; }
         public List<ManageRecord> ManageRecords { get; set; }
     }
 }

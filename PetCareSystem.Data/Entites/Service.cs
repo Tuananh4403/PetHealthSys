@@ -7,13 +7,11 @@ using System.Threading.Tasks;
 
 namespace PetCareSystem.Data.Entites
 {
-    public class Service
+    public class Service : BaseModel
     {
-        public int ServiceId { get; set; }
-        public string TypeOfService { get; set; }
-        public string ServiceName { get; set; }
+        public string? TypeOfService { get; set; }
+        public string? ServiceName { get; set; }
         public decimal Price { get; set; }
-        public List<Booking> Bookings { get; set; }
-        public List<ManageService> ManageSevices { get; set; }
+        public ICollection<BookingService>? BookingServicess { get; set; }
     }
 }
