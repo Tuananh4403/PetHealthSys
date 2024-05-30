@@ -14,7 +14,7 @@ namespace PetCareSystem.Data.Configurations
         public void Configure(EntityTypeBuilder<ManageService> builder)
         {
             builder.ToTable("ManageService");
-            builder.HasKey(t => t.ManageId);
+            builder.HasKey(t => new {t.AdminId, t.ServiceId});
             builder.Property(t => t.ManageId).ValueGeneratedOnAdd();
 
             

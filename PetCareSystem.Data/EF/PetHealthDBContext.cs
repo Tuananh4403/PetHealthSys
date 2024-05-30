@@ -37,6 +37,10 @@ namespace PetCareSystem.Data.EF
             modelBuilder.ApplyConfiguration(new BookingConfig());
             modelBuilder.ApplyConfiguration(new ManageServiceConfig());
             modelBuilder.ApplyConfiguration(new ManageRecordConfig());
+
+            modelBuilder.Entity<Booking>().Property(t => t.Total).HasColumnType("decimal(18,4)");
+            modelBuilder.Entity<Service>().Property(t => t.Price).HasColumnType("decimal(18,4)");
+            modelBuilder.Entity<ManageRecord>().HasOne(mr => mr.Record).WithMany(r => r.ManageRecords).HasForeignKey(mr => mr.RecordId).OnDelete(DeleteBehavior.Restrict);
             //base.OnModelCreating(modelBuilder);
         }
 

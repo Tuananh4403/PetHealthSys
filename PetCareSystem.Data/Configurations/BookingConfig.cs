@@ -15,7 +15,7 @@ namespace PetCareSystem.Data.Configurations
         {
             builder.ToTable("Booking");
 
-            builder.HasKey(t => new {t.BookingId, t.CustomerId, t.PetId, t.ServiceId, t.StaffId});
+            builder.HasKey(t => new {t.CustomerId, t.PetId, t.ServiceId, t.StaffId});
             builder.Property(t => t.BookingId).ValueGeneratedOnAdd();
 
             builder.HasOne(t => t.Customer).WithMany(bk => bk.Bookings)

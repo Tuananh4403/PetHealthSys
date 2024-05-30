@@ -15,7 +15,7 @@ namespace PetCareSystem.Data.Configurations
         {
             builder.ToTable("ManageRecord");
 
-            builder.HasKey(t => t.ManageId);
+            builder.HasKey(t => new {t.DoctorId, t.RecordId});
             builder.Property(t => t.ManageId).ValueGeneratedOnAdd();
 
             builder.HasOne(t => t.Doctor).WithMany(bk => bk.ManageRecords)
@@ -23,10 +23,7 @@ namespace PetCareSystem.Data.Configurations
 
             builder.HasOne(t => t.Record).WithMany(bk => bk.ManageRecords)
                 .HasForeignKey(bk => bk.RecordId);
-
-            builder.HasOne(t => t.Record)
-               .WithMany(bk => bk.ManageRecords)
-               .HasForeignKey(t => new { t.RecordId, t.PetId });
+            
         }
     }
 }

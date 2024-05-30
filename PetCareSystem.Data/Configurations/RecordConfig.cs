@@ -15,7 +15,7 @@ namespace PetCareSystem.Data.Configurations
         {
             builder.ToTable("Records");
 
-            builder.HasKey(x => new {x.RecordId, x.PetId});
+            builder.HasKey(x => x.RecordId);
             builder.Property(x => x.RecordId).ValueGeneratedOnAdd();
 
             builder.Property(x => x.Medicine).HasMaxLength(300).IsUnicode(true);
