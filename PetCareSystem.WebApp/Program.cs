@@ -22,17 +22,6 @@ IConfiguration configuration = new ConfigurationBuilder()
 var appSetting = configuration["AppSettings:Secret"];
 var builder = WebApplication.CreateBuilder(args);
 
-builder.Services.AddAuthentication(option =>
-{
-    option.DefaultScheme = CookieAuthenticationDefaults.AuthenticationScheme;
-    option.DefaultChallengeScheme = GoogleDefaults.AuthenticationScheme;
-})
-    .AddCookie()
-    .AddGoogle(GoogleDefaults.AuthenticationScheme, options =>
-    {
-        options.ClientId = builder.Configuration.GetSection("GoogleKeys:ClientId").Value;
-        options.ClientSecret = builder.Configuration.GetSection("GoogleKeys:ClientSecret").Value;
-    });
 
 // Add services to the container.
 builder.Services.AddControllers();
