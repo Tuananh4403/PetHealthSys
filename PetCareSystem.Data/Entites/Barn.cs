@@ -6,13 +6,12 @@ using System.Threading.Tasks;
 
 namespace PetCareSystem.Data.Entites
 {
-    public class Barn
+    public class Barn : BaseModel
     {
-        public int BarnId { get; set; }
-        public DateTime DateSaveBarn { get; set; }
-        public string Status { get; set; }
-        public string Medicine { get; set; }
-        public string Vaccine { get; set; }
-        public Boolean Result { get; set; }
+        public DateTime? DateStart { get; set; }
+        public DateTime? DateEnd { get; set;}
+        public string? Status { get; set; }
+        public ICollection<Record>? Records{ get; set;}
+        public Boolean? Result { get; set; }
     }
 }

@@ -6,14 +6,15 @@ using System.Threading.Tasks;
 
 namespace PetCareSystem.Data.Entites
 {
-    public class Record
+    public class Record : BaseModel
     {
-        public int RecordId { get; set; }
-        public string Medicine { get; set; }
-        public string Vaccine { get; set; }
-        public List<ManageRecord> ManageRecords { get; set; }
-        public int PetId { get; set; }
-        public Pet Pet { get; set; }
-        public List<Pet> Pets { get; set; }
+        public Boolean saveBarn { get; set; }
+        public int? DoctorId { get; set; }
+        public Doctor? Doctor { get; set; }
+        public string? DetailPrediction { get; set; }
+        public string? Conclude { get; set; }
+        public int? PetId { get; set; }
+        public Pet? Pet { get; set; }
+        public ICollection<RecordDetail>? RecordDetails { get; set; }
     }
 }

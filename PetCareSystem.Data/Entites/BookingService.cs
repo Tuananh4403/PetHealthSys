@@ -6,11 +6,13 @@ using System.Threading.Tasks;
 
 namespace PetCareSystem.Data.Entites
 {
-    public class BookingService
+    public class BookingService : BaseModel
     {
         public int ServiceId { get; set; }
         public Service? Service { get; set; }
         public int BookingId { get; set;}
-        public Booking? Booking { get; set; }
+        public virtual Booking? Booking { get; set; }
+        public string? Note { get; set; }
+        public decimal Price { get; set; }
     }
 }

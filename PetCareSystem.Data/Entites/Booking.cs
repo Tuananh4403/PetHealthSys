@@ -12,10 +12,11 @@ namespace PetCareSystem.Data.Entites
             BookingServices = new List<BookingService>();
         }
 
-        public int Number { get; set; }
+        public int? Number { get; set; }
         public decimal Total { get; set; }
-        public DateTime BookingTime { get; set; }
-        public int CustomerId { get; set; }
+        public DateTime? BookingTime { get; set; }
+        public int? CustomerId { get; set; }
+        public string? Status { get; set; }
         public virtual Customer Customer { get; set; }
         public int PetId { get; set; }
         public virtual Pet Pet { get; set; }

@@ -15,18 +15,18 @@ namespace PetCareSystem.Data.Configurations
         {
             builder.ToTable("Barns");
 
-            builder.HasKey(x => x.BarnId);
-            builder.Property(x => x.BarnId).ValueGeneratedOnAdd();
+            builder.HasKey(x => x.Id);
 
-            builder.Property(x => x.DateSaveBarn).IsRequired();
+            builder.Property(x => x.Id).ValueGeneratedOnAdd();
 
-            builder.Property(x => x.Status).IsRequired().HasMaxLength(1000).IsUnicode(true);
+            builder.Property(x => x.DateStart);
 
-            builder.Property(x => x.Medicine).HasMaxLength(300).IsUnicode(true);
+            builder.Property(x => x.DateEnd);
 
-            builder.Property(x => x.Vaccine).HasMaxLength(250).IsUnicode(true);
+            builder.Property(x => x.Status).HasMaxLength(1000).IsUnicode(true);
+            builder.Property(x => x.IsDeleted);
 
-            builder.Property(x => x.Result).IsRequired();
+            builder.Property(x => x.Result);
         }
     }
 }

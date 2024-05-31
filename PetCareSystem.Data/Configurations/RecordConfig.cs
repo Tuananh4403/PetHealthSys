@@ -15,12 +15,12 @@ namespace PetCareSystem.Data.Configurations
         {
             builder.ToTable("Records");
 
-            builder.HasKey(x => x.RecordId);
-            builder.Property(x => x.RecordId).ValueGeneratedOnAdd();
-
-            builder.Property(x => x.Medicine).HasMaxLength(300).IsUnicode(true);
-            builder.Property(x => x.Vaccine).HasMaxLength(300).IsUnicode(true);
-            
+            builder.HasKey(x => x.Id);
+            builder.Property(x => x.Id).ValueGeneratedOnAdd();
+            builder.Property(x=>x.DoctorId);
+            builder.Property(x=>x.Conclude);
+            builder.Property(x=>x.DetailPrediction);
+            builder.Property(x=>x.PetId);
             builder.HasOne(t => t.Pet).WithMany(t => t.Records)
                 .HasForeignKey(t => t.PetId);
         }

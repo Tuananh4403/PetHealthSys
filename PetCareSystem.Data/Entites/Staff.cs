@@ -10,7 +10,7 @@ namespace PetCareSystem.Data.Entites
     public class Staff : BaseModel
     {
         public int UserId { get; set; }
-        public virtual User User { get; set; }
-        public ICollection<Booking> Bookings { get; set; }
+        public virtual User? User { get; set; }
+        public ICollection<Booking>? Bookings { get; set; }
     }
 }
