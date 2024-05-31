@@ -8,13 +8,13 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
 using PetCareSystem.Services.Helpers;
+using Microsoft.Extensions.Configuration;
 
 namespace PetCareSystem.Services
 {
     public class AuthService : IAuthService
     {
         private readonly IUserRepository _userRepository;
-        private readonly AppSetting _appSetting;
 
         public AuthService(IUserRepository userRepository)
         {
@@ -33,7 +33,7 @@ namespace PetCareSystem.Services
             return new AuthenticationResult { Success = true, Token = token };
         }
 
-        public async Task RegisterAsync(string username, string password)
+        public async Task RegisterAsync(string username, string password )
         {
             var user = new User
             {
@@ -52,8 +52,15 @@ namespace PetCareSystem.Services
 
         private string GenerateToken(User user)
         {
+
+            IConfiguration configuration = new ConfigurationBuilder()
+                        .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
+                        .Build();
+
+            // Access configuration settings
+            var appSetting = configuration["AppSettings:Secret"];
             var tokenHandler = new JwtSecurityTokenHandler();
-            var key = Encoding.ASCII.GetBytes(_appSetting.Secret);
+            var key = Encoding.ASCII.GetBytes(appSetting);
             var tokenDescriptor = new SecurityTokenDescriptor
             {
                 Subject = new ClaimsIdentity(new[] { new Claim("id", user.Id.ToString()) }),

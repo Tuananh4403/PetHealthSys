@@ -10,6 +10,8 @@ using System.Text;
 using PetCareSystem.Data.Repositories.Users;
 using PetCareSystem.Services.Auth;
 using System;
+using PetCareSystem.Services.Services.Bookings;
+using PetCareSystem.Data.Repositories.Bookings;
 
 
 IConfiguration configuration = new ConfigurationBuilder()
@@ -30,6 +32,8 @@ builder.Services.AddDbContext<PetHealthDBContext>(options =>
 
 builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<IAuthService, AuthService>();
+builder.Services.AddScoped<IBookingServices, BookingServices>();
+builder.Services.AddScoped<IBookingRepository, BookingRepository>();
 
 // Configure JWT authentication
 var key = Encoding.ASCII.GetBytes(appSetting);
@@ -75,10 +79,7 @@ app.UseSwaggerUI(c =>
 {
     c.SwaggerEndpoint("/swagger/v1/swagger.json", "My API V1");
 });
-app.UseEndpoints(endpoints =>
-{
-    endpoints.MapControllers();
-});
+app.MapControllers();
 
 
 app.Run("http://localhost:4000");
