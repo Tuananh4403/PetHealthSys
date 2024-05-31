@@ -51,6 +51,7 @@ builder.Services.AddAuthentication(x =>
     };
 });
 builder.Services.AddCors();
+builder.Services.AddControllersWithViews();
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -79,6 +80,10 @@ app.UseEndpoints(endpoints =>
 {
     endpoints.MapControllers();
 });
+app.MapControllerRoute(
+                name: "default",
+                pattern: "{controller=Home}/{action=Index}/{id?}");
+
 
 
 app.Run("http://localhost:4000");
