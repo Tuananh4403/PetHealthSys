@@ -11,7 +11,9 @@ namespace PetCareSystem.Data.Entites
         public Boolean Gender { get; set; }
         public DateTime Birthday { get; set; }
         public string? Species { get; set; }
-        public List<Booking>? Bookings { get; set; }
-        public List<Record>? Records { get; set; }
+        public int CustomerId { get; set; }
+        public Customer Customer { get; set; }
+        public ICollection<Booking>? Bookings { get; set; }
+        public ICollection<Record>? Records { get; set; }
     }
 }

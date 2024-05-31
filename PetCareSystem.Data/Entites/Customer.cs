@@ -12,6 +12,8 @@ namespace PetCareSystem.Data.Entites
     
     public class Customer : BaseModel
     {
+        public int UserId { get; set; }
+        public User? User { get; set; }
         public ICollection<Pet>? Pets { get; set; }
         public ICollection<Booking>? Bookings { get; set; }
     }

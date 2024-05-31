@@ -13,16 +13,37 @@ namespace PetCareSystem.Data.Configurations
     {
         public void Configure(EntityTypeBuilder<Record> builder)
         {
+            // Table name
             builder.ToTable("Records");
 
-            builder.HasKey(x => x.Id);
-            builder.Property(x => x.Id).ValueGeneratedOnAdd();
-            builder.Property(x=>x.DoctorId);
-            builder.Property(x=>x.Conclude);
-            builder.Property(x=>x.DetailPrediction);
-            builder.Property(x=>x.PetId);
-            builder.HasOne(t => t.Pet).WithMany(t => t.Records)
-                .HasForeignKey(t => t.PetId);
+            // Primary key
+            builder.HasKey(r => r.Id);
+
+            // Properties
+            builder.Property(r => r.saveBarn)
+                   .IsRequired();
+
+            builder.Property(r => r.DetailPrediction)
+                   .HasMaxLength(1000);
+
+            builder.Property(r => r.Conclude)
+                   .HasMaxLength(1000);
+
+            // Relationships
+            builder.HasOne(r => r.Doctor)
+                   .WithMany(d => d.Records)
+                   .HasForeignKey(r => r.DoctorId)
+                   .OnDelete(DeleteBehavior.Restrict);
+
+            builder.HasOne(r => r.Pet)
+                   .WithMany(p => p.Records)
+                   .HasForeignKey(r => r.PetId)
+                   .OnDelete(DeleteBehavior.Restrict);
+
+            builder.HasMany(r => r.RecordDetails)
+                   .WithOne(rd => rd.Record)
+                   .HasForeignKey(rd => rd.RecordId)
+                   .OnDelete(DeleteBehavior.Restrict);
         }
     }
 }

@@ -13,23 +13,20 @@ namespace PetCareSystem.Data.Configurations
     {
         public void Configure(EntityTypeBuilder<Staff> builder)
         {
+            // Table name
             builder.ToTable("Staff");
 
-            builder.HasKey(x => x.StaffId);
-            builder.Property(x => x.StaffId).ValueGeneratedOnAdd();
+            // Primary key
+            builder.HasKey(s => s.Id);
 
-            builder.Property(x => x.UserName).IsRequired().HasMaxLength(250);
-            builder.Property(x => x.Password).IsRequired().HasMaxLength(250);
+            builder.Property(s => s.UserId).IsRequired();
+            // Relationship with Bookings
+            builder.HasMany(s => s.Bookings)
+                   .WithOne(b => b.Staff)
+                   .HasForeignKey(b => b.StaffId)
+                   .OnDelete(DeleteBehavior.Restrict); // Set null if the staff is deleted
 
-            builder.Property(x => x.FirstName).IsRequired().HasMaxLength(250).IsUnicode(true);
-            builder.Property(x => x.LastName).IsRequired().HasMaxLength(250).IsUnicode(true);
-            builder.Property(x => x.Email).IsRequired().HasMaxLength(250);
-            
-            builder.Property(x => x.Birthday).IsRequired();
-            builder.Property(x => x.PhoneNumber).IsRequired();
-
-            builder.Property(x => x.Address).IsRequired().HasMaxLength(500).IsUnicode(true);
-
+            // Other configurations if needed
         }
     }
 }

@@ -13,20 +13,21 @@ namespace PetCareSystem.Data.Configurations
     {
         public void Configure(EntityTypeBuilder<Barn> builder)
         {
+            // Table name
             builder.ToTable("Barns");
 
-            builder.HasKey(x => x.Id);
+            // Primary key
+            builder.HasKey(b => b.Id);
 
-            builder.Property(x => x.Id).ValueGeneratedOnAdd();
+            // Soft delete query filter
+            builder.HasQueryFilter(b => b.DeletedAt == null);
 
-            builder.Property(x => x.DateStart);
+            // Relationships
+            builder.HasMany(b => b.Records)
+                   .WithOne(r => r.Barn)
+                   .HasForeignKey(r => r.BarnId);
 
-            builder.Property(x => x.DateEnd);
-
-            builder.Property(x => x.Status).HasMaxLength(1000).IsUnicode(true);
-            builder.Property(x => x.IsDeleted);
-
-            builder.Property(x => x.Result);
+            // Other configurations if needed
         }
     }
 }

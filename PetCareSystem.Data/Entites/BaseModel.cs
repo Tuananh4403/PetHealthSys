@@ -14,13 +14,13 @@ namespace PetCareSystem.Data.Entites
     public int Id { get; set; }
     public DateTime CreatedAt { get; set; }
     public DateTime UpdatedAt { get; set; }
-    public bool IsDeleted { get; set; }
+    public DateTime? DeletedAt { get; set; }
 
     protected BaseModel()
     {
         CreatedAt = DateTime.Now;
         UpdatedAt = DateTime.Now;
-        IsDeleted = false;
+        DeletedAt = null;
     }
 }
 

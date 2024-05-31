@@ -1,11 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using PetCareSystem.Data.Entites;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace PetCareSystem.Data.Configurations
 {
@@ -13,23 +8,45 @@ namespace PetCareSystem.Data.Configurations
     {
         public void Configure(EntityTypeBuilder<Booking> builder)
         {
-            builder.ToTable("Booking");
+            // Table name
+            builder.ToTable("Bookings");
 
-            builder.HasKey(t => new {t.CustomerId, t.PetId, t.ServiceId, t.StaffId});
-            builder.Property(t => t.BookingId).ValueGeneratedOnAdd();
+            // Primary key
+            builder.HasKey(b => b.Id);
 
-            builder.HasOne(t => t.Customer).WithMany(bk => bk.Bookings)
-                .HasForeignKey(bk => bk.CustomerId);
+            // Properties
+            builder.Property(b => b.Number)
+                   .IsRequired(false);
 
-            builder.HasOne(t => t.Pet).WithMany(bk => bk.Bookings)
-                .HasForeignKey(bk => bk.PetId);
+            builder.Property(b => b.Total)
+                   .IsRequired();
 
-            builder.HasOne(t => t.Service).WithMany(bk => bk.Bookings)
-                .HasForeignKey(bk => bk.ServiceId);
+            builder.Property(b => b.BookingTime)
+                   .IsRequired(false);
 
-            builder.HasOne(t => t.Staff).WithMany(bk => bk.Bookings)
-                .HasForeignKey(bk => bk.StaffId);
-            
+            builder.Property(b => b.Status)
+                   .HasMaxLength(50);
+
+            // Relationships
+            builder.HasOne(b => b.Customer)
+                   .WithMany(c => c.Bookings)
+                   .HasForeignKey(b => b.CustomerId)
+                   .OnDelete(DeleteBehavior.SetNull);
+
+            builder.HasOne(b => b.Pet)
+                   .WithMany(p => p.Bookings)
+                   .HasForeignKey(b => b.PetId)
+                   .OnDelete(DeleteBehavior.Restrict);
+
+            builder.HasOne(b => b.Staff)
+                   .WithMany(s => s.Bookings)
+                   .HasForeignKey(b => b.StaffId)
+                   .OnDelete(DeleteBehavior.Restrict);
+
+            builder.HasMany(b => b.BookingServices)
+                   .WithOne(bs => bs.Booking)
+                   .HasForeignKey(bs => bs.BookingId)
+                   .OnDelete(DeleteBehavior.Restrict);
         }
     }
 }

@@ -13,16 +13,38 @@ namespace PetCareSystem.Data.Configurations
     {
         public void Configure(EntityTypeBuilder<Service> builder)
         {
-            builder.ToTable("Service");
+            // Table name
+            builder.ToTable("Services");
 
-            builder.HasKey(x => x.ServiceId);
-            builder.Property(x =>x.ServiceId).ValueGeneratedOnAdd();
+            // Primary key
+            builder.HasKey(s => s.Id);
 
-            builder.Property(x => x.TypeOfService).IsRequired().HasMaxLength(500).IsUnicode(true);
+            // Properties
+            builder.Property(s => s.TypeOfService)
+                   .HasMaxLength(100);
 
-            builder.Property(x => x.ServiceName).IsRequired().HasMaxLength(300).IsUnicode(true);
+            builder.Property(s => s.ServiceName)
+                   .HasMaxLength(100);
 
-            builder.Property(x => x.Price).IsRequired();
+            builder.Property(s => s.Price)
+                   .IsRequired();
+
+            builder.Property(s => s.Status)
+                   .HasMaxLength(50);
+
+            builder.Property(s => s.Note)
+                   .HasMaxLength(200);
+
+            // Relationships
+            builder.HasMany(s => s.BookingServicess)
+                   .WithOne(bs => bs.Service)
+                   .HasForeignKey(bs => bs.ServiceId)
+                   .OnDelete(DeleteBehavior.Restrict);
+
+            builder.HasMany(s => s.RecordDetails)
+                   .WithOne(rd => rd.Service)
+                   .HasForeignKey(rd => rd.ServiceId)
+                   .OnDelete(DeleteBehavior.Restrict);
         }
     }
 }

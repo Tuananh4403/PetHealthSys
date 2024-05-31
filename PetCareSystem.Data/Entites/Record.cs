@@ -15,6 +15,8 @@ namespace PetCareSystem.Data.Entites
         public string? Conclude { get; set; }
         public int? PetId { get; set; }
         public Pet? Pet { get; set; }
+        public int? BarnId { get; set; }
+        public Barn? Barn { get; set; }
         public ICollection<RecordDetail>? RecordDetails { get; set; }
     }
 }

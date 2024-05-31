@@ -1,11 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using PetCareSystem.Data.Entites;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace PetCareSystem.Data.Configurations
 {
@@ -13,31 +8,32 @@ namespace PetCareSystem.Data.Configurations
     {
         public void Configure(EntityTypeBuilder<Pet> builder)
         {
-            builder.ToTable("Pet");
+            // Table name
+            builder.ToTable("Pets");
 
+            // Primary key
             builder.HasKey(p => p.PetId);
-            builder.Property(p => p.PetId).ValueGeneratedOnAdd();
 
+            // Properties
             builder.Property(p => p.PetName)
-                .IsRequired()
-                .HasMaxLength(250)
-                .IsUnicode(true);
+                   .HasMaxLength(255);
 
             builder.Property(p => p.KindOfPet)
-                .IsRequired()
-                .HasMaxLength(250)
-                .IsUnicode(true);
-
-            builder.Property(p => p.Gender)
-               .IsRequired();
-
-            builder.Property(p => p.Birthday)
-                .IsRequired();
+                   .HasMaxLength(255);
 
             builder.Property(p => p.Species)
-                .IsRequired()
-                .HasMaxLength(250)
-                .IsUnicode(true);
+                   .HasMaxLength(255);
+
+            // Relationships
+            builder.HasMany(p => p.Bookings)
+                   .WithOne(b => b.Pet)
+                   .HasForeignKey(b => b.PetId)
+                   .OnDelete(DeleteBehavior.Restrict);
+
+            builder.HasMany(p => p.Records)
+                   .WithOne(r => r.Pet)
+                   .HasForeignKey(r => r.PetId)
+                   .OnDelete(DeleteBehavior.Restrict);
         }
     }
 }
