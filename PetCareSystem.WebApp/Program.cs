@@ -10,6 +10,8 @@ using System.Text;
 using PetCareSystem.Data.Repositories.Users;
 using PetCareSystem.Services.Auth;
 using System;
+using Microsoft.AspNetCore.Authentication.Google;
+using Microsoft.AspNetCore.Authentication.Cookies;
 
 
 IConfiguration configuration = new ConfigurationBuilder()
@@ -19,6 +21,18 @@ IConfiguration configuration = new ConfigurationBuilder()
 // Access configuration settings
 var appSetting = configuration["AppSettings:Secret"];
 var builder = WebApplication.CreateBuilder(args);
+
+builder.Services.AddAuthentication(option =>
+{
+    option.DefaultScheme = CookieAuthenticationDefaults.AuthenticationScheme;
+    option.DefaultChallengeScheme = GoogleDefaults.AuthenticationScheme;
+})
+    .AddCookie()
+    .AddGoogle(GoogleDefaults.AuthenticationScheme, options =>
+    {
+        options.ClientId = builder.Configuration.GetSection("GoogleKeys:ClientId").Value;
+        options.ClientSecret = builder.Configuration.GetSection("GoogleKeys:ClientSecret").Value;
+    });
 
 // Add services to the container.
 builder.Services.AddControllers();
@@ -53,6 +67,8 @@ builder.Services.AddAuthentication(x =>
 builder.Services.AddCors();
 var app = builder.Build();
 
+
+
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
@@ -79,6 +95,8 @@ app.UseEndpoints(endpoints =>
 {
     endpoints.MapControllers();
 });
+
+
 
 
 app.Run("http://localhost:4000");
