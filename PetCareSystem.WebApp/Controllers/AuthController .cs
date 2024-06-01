@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Authorization;
 using PetCareSystem.Services;
-using PetCareSystem.WebApp.Models.Auth;
+using PetCareSystem.Services.Models.Auth;
 using System.Threading.Tasks;
 using PetCareSystem.Services.Auth;
 
@@ -19,7 +19,7 @@ namespace PetCareSystem.WebApp.Controllers
         }
 
         [HttpPost("login")]
-        public async Task<IActionResult> Login([FromBody] AuthenticateRequest model)
+        public async Task<IActionResult> Login(AuthenticateRequest model)
         {
             if (!ModelState.IsValid)
             {
@@ -36,7 +36,7 @@ namespace PetCareSystem.WebApp.Controllers
         }
 
         [HttpPost("register")]
-        public async Task<IActionResult> Register([FromBody] RegisterRequest model)
+        public async Task<IActionResult> Register( RegisterRequest model)
         {
             if (!ModelState.IsValid)
             {
