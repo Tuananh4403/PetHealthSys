@@ -3,11 +3,6 @@
 }
 
 <br />
-@if (Context.User.Identity.IsAuthenticated)
-{
-    <br />
-    <h3>Welcome @User.Identity.Name</h3>
+<div id="app"></div>
 
-    <br />
-    <a asp-controller="Login" asp-action="Logout">Logout</a>
-}
+<script src="~/dist/bundle.js"></script>
