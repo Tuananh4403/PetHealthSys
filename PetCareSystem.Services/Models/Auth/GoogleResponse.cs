@@ -1,4 +1,4 @@
-﻿namespace PetCareSystem.WebApp.Models.Auth
+﻿namespace PetCareSystem.Services.Models.Auth
 {
     public class GoogleResponse
     {

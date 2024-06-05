@@ -24,6 +24,11 @@ namespace PetCareSystem.Data.Repositories.Users
             await _dbContext.SaveChangesAsync();
         }
 
+        public async Task<User> GetUserById(int id)
+        {
+            return await _dbContext.Users.SingleOrDefaultAsync(u => u.Id == id);
+        }
+
         public async Task<User> GetUserByUsernameAsync(string username)
         {
             return await _dbContext.Users.SingleOrDefaultAsync(u => u.Username == username);

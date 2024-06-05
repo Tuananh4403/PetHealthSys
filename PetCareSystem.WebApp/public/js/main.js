@@ -1,6 +1,5 @@
-import Vue from 'vue';
+import { createApp } from 'vue';
+
 import HelloWorld from './components/HelloWorld.vue';
 
-new Vue({
-    render: h => h(HelloWorld),
-}).$mount('#app');
+createApp(HelloWorld).mount('#app');

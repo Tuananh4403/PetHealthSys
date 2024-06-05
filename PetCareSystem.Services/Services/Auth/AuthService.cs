@@ -1,7 +1,6 @@
 ﻿using System.Threading.Tasks;
 using PetCareSystem.Data.Entites;
 using PetCareSystem.Data.Repositories.Users;
-using PetCareSystem.Services.Auth;
 using BCrypt.Net;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
@@ -10,7 +9,7 @@ using System.Text;
 using PetCareSystem.Services.Helpers;
 using Microsoft.Extensions.Configuration;
 
-namespace PetCareSystem.Services
+namespace PetCareSystem.Services.Services.Auth
 {
     public class AuthService : IAuthService
     {
@@ -33,11 +32,17 @@ namespace PetCareSystem.Services
             return new AuthenticationResult { Success = true, Token = token };
         }
 
-        public async Task RegisterAsync(string username, string password )
+        public async Task RegisterAsync(string username, string password, string firstName, string lastName, string email)
         {
             var user = new User
             {
                 Username = username,
+                FirstName = firstName,
+                LastName = lastName,
+                Email = email,
+                Birthday = DateTime.Now,
+                PhoneNumber = "0900003",
+                 Address = "test",
                 Password = HashPassword(password)
             };
 
@@ -76,6 +81,11 @@ namespace PetCareSystem.Services
         {
             // Implement password hashing
             return BCrypt.Net.BCrypt.HashPassword(password);
+        }
+
+        public Task<User?> GetById(int userId)
+        {
+            return _userRepository.GetUserById(userId);
         }
     }
 }

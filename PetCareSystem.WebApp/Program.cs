@@ -6,12 +6,12 @@ using Microsoft.IdentityModel.Tokens;
 using PetCareSystem.Data.EF;
 using PetCareSystem.Data.Repositories.Bookings;
 using PetCareSystem.Data.Repositories.Users;
-using PetCareSystem.Services;
-using PetCareSystem.Services.Auth;
+using PetCareSystem.Services.Services.Auth;
 using PetCareSystem.Services.Helpers;
 using PetCareSystem.Services.Services.Bookings;
 using System.Text;
 using Microsoft.AspNetCore.Mvc.ViewFeatures;
+using PetCareSystem.WebApp.Helpers;
 
 
 
@@ -97,6 +97,7 @@ app.UseSwagger();
 
 app.UseAuthentication(); // Add this line
 app.UseAuthorization(); // Add this line
+app.UseMiddleware<JwtMiddleware>();
 app.UseSwaggerUI(c =>
 {
     c.SwaggerEndpoint("/swagger/v1/swagger.json", "My API V1");
@@ -108,3 +109,4 @@ app.MapControllerRoute(
 
 
 app.Run("http://localhost:4000");
+

@@ -2,12 +2,13 @@
 using PetCareSystem.Data.Entites;
 using System.Threading.Tasks;
 
-namespace PetCareSystem.Services.Auth
+namespace PetCareSystem.Services.Services.Auth
 {
     public interface IAuthService
     {
+        Task<User?> GetById(int userId);
         Task<AuthenticationResult> LoginAsync(string username, string password);
-        Task RegisterAsync(string username, string password);
+        Task RegisterAsync(string username, string password, string firstName, string lastName, string email);
     }
     public class AuthenticationResult
     {
