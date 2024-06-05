@@ -3,11 +3,11 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.9.34728.123
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PetCareSystem.WebApp", "PetCareSystem.WebApp\PetCareSystem.WebApp.csproj", "{A4EB4A73-90E5-40CB-A2D6-8B2FABBDDC59}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PetCareSystem.WebApp", "PetCareSystem.WebApp\PetCareSystem.WebApp.csproj", "{A4EB4A73-90E5-40CB-A2D6-8B2FABBDDC59}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PetCareSystem.Data", "PetCareSystem.Data\PetCareSystem.Data.csproj", "{7925DD94-91D6-4A02-BDAE-D327580EFD05}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PetCareSystem.Data", "PetCareSystem.Data\PetCareSystem.Data.csproj", "{7925DD94-91D6-4A02-BDAE-D327580EFD05}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PetCareSystem.Application", "PetCareSystem.Application\PetCareSystem.Application.csproj", "{EB6DD086-ED0B-444C-966C-D17C66F707EA}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PetCareSystem.Services", "PetCareSystem.Services\PetCareSystem.Services.csproj", "{BA8C7911-9CAA-4022-A653-EE8B25ABBDD3}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -23,10 +23,10 @@ Global
 		{7925DD94-91D6-4A02-BDAE-D327580EFD05}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{7925DD94-91D6-4A02-BDAE-D327580EFD05}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{7925DD94-91D6-4A02-BDAE-D327580EFD05}.Release|Any CPU.Build.0 = Release|Any CPU
-		{EB6DD086-ED0B-444C-966C-D17C66F707EA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{EB6DD086-ED0B-444C-966C-D17C66F707EA}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{EB6DD086-ED0B-444C-966C-D17C66F707EA}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{EB6DD086-ED0B-444C-966C-D17C66F707EA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BA8C7911-9CAA-4022-A653-EE8B25ABBDD3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BA8C7911-9CAA-4022-A653-EE8B25ABBDD3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BA8C7911-9CAA-4022-A653-EE8B25ABBDD3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BA8C7911-9CAA-4022-A653-EE8B25ABBDD3}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

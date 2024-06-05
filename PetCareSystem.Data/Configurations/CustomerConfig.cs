@@ -15,21 +15,20 @@ namespace PetCareSystem.Data.Configurations
         {
             builder.ToTable("Customers");
 
-            builder.HasKey(x => x.CustomerId);
-            builder.Property(x => x.CustomerId).ValueGeneratedOnAdd();
+            // Primary key
+            builder.HasKey(c => c.Id);
 
-            builder.Property(x => x.UserName).IsRequired();
-            builder.Property(x => x.Password).IsRequired();
+            builder.Property(c => c.UserId).IsRequired();
+            // Relationships
+            builder.HasMany(c => c.Pets)
+                   .WithOne(p => p.Customer)
+                   .HasForeignKey(p => p.CustomerId)
+                   .OnDelete(DeleteBehavior.Restrict);
 
-            builder.Property(x => x.FirstName).IsRequired().HasMaxLength(250).IsUnicode(true);
-            builder.Property(x => x.LastName).IsRequired().HasMaxLength(250).IsUnicode(true);
-            builder.Property(x => x.Email).IsRequired().HasMaxLength(250);
-
-            builder.Property(x => x.Address).IsRequired().HasMaxLength(500).IsUnicode(true);
-
-            builder.Property(x => x.Birthday).IsRequired();
-            builder.Property(x => x.PhoneNumber).IsRequired();
-
+            builder.HasMany(c => c.Bookings)
+                   .WithOne(b => b.Customer)
+                   .HasForeignKey(b => b.CustomerId)
+                   .OnDelete(DeleteBehavior.Restrict);
         }
     }
 }

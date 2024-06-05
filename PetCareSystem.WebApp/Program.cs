@@ -1,36 +1,85 @@
-namespace PetCareSystem.WebApp
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
+using Microsoft.IdentityModel.Tokens;
+using PetCareSystem.Services;
+using PetCareSystem.Data.EF;
+using System.Text;
+using PetCareSystem.Data.Repositories.Users;
+using PetCareSystem.Services.Auth;
+using System;
+using PetCareSystem.Services.Services.Bookings;
+using PetCareSystem.Data.Repositories.Bookings;
+
+
+IConfiguration configuration = new ConfigurationBuilder()
+            .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
+            .Build();
+
+// Access configuration settings
+var appSetting = configuration["AppSettings:Secret"];
+var builder = WebApplication.CreateBuilder(args);
+
+// Add services to the container.
+builder.Services.AddControllers();
+builder.Services.AddSwaggerGen();
+
+// Register the DbContext, Repositories, and Services
+builder.Services.AddDbContext<PetHealthDBContext>(options =>
+    options.UseSqlServer(builder.Configuration.GetConnectionString("PetHealthCareDb")));
+
+builder.Services.AddScoped<IUserRepository, UserRepository>();
+builder.Services.AddScoped<IAuthService, AuthService>();
+builder.Services.AddScoped<IBookingServices, BookingServices>();
+builder.Services.AddScoped<IBookingRepository, BookingRepository>();
+
+// Configure JWT authentication
+var key = Encoding.ASCII.GetBytes(appSetting);
+builder.Services.AddAuthentication(x =>
 {
-    public class Program
+    x.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+    x.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+})
+.AddJwtBearer(x =>
+{
+    x.RequireHttpsMetadata = false;
+    x.SaveToken = true;
+    x.TokenValidationParameters = new TokenValidationParameters
     {
-        public static void Main(string[] args)
-        {
-            var builder = WebApplication.CreateBuilder(args);
+        ValidateIssuerSigningKey = true,
+        IssuerSigningKey = new SymmetricSecurityKey(key),
+        ValidateIssuer = false,
+        ValidateAudience = false
+    };
+});
+builder.Services.AddCors();
+var app = builder.Build();
 
-            // Add services to the container.
-            builder.Services.AddControllersWithViews();
-
-            var app = builder.Build();
-
-            // Configure the HTTP request pipeline.
-            if (!app.Environment.IsDevelopment())
-            {
-                app.UseExceptionHandler("/Home/Error");
-                // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
-                app.UseHsts();
-            }
-
-            app.UseHttpsRedirection();
-            app.UseStaticFiles();
-
-            app.UseRouting();
-
-            app.UseAuthorization();
-
-            app.MapControllerRoute(
-                name: "default",
-                pattern: "{controller=Home}/{action=Index}/{id?}");
-
-            app.Run();
-        }
-    }
+// Configure the HTTP request pipeline.
+if (app.Environment.IsDevelopment())
+{
+    app.UseDeveloperExceptionPage();
 }
+
+app.UseCors(x => x
+        .AllowAnyOrigin()
+        .AllowAnyMethod()
+        .AllowAnyHeader());
+
+
+app.UseHttpsRedirection();
+app.UseRouting();
+app.UseSwagger();
+
+app.UseAuthentication(); // Add this line
+app.UseAuthorization(); // Add this line
+app.UseSwaggerUI(c =>
+{
+    c.SwaggerEndpoint("/swagger/v1/swagger.json", "My API V1");
+});
+app.MapControllers();
+
+
+app.Run("http://localhost:4000");
