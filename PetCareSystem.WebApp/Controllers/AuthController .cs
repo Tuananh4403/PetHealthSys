@@ -1,9 +1,8 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Authorization;
-using PetCareSystem.Services;
-using PetCareSystem.Services.Models.Auth;
-using System.Threading.Tasks;
-using PetCareSystem.Services.Auth;
+using PetCareSystem.WebApp.Models.Auth;
+using PetCareSystem.Services.Services.Models.Auth;
+using PetRequest = PetCareSystem.WebApp.Models.Auth.PetRequest;
 
 namespace PetCareSystem.WebApp.Controllers
 {
@@ -36,7 +35,7 @@ namespace PetCareSystem.WebApp.Controllers
         }
 
         [HttpPost("register")]
-        public async Task<IActionResult> Register( RegisterRequest model)
+        public async Task<IActionResult> Register(RegisterRequest model)
         {
             if (!ModelState.IsValid)
             {
@@ -46,6 +45,33 @@ namespace PetCareSystem.WebApp.Controllers
             await _authService.RegisterAsync(model.Username, model.Password);
             return Ok();
         }
+
+        [HttpPost("register-pet")]
+        public async Task<IActionResult> RegisterPet(PetRequest model)
+        {
+            // Check if the model state is NOT valid
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+            try
+            {
+                bool isRegistered = await _authService.RegisterPetAsync(model);
+                if (isRegistered)
+                {
+                    return Ok(new { message = "Pet registration successful" });
+                }
+                else
+                {
+                    return BadRequest(new { message = "Pet registration failed" });
+                }
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new { message = "An error occurred while registering the pet", details = ex.Message });
+            }
+        }
+
 
         [HttpGet("protected")]
         [Authorize]

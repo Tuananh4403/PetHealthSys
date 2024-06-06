@@ -9,6 +9,7 @@ using System.Security.Claims;
 using System.Text;
 using PetCareSystem.Services.Helpers;
 using Microsoft.Extensions.Configuration;
+using PetCareSystem.Services.Services.Models.Auth;
 
 namespace PetCareSystem.Services
 {
@@ -42,6 +43,35 @@ namespace PetCareSystem.Services
             };
 
             await _userRepository.AddUserAsync(user);
+        }
+
+        public async Task<bool> RegisterPetAsync(PetRequest model)
+        {
+            // Validate the provided information
+            if (model.PetId <= 0 || string.IsNullOrEmpty(model.PetName) || string.IsNullOrEmpty(model.KindOfPet) ||
+                model.Birthday == DateTime.MinValue || string.IsNullOrEmpty(model.Species) || model.CustomerId <= 0 || model.Birthday > DateTime.Now)
+            {
+                // Return false or throw an exception if the validation fails
+                return false;
+            }
+
+            // Create a new pet object
+            var pet = new Pet
+            {
+                PetId = model.PetId,
+                PetName = model.PetName,
+                KindOfPet = model.KindOfPet,
+                Gender = model.Gender,
+                Birthday = model.Birthday,
+                Species = model.Species,
+                CustomerId = model.CustomerId
+            };
+
+            // Add the new pet to the repository
+            await _userRepository.AddPetAsync(pet);
+
+            // Return true if the pet was registered successfully
+            return true;
         }
 
         private bool VerifyPasswordHash(string password, string storedHash)
