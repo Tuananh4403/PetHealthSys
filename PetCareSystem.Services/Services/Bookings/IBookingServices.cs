@@ -11,6 +11,10 @@ namespace PetCareSystem.Services.Services.Bookings
     public interface IBookingServices
     {
         Task<bool> CreateBookingAsync(CreateBookingReq bookingReq);
-        Task<Booking> GetBookingById();
+
+        Task<bool> UpdateBookingAsync(int BookingId, CreateBookingReq updateReq);
+        Task<List<Booking>> GetBookingById(int BookingId);
+        Task<bool> DeleteBooking(int BookingId);
+
     }
 }

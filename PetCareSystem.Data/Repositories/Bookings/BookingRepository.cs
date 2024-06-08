@@ -24,16 +24,31 @@ namespace PetCareSystem.Data.Repositories.Bookings
             return await SaveChangesAsync();
         }
 
-        public async Task<bool> CreateBookingAsync(Booking booking)
-        {
+        public async Task<bool> CreateBookingAsync(Booking booking)        {
             _dbContext.Bookings.Add(booking);
             return await SaveChangesAsync();
         }
 
-        public Task<IList> GetListBooking()
+        public async Task<IList<Booking>> GetListBooking(int BookingId)
         {
-            throw new NotImplementedException();
+            var bookings = await _dbContext.Bookings.Where(b => b.Id == BookingId).ToListAsync();
+            return bookings.ToList<Booking>();
         }
+
+        public async Task<bool> DeleteBookingAsync(int BookingId)
+        {
+            var bookings = await GetListBooking(BookingId);
+            if (bookings != null && bookings.Any())
+            {
+                foreach (var booking in bookings)
+        {
+                    _dbContext.Bookings.Remove(booking);
+                }
+                return await SaveChangesAsync();
+            }
+            return false; 
+        }
+
 
         public async Task<bool> SaveChangesAsync()
         {

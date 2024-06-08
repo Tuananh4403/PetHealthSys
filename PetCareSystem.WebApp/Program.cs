@@ -6,10 +6,13 @@ using Microsoft.IdentityModel.Tokens;
 using PetCareSystem.Data.EF;
 using PetCareSystem.Data.Repositories.Bookings;
 using PetCareSystem.Data.Repositories.Users;
-using PetCareSystem.Services;
+using PetCareSystem.Services.Services.Auth;
 using PetCareSystem.Services.Helpers;
 using PetCareSystem.Services.Services.Bookings;
 using System.Text;
+using Microsoft.AspNetCore.Mvc.ViewFeatures;
+using PetCareSystem.WebApp.Helpers;
+
 
 
 
@@ -45,6 +48,8 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddDbContext<PetHealthDBContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("PetHealthCareDb")));
 
+builder.Services.AddControllersWithViews();
+builder.Services.AddSingleton<ITempDataDictionaryFactory, TempDataDictionaryFactory>();
 builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<IAuthService, AuthService>();
 builder.Services.AddScoped<IBookingServices, BookingServices>();
@@ -92,6 +97,7 @@ app.UseSwagger();
 
 app.UseAuthentication(); // Add this line
 app.UseAuthorization(); // Add this line
+//app.UseMiddleware<JwtMiddleware>();
 app.UseSwaggerUI(c =>
 {
     c.SwaggerEndpoint("/swagger/v1/swagger.json", "My API V1");
@@ -102,7 +108,5 @@ app.MapControllerRoute(
                 pattern: "{controller=Home}/{action=Index}/{id?}");
 
 
-
-
-
 app.Run("http://localhost:4000");
+

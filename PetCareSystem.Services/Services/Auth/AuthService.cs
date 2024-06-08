@@ -6,9 +6,9 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
 using Microsoft.Extensions.Configuration;
-using PetCareSystem.Services.Services.Models.Auth;
+using PetCareSystem.Services.Models.Auth;
 
-namespace PetCareSystem.Services
+namespace PetCareSystem.Services.Services.Auth
 {
     public class AuthService : IAuthService
     {
@@ -31,11 +31,17 @@ namespace PetCareSystem.Services
             return new AuthenticationResult { Success = true, Token = token };
         }
 
-        public async Task RegisterAsync(string username, string password )
+        public async Task RegisterAsync(string username, string password, string firstName, string lastName, string email)
         {
             var user = new User
             {
                 Username = username,
+                FirstName = firstName,
+                LastName = lastName,
+                Email = email,
+                Birthday = DateTime.Now,
+                PhoneNumber = "0900003",
+                 Address = "test",
                 Password = HashPassword(password)
             };
 
@@ -45,7 +51,7 @@ namespace PetCareSystem.Services
         public async Task<bool> RegisterPetAsync(PetRequest model)
         {
             // Validate the provided information
-            if (model.PetId <= 0 || string.IsNullOrEmpty(model.PetName) || string.IsNullOrEmpty(model.KindOfPet) ||
+            if (model.PetId < 0 || string.IsNullOrEmpty(model.PetName) || string.IsNullOrEmpty(model.KindOfPet) ||
                 model.Birthday == DateTime.MinValue || string.IsNullOrEmpty(model.Species) || model.CustomerId <= 0 || model.Birthday > DateTime.Now)
             {
                 // Return false or throw an exception if the validation fails
@@ -103,6 +109,16 @@ namespace PetCareSystem.Services
         {
             // Implement password hashing
             return BCrypt.Net.BCrypt.HashPassword(password);
+        }
+
+        public Task<User?> GetById(int userId)
+        {
+            return _userRepository.GetUserById(userId);
+        }
+
+        public Task RegisterAsync(string username, string password)
+        {
+            throw new NotImplementedException();
         }
     }
 }

@@ -22,7 +22,7 @@ namespace PetCareSystem.Services.Services.Bookings
         public async Task<bool> CreateBookingAsync(CreateBookingReq bookingReq)
         {
 
-            var booking = new Booking
+            var booking = new Booking ()
             {
                 CustomerId = bookingReq.OwnerId,
                 PetId = bookingReq.PetId,
@@ -56,9 +56,48 @@ namespace PetCareSystem.Services.Services.Bookings
             return true;
         }
 
-        public Task<Booking> GetBookingById()
+        public async Task<bool> UpdateBookingAsync(int BookingId, CreateBookingReq updateReq)
+        {
+            var bookingToUpdate = await _bookingRepository.GetListBooking(BookingId);
+            if (bookingToUpdate == null)
+            {
+                    return false;
+                }
+
+            if(await _bookingRepository.DeleteBookingAsync(BookingId))
+            {
+                CreateBookingAsync(updateReq);
+            }
+            else
+            {
+                return false;
+            }
+
+            return true;
+        }
+
+
+        public async Task<Booking> GetBookingById(int BookingId)
+        {
+            return (Booking)await _bookingRepository.GetListBooking(BookingId);
+        }
+
+        public async Task<bool> DeleteBooking(int BookingId)
+        {
+            if(!(await _bookingRepository.DeleteBookingAsync(BookingId)))
+            {
+                return false;
+            }
+
+                return true;
+        }
+
+
+        Task<List<Booking>> IBookingServices.GetBookingById(int BookingId)
         {
             throw new NotImplementedException();
         }
+
+        
     }
 }

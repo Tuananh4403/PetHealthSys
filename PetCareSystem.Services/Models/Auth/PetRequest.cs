@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace PetCareSystem.Services.Services.Models.Auth
+namespace PetCareSystem.Services.Models.Auth
 {
     public class PetRequest
     {

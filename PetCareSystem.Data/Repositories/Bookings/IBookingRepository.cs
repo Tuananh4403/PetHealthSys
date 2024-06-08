@@ -13,7 +13,9 @@ namespace PetCareSystem.Data.Repositories.Bookings
         Task<Boolean> CreateBookingAsync(Booking booking);
         Task<Boolean> AddBookingServiceAsync(BookingService bookingService);
         Task<Boolean> SaveChangesAsync();
-        Task<IList> GetListBooking();
+        Task<IList<Booking>> GetListBooking(int BookingId);
+
+        Task<bool> DeleteBookingAsync(int BookingId);
 
     }
 }
