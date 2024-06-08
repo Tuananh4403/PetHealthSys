@@ -12,8 +12,8 @@ using PetCareSystem.Data.EF;
 namespace PetCareSystem.Data.Migrations
 {
     [DbContext(typeof(PetHealthDBContext))]
-    [Migration("20240531215905_createBooking")]
-    partial class createBooking
+    [Migration("20240608001757_InitialRecord")]
+    partial class InitialRecord
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -453,8 +453,8 @@ namespace PetCareSystem.Data.Migrations
                         .HasMaxLength(255)
                         .HasColumnType("nvarchar(255)");
 
-                    b.Property<int?>("PhoneNumber")
-                        .HasColumnType("int");
+                    b.Property<string>("PhoneNumber")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime>("UpdatedAt")
                         .HasColumnType("datetime2");
