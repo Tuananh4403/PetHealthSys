@@ -2,7 +2,6 @@
 using Microsoft.AspNetCore.Authorization;
 using PetCareSystem.WebApp.Models.Auth;
 using PetCareSystem.Services.Services.Models.Auth;
-using PetRequest = PetCareSystem.WebApp.Models.Auth.PetRequest;
 
 namespace PetCareSystem.WebApp.Controllers
 {

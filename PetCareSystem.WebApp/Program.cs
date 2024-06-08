@@ -7,7 +7,6 @@ using PetCareSystem.Data.EF;
 using PetCareSystem.Data.Repositories.Bookings;
 using PetCareSystem.Data.Repositories.Users;
 using PetCareSystem.Services;
-using PetCareSystem.Services.Auth;
 using PetCareSystem.Services.Helpers;
 using PetCareSystem.Services.Services.Bookings;
 using System.Text;
@@ -98,6 +97,10 @@ app.UseSwaggerUI(c =>
     c.SwaggerEndpoint("/swagger/v1/swagger.json", "My API V1");
 });
 app.MapControllers();
+app.MapControllerRoute(
+                name: "default",
+                pattern: "{controller=Home}/{action=Index}/{id?}");
+
 
 
 

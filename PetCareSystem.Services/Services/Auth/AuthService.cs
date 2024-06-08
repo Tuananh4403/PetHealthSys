@@ -1,13 +1,10 @@
 ﻿using System.Threading.Tasks;
 using PetCareSystem.Data.Entites;
 using PetCareSystem.Data.Repositories.Users;
-using PetCareSystem.Services.Auth;
-using BCrypt.Net;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
-using PetCareSystem.Services.Helpers;
 using Microsoft.Extensions.Configuration;
 using PetCareSystem.Services.Services.Models.Auth;
 
