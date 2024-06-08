@@ -41,7 +41,7 @@ namespace PetCareSystem.Data.Repositories.Bookings
             if (bookings != null && bookings.Any())
             {
                 foreach (var booking in bookings)
-                {
+        {
                     _dbContext.Bookings.Remove(booking);
                 }
                 return await SaveChangesAsync();

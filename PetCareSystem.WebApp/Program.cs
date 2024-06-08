@@ -1,17 +1,19 @@
+using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authentication.Google;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Hosting;
 using Microsoft.IdentityModel.Tokens;
-using PetCareSystem.Services;
 using PetCareSystem.Data.EF;
-using System.Text;
-using PetCareSystem.Data.Repositories.Users;
-using PetCareSystem.Services.Auth;
-using System;
-using PetCareSystem.Services.Services.Bookings;
 using PetCareSystem.Data.Repositories.Bookings;
+using PetCareSystem.Data.Repositories.Users;
+using PetCareSystem.Services.Services.Auth;
+using PetCareSystem.Services.Helpers;
+using PetCareSystem.Services.Services.Bookings;
+using System.Text;
+using Microsoft.AspNetCore.Mvc.ViewFeatures;
+using PetCareSystem.WebApp.Helpers;
+
+
 
 
 IConfiguration configuration = new ConfigurationBuilder()
@@ -21,6 +23,22 @@ IConfiguration configuration = new ConfigurationBuilder()
 // Access configuration settings
 var appSetting = configuration["AppSettings:Secret"];
 var builder = WebApplication.CreateBuilder(args);
+builder.Services.Configure<GoogleKeys>(builder.Configuration.GetSection("GoogleKeys"));
+
+
+builder.Services.AddAuthentication(option =>
+{
+    option.DefaultScheme = CookieAuthenticationDefaults.AuthenticationScheme;
+    option.DefaultChallengeScheme = GoogleDefaults.AuthenticationScheme;
+})
+    .AddCookie()
+    .AddGoogle(GoogleDefaults.AuthenticationScheme, options =>
+    {
+        options.ClientId = "548056226336-9r91b1s78lcvvefd4chijuo0hb09gs25.apps.googleusercontent.com";
+        options.ClientSecret = "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";
+        options.CallbackPath = "/signin-google"; // Ensure this matches the registered redirect URI
+        options.SaveTokens = true;
+    });
 
 // Add services to the container.
 builder.Services.AddControllers();
@@ -30,6 +48,8 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddDbContext<PetHealthDBContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("PetHealthCareDb")));
 
+builder.Services.AddControllersWithViews();
+builder.Services.AddSingleton<ITempDataDictionaryFactory, TempDataDictionaryFactory>();
 builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<IAuthService, AuthService>();
 builder.Services.AddScoped<IBookingServices, BookingServices>();
@@ -57,6 +77,8 @@ builder.Services.AddAuthentication(x =>
 builder.Services.AddCors();
 var app = builder.Build();
 
+
+
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
@@ -75,11 +97,16 @@ app.UseSwagger();
 
 app.UseAuthentication(); // Add this line
 app.UseAuthorization(); // Add this line
+//app.UseMiddleware<JwtMiddleware>();
 app.UseSwaggerUI(c =>
 {
     c.SwaggerEndpoint("/swagger/v1/swagger.json", "My API V1");
 });
 app.MapControllers();
+app.MapControllerRoute(
+                name: "default",
+                pattern: "{controller=Home}/{action=Index}/{id?}");
 
 
 app.Run("http://localhost:4000");
+

@@ -5,6 +5,8 @@ using PetCareSystem.Services.Models.Booking;
 using PetCareSystem.Services.Services.Bookings;
 using System;
 using System.Threading.Tasks;
+using PetCareSystem.Data.Entites;
+
 
 namespace PetCareSystem.WebApp.Controllers
 {

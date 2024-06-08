@@ -61,8 +61,8 @@ namespace PetCareSystem.Services.Services.Bookings
             var bookingToUpdate = await _bookingRepository.GetListBooking(BookingId);
             if (bookingToUpdate == null)
             {
-                return false;
-            }
+                    return false;
+                }
 
             if(await _bookingRepository.DeleteBookingAsync(BookingId))
             {
