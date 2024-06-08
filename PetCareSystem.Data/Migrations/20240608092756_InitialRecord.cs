@@ -184,18 +184,21 @@ namespace PetCareSystem.Data.Migrations
                 name: "Pets",
                 columns: table => new
                 {
-                    PetId = table.Column<int>(type: "int", nullable: false)
+                    Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     PetName = table.Column<string>(type: "nvarchar(255)", maxLength: 255, nullable: true),
                     KindOfPet = table.Column<string>(type: "nvarchar(255)", maxLength: 255, nullable: true),
                     Gender = table.Column<bool>(type: "bit", nullable: false),
                     Birthday = table.Column<DateTime>(type: "datetime2", nullable: false),
                     Species = table.Column<string>(type: "nvarchar(255)", maxLength: 255, nullable: true),
-                    CustomerId = table.Column<int>(type: "int", nullable: false)
+                    CustomerId = table.Column<int>(type: "int", nullable: false),
+                    CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    UpdatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    DeletedAt = table.Column<DateTime>(type: "datetime2", nullable: true)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Pets", x => x.PetId);
+                    table.PrimaryKey("PK_Pets", x => x.Id);
                     table.ForeignKey(
                         name: "FK_Pets_Customers_CustomerId",
                         column: x => x.CustomerId,
@@ -234,7 +237,7 @@ namespace PetCareSystem.Data.Migrations
                         name: "FK_Bookings_Pets_PetId",
                         column: x => x.PetId,
                         principalTable: "Pets",
-                        principalColumn: "PetId",
+                        principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
                         name: "FK_Bookings_Staff_StaffId",
@@ -278,7 +281,7 @@ namespace PetCareSystem.Data.Migrations
                         name: "FK_Records_Pets_PetId",
                         column: x => x.PetId,
                         principalTable: "Pets",
-                        principalColumn: "PetId",
+                        principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                 });
 
