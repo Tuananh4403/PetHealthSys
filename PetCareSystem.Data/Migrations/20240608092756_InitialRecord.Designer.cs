@@ -12,8 +12,8 @@ using PetCareSystem.Data.EF;
 namespace PetCareSystem.Data.Migrations
 {
     [DbContext(typeof(PetHealthDBContext))]
-    [Migration("20240608085644_UpdateAutoIncrement")]
-    partial class UpdateAutoIncrement
+    [Migration("20240608092756_InitialRecord")]
+    partial class InitialRecord
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
