@@ -1,6 +1,6 @@
 const path = require('path');
 const { VueLoaderPlugin } = require('vue-loader');
-const outputPath = path.resolve(__dirname, 'wwwroot/js/dist');
+const outputPath = path.resolve(__dirname, '~/wwwroot/js/dist');
 
 module.exports = {
     entry: './public/js/main.js',
@@ -38,7 +38,7 @@ module.exports = {
     ],
     resolve: {
         alias: {
-            'vue': '@vue/runtime-dom'
+            'vue': 'vue/ dist / vue.esm - bundler.js'
         },
         extensions: ['.js', '.vue', '.json']
     },

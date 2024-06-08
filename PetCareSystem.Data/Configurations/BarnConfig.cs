@@ -18,6 +18,8 @@ namespace PetCareSystem.Data.Configurations
 
             // Primary key
             builder.HasKey(b => b.Id);
+            builder.Property(b => b.Id).ValueGeneratedOnAdd();
+
 
             // Soft delete query filter
             builder.HasQueryFilter(b => b.DeletedAt == null);
