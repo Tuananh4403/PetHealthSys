@@ -12,8 +12,8 @@ namespace PetCareSystem.Data.Configurations
             builder.ToTable("Pets");
 
             // Primary key
-            builder.HasKey(p => p.PetId);
-
+            builder.HasKey(p => p.Id);
+            builder.Property(p => p.Id).ValueGeneratedOnAdd();
             // Properties
             builder.Property(p => p.PetName)
                    .HasMaxLength(255);

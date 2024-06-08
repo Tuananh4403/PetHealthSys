@@ -13,6 +13,8 @@ namespace PetCareSystem.Data.Configurations
 
             // Primary key
             builder.HasKey(d => d.Id);
+            builder.Property(d => d.Id).ValueGeneratedOnAdd();
+
 
             // Properties
             builder.Property(d => d.UserId)

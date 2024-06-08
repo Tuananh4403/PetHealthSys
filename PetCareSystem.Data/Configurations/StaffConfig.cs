@@ -18,6 +18,8 @@ namespace PetCareSystem.Data.Configurations
 
             // Primary key
             builder.HasKey(s => s.Id);
+            builder.Property(s => s.Id).ValueGeneratedOnAdd();
+
 
             builder.Property(s => s.UserId).IsRequired();
             // Relationship with Bookings

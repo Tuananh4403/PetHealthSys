@@ -3,9 +3,8 @@ using System.Text.Json.Serialization;
 
 namespace PetCareSystem.Data.Entites
 {
-    public class Pet
+    public class Pet : BaseModel
     {
-        public int PetId { get; set; }
         public string? PetName { get; set; }
         public string? KindOfPet { get; set; }
         public Boolean Gender { get; set; }
