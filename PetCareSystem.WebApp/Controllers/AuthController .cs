@@ -22,7 +22,7 @@ namespace PetCareSystem.WebApp.Controllers
         {
             _authService = authService;
         }
-
+        [AllowAnonymous]
         [HttpPost("authenticate")]
         public async Task<IActionResult> Login(AuthenticateRequest model)
         {
@@ -31,16 +31,26 @@ namespace PetCareSystem.WebApp.Controllers
                 return BadRequest(ModelState);
             }
 
-            var result = await _authService.LoginAsync(model.Username, model.Password);
-            if (result.Success)
+            try
             {
-                return Ok("hello world");
-            }
+                var result = await _authService.LoginAsync(model.Username, model.Password);
+                if (result.Success)
+                {
+                    return Ok(new { message = "Login successful", token = result.Token });
+                }
 
-            return Unauthorized("test");
+                return Unauthorized(new { message = "Username or password is incorrect" });
+            }
+            catch (Exception ex)
+            {
+                // Log the exception (you might need to inject a logger)
+                Console.WriteLine($"Login error: {ex.Message}");
+                return StatusCode(StatusCodes.Status500InternalServerError, new { message = "An error occurred during login" });
+            }
         }
+        [AllowAnonymous]
         [HttpPost("register")]
-        public async Task<IActionResult> Register( RegisterRequest model)
+        public async Task<IActionResult> Register([FromBody] RegisterRequest model)
         {
             if (!ModelState.IsValid)
             {

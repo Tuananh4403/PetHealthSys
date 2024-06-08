@@ -97,7 +97,7 @@ app.UseSwagger();
 
 app.UseAuthentication(); // Add this line
 app.UseAuthorization(); // Add this line
-app.UseMiddleware<JwtMiddleware>();
+//app.UseMiddleware<JwtMiddleware>();
 app.UseSwaggerUI(c =>
 {
     c.SwaggerEndpoint("/swagger/v1/swagger.json", "My API V1");

@@ -14,10 +14,14 @@ namespace PetCareSystem.WebApp.Helpers
     public class JwtMiddleware
     {
         private readonly RequestDelegate _next;
+        private readonly IConfiguration _configuration;
+        private readonly ILogger<JwtMiddleware> _logger;
 
-        public JwtMiddleware(RequestDelegate next)
+        public JwtMiddleware(RequestDelegate next, IConfiguration configuration, ILogger<JwtMiddleware> logger)
         {
             _next = next;
+            _configuration = configuration;
+            _logger = logger;
         }
 
         public async Task<Task> Invoke(HttpContext httpContext, IAuthService authService)
@@ -31,12 +35,9 @@ namespace PetCareSystem.WebApp.Helpers
         }
         private async Task AttachUserToContext(HttpContext httpContext, IAuthService authService, string token)
         {
-            IConfiguration configuration = new ConfigurationBuilder()
-                        .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
-                        .Build();
 
             // Access configuration settings
-            var appSetting = configuration["AppSettings:Secret"];
+            var appSetting = _configuration["AppSettings:Secret"];
             try
             {
                 var tokenHandler = new JwtSecurityTokenHandler();
@@ -57,10 +58,9 @@ namespace PetCareSystem.WebApp.Helpers
                 //Attach user to context on successful JWT validation
                 httpContext.Items["User"] = await authService.GetById(userId);
             }
-            catch
+            catch(Exception e) 
             {
-                //Do nothing if JWT validation fails
-                // user is not attached to context so the request won't have access to secure routes
+                _logger.LogError(e, "Error occurred in JwtMiddleware.");
             }
         }
     }
