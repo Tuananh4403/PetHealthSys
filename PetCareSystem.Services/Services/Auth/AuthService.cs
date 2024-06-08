@@ -1,7 +1,7 @@
 ﻿using System.Threading.Tasks;
 using PetCareSystem.Data.Entites;
 using PetCareSystem.Data.Repositories.Users;
-using PetCareSystem.Services.Auth;
+using PetCareSystem.Services.Models.Auth;
 using BCrypt.Net;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
