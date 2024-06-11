@@ -1,9 +1,23 @@
 {
-   "ConnectionStrings": {
+  "ConnectionStrings": {
     "PetHealthCareDb": "Server=localhost;Database=PetHealthCareDb;User Id=sa;Password=12345;TrustServerCertificate=True;"
   },
   "AppSettings": {
     "Secret": "3xB+vPJ5A0mLk7MwGmPVVvxTrV3fqX5hXZXzjNE5V0I="
+  },
+  "Category": {
+    "Service": {
+      "Id": 1,
+      "Name": "general service"
+    },
+    "Medicine": {
+      "Id": 2,
+      "Name": "medicine"
+    },
+    "Vaccine": {
+      "Id": 3,
+      "Name": "vaccine"
+    }
   }
 }
 

@@ -47,7 +47,7 @@ namespace PetCareSystem.WebApp.Controllers
 
         // GET: api/booking/{bookingId}
         [HttpGet("{bookingId}")]
-        public async Task<IActionResult> Get(int bookingId)
+        public async Task<IActionResult> GetDetailBooking(int bookingId)
         {
             try
             {
@@ -108,6 +108,12 @@ namespace PetCareSystem.WebApp.Controllers
                 // Log the exception (ex) here if needed
                 return StatusCode(500, "Internal server error");
             }
+        }
+
+        [HttpPost("booking-list")]
+        public async Task<IActionResult> GetListBooking(string name)
+        {
+
         }
     }
 }
