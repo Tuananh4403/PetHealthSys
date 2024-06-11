@@ -57,7 +57,7 @@ namespace PetCareSystem.WebApp.Controllers
                 return BadRequest(ModelState);
             }
 
-            await _authService.RegisterAsync(model.Username, model.Password, model.FirstName, model.LastName,model.Email);
+            await _authService.RegisterAsync(model);
             return Ok("'add db true'");
         }
 

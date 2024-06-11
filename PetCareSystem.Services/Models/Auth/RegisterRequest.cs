@@ -5,21 +5,21 @@ namespace PetCareSystem.Services.Models.Auth
     public class RegisterRequest
     {
         [Required]
-        public string Username { get; set; }
+        public string? Username { get; set; }
 
         [Required]
-        public string FirstName { get; set; }
+        public string? FirstName { get; set; }
 
         [Required]
-        public string LastName { get; set; }
+        public string? LastName { get; set; }
 
         [Required]
-        public string Email { get; set; }
+        public string? Email { get; set; }
 
         [Required]
-        public string Title { get; set; }
-
+        public bool IsCustomer { get; set; }
+        public string? Role { get; set; }
         [Required]
-        public string Password { get; set; }
+        public string? Password { get; set; }
     }
 }

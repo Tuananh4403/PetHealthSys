@@ -1,5 +1,6 @@
 ﻿using Microsoft.Identity.Client;
 using PetCareSystem.Data.Entites;
+using PetCareSystem.Services.Models.Auth;
 using System.Threading.Tasks;
 
 namespace PetCareSystem.Services.Services.Auth
@@ -8,7 +9,7 @@ namespace PetCareSystem.Services.Services.Auth
     {
         Task<User?> GetById(int userId);
         Task<AuthenticationResult> LoginAsync(string username, string password);
-        Task RegisterAsync(string username, string password, string firstName, string lastName, string email);
+        Task RegisterAsync(RegisterRequest model);
     }
     public class AuthenticationResult
     {
