@@ -26,7 +26,7 @@ namespace PetCareSystem.Services.Services.Pets
         public async Task<bool> RegisterPetAsync(PetRequest model, string token)
         {
             var userId = _customerRepository.GetUserIdFromToken(token);
-            if (userId <= 0)
+            if (!userId.HasValue || userId <= 0)
             {
                 throw new ArgumentException("Invalid token");
             }

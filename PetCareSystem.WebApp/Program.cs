@@ -13,6 +13,9 @@ using System.Text;
 using Microsoft.AspNetCore.Mvc.ViewFeatures;
 using PetCareSystem.WebApp.Helpers;
 using PetCareSystem.Data.Repositories.Customers;
+using PetCareSystem.Services.Services.Pets;
+using PetCareSystem.Data.Entites;
+using PetCareSystem.Data.Repositories.Pets;
 
 
 
@@ -56,6 +59,9 @@ builder.Services.AddScoped<IAuthService, AuthService>();
 builder.Services.AddScoped<IBookingServices, BookingServices>();
 builder.Services.AddScoped<IBookingRepository, BookingRepository>();
 builder.Services.AddScoped<ICustomerRepository, CustomerRepository>();
+builder.Services.AddScoped<IPetRepository, PetRepository>();
+builder.Services.AddScoped<IPetService, PetService>();
+//builder.Services.AddScoped<ICustomerRepository, CustomerRepository>();
 
 // Configure JWT authentication
 var key = Encoding.ASCII.GetBytes(appSetting);

@@ -62,31 +62,6 @@ namespace PetCareSystem.WebApp.Controllers
             return Ok("'add db true'");
         }
 
-        [HttpPost("register-pet")]
-        public async Task<IActionResult> RegisterPet(PetRequest model)
-        {
-            // Check if the model state is NOT valid
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
-            }
-            try
-            {
-                bool isRegistered = await _authService.RegisterPetAsync(model);
-                if (isRegistered)
-                {
-                    return Ok(new { message = "Pet registration successful" });
-                }
-                else
-                {
-                    return BadRequest(new { message = "Pet registration failed" });
-                }
-            }
-            catch (Exception ex)
-            {
-                return StatusCode(500, new { message = "An error occurred while registering the pet", details = ex.Message });
-            }
-        }
 
 
         [HttpGet("protected")]
