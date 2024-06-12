@@ -11,5 +11,7 @@ namespace PetCareSystem.Data.Repositories.Users
     {
         Task<User> GetUserByUsernameAsync(string username);
         Task AddUserAsync(User user);
+        Task AddPetAsync(Pet pet);
+        Task<User?> GetUserById(int userId);
     }
 }

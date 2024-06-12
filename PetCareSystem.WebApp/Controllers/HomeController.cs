@@ -1,6 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
-using PetCareSystem.WebApp.Models;
 using System.Diagnostics;
+using PetCareSystem.Services.Models;
 
 namespace PetCareSystem.WebApp.Controllers
 {

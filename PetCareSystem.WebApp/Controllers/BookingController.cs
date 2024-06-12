@@ -1,4 +1,9 @@
-﻿using System;
+﻿using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Authorization;
+using PetCareSystem.Services.Models.Booking;
+using PetCareSystem.Services.Services.Bookings;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
@@ -17,7 +22,7 @@ namespace PetCareSystem.WebApp.Controllers
             {
                 var services = context.Service.ToList();
                 ViewBag.Services = services;
-            }
+        }
             return View();
         }
 
@@ -31,16 +36,17 @@ namespace PetCareSystem.WebApp.Controllers
 
 
                 for (int i = 0; i < SelectedServices.Count; i++)
-                {
+            {
                     int serviceID = SelectedServices[i];
                     int quantity = serviceQuantities[i];
                     var service = context.Service.FirstOrDefault(s => s.ServiceID == serviceID);
                     if (service != null)
-                    {
+                {
                         totalPrice += service.Price;
                         totalServices += i;
-                    }
                 }
+                return BadRequest("Failed to create booking");
+            }
 
                 model.TotalPrice = totalPrice;
                 model.NumberService = totalServices;
@@ -62,9 +68,9 @@ namespace PetCareSystem.WebApp.Controllers
             {
                 var data = context.Booking.ToList();
                 return View(data);
-            }
+                }
 
-        }
+            }
 
         [HttpGet]
         public ActionResult Update(int BookingID)
@@ -89,10 +95,10 @@ namespace PetCareSystem.WebApp.Controllers
                 int totalServices = 1;
 
                 foreach (int serviceID in SelectedServices)
-                {
+            {
                     var service = context.Service.FirstOrDefault(s => s.ServiceID == serviceID);
                     if (service != null)
-                    {
+                {
                         totalPrice += service.Price;
                         totalServices++;
                     }
@@ -103,13 +109,13 @@ namespace PetCareSystem.WebApp.Controllers
 
                 context.Booking.Add(model);
                 context.SaveChanges();
-            }
+                }
             string message = "Updated the booking successfully";
             ViewBag.Message = message;
-        }
+            }
 
         public ActionResult Delete()
-        {
+            {
             return View();
         }
 
@@ -123,7 +129,7 @@ namespace PetCareSystem.WebApp.Controllers
                 {
                     context.Booking.Remove(data);
                     context.SaveChanges();
-                }
+            }
                 else
                     return View();
             }
