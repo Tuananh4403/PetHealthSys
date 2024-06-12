@@ -5,12 +5,16 @@
 namespace PetCareSystem.Data.Migrations
 {
     /// <inheritdoc />
-    public partial class UpdateAutoIncrement : Migration
+    public partial class ChangNullAble : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
-
+            migrationBuilder.AlterColumn<string>(
+            name: "CustomerId",
+            table: "Pets",
+            nullable: true, // Change nullability here
+            oldNullable: false);
         }
 
         /// <inheritdoc />

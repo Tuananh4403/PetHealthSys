@@ -9,8 +9,10 @@ namespace PetCareSystem.Data.Repositories.Customers
 {
     public interface ICustomerRepository
     {
-        // Task<User> GetUserByUsernameAsync(string username);
+       
         Task AddCustomerAsync(Customer cus);
         Task<User> GetCusById(int id);
+        
+        int? GetUserIdFromToken(string token);
     }
 }

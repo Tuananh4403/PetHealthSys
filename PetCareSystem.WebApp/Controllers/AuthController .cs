@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Authorization;
-using PetCareSystem.Services;
 using PetCareSystem.Services.Models.Auth;
+using PetCareSystem.Services;
 using System.Threading.Tasks;
 using PetCareSystem.Services.Services.Auth;
 using Microsoft.AspNetCore.Authentication.Cookies;
@@ -9,6 +9,7 @@ using Microsoft.AspNetCore.Authentication.Google;
 using Microsoft.AspNetCore.Authentication;
 using Newtonsoft.Json;
 using System.Net.Http.Headers;
+using PetCareSystem.Services.Models.Auth;
 
 namespace PetCareSystem.WebApp.Controllers
 {
@@ -50,7 +51,7 @@ namespace PetCareSystem.WebApp.Controllers
         }
         [AllowAnonymous]
         [HttpPost("register")]
-        public async Task<IActionResult> Register([FromBody] RegisterRequest model)
+        public async Task<IActionResult> Register(RegisterRequest model)
         {
             if (!ModelState.IsValid)
             {
@@ -60,6 +61,8 @@ namespace PetCareSystem.WebApp.Controllers
             await _authService.RegisterAsync(model);
             return Ok("User have been created");
         }
+
+
 
         [HttpGet("protected")]
         [Authorize]

@@ -8,9 +8,7 @@ using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
-using PetCareSystem.Services.Helpers;
 using Microsoft.Extensions.Configuration;
-using System.Data.Entity.Core.Metadata.Edm;
 
 namespace PetCareSystem.Services.Services.Auth
 {
@@ -65,6 +63,7 @@ namespace PetCareSystem.Services.Services.Auth
             }
         }
 
+        
         private bool VerifyPasswordHash(string password, string storedHash)
         {
             // Implement password hash verification
@@ -102,6 +101,11 @@ namespace PetCareSystem.Services.Services.Auth
         public Task<User?> GetById(int userId)
         {
             return _userRepository.GetUserById(userId);
+        }
+
+        public Task RegisterAsync(string username, string password)
+        {
+            throw new NotImplementedException();
         }
     }
 }

@@ -15,6 +15,9 @@ using PetCareSystem.WebApp.Models;
 using PetCareSystem.Data.Repositories.Customers;
 using PetCareSystem.Services.Services.Serivces;
 using PetCareSystem.Data.Repositories.Services;
+using PetCareSystem.Services.Services.Pets;
+using PetCareSystem.Data.Entites;
+using PetCareSystem.Data.Repositories.Pets;
 
 
 LoadWebpack.Load();
@@ -59,6 +62,9 @@ builder.Services.AddScoped<IBookingRepository, BookingRepository>();
 builder.Services.AddScoped<ICustomerRepository, CustomerRepository>();
 builder.Services.AddScoped<IServiceServices, ServiceServices>();
 builder.Services.AddScoped<IServicesRepository, ServicesRepository>();
+builder.Services.AddScoped<IPetRepository, PetRepository>();
+builder.Services.AddScoped<IPetService, PetService>();
+//builder.Services.AddScoped<ICustomerRepository, CustomerRepository>();
 
 // Configure JWT authentication
 var key = Encoding.ASCII.GetBytes(appSetting);

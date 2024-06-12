@@ -23,6 +23,11 @@ namespace PetCareSystem.Data.Repositories.Users
             await _dbContext.Users.AddAsync(user);
             await _dbContext.SaveChangesAsync();
         }
+        public async Task AddPetAsync(Pet pet)
+        {
+            await _dbContext.Pets.AddAsync(pet);
+            await _dbContext.SaveChangesAsync();
+        }
 
         public async Task<User> GetUserById(int id)
         {
