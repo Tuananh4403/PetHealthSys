@@ -4,7 +4,7 @@ namespace PetCareSystem.Services.Models.Booking
 {
     public class CreateBookingReq
     {
-        public int OwnerId { get; set; }
+        public int CustomerId { get; set; }
         public int PetId { get; set; }
         public int DoctorId { get; set; }
         public int[]? ServiceIds { get; set; }

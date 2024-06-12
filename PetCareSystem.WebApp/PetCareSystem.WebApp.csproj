@@ -26,10 +26,19 @@
     <PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="8.0.0" />
     <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
     <PackageReference Include="Swashbuckle.AspNetCore" Version="6.6.2" />
+	<PackageReference Include="Microsoft.AspNetCore.Mvc.Razor.RuntimeCompilation" Version="7.0.5" />
+	<PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
   </ItemGroup>
+	
 	<ItemGroup>
 		<ProjectReference Include="..\PetCareSystem.Data\PetCareSystem.Data.csproj" />
 		<ProjectReference Include="..\PetCareSystem.Services\PetCareSystem.Services.csproj" />
+	</ItemGroup>
+	<ItemGroup>
+		<None Include="webpack.config.js" />
+	</ItemGroup>
+	<ItemGroup>
+		<Content  Remove="webpack.config.js" />
 	</ItemGroup>
 
 </Project>

@@ -1,8 +1,12 @@
-﻿@{
-    ViewData["Title"] = "Home Page";
+﻿﻿@{
+	ViewData["Title"] = "Home Page";
 }
 
-<br />
-<div id="app"></div>
+@section Styles {
+	@await Html.PartialAsync("_Styles", "home")
+}
+@section Scripts {
+	@await Html.PartialAsync("_Scripts", "home")
+}
 
-<script src="~/dist/bundle.js"></script>
+<div id="home-app"></div>

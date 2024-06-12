@@ -24,7 +24,7 @@ namespace PetCareSystem.Services.Services.Bookings
 
             var booking = new Booking ()
             {
-                CustomerId = bookingReq.OwnerId,
+                CustomerId = bookingReq.CustomerId,
                 PetId = bookingReq.PetId,
                 BookingTime = bookingReq.BookingDate,
                 // Set other properties of the Booking entity as needed

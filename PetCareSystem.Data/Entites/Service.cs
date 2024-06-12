@@ -9,9 +9,10 @@ namespace PetCareSystem.Data.Entites
 {
     public class Service : BaseModel
     {
-        public string? TypeOfService { get; set; }
-        public string? ServiceName { get; set; }
-        public decimal Price { get; set; }
+        public int? TypeId { get; set; }
+        public string? Code { get; set; }
+        public string? Name { get; set; }
+        public decimal? Price { get; set; }
         public string? Status { get; set; }
         public string? Note { get; set; }
         public virtual ICollection<BookingService>? BookingServicess { get; set; }

@@ -22,14 +22,15 @@ namespace PetCareSystem.Data.Configurations
 
 
             // Properties
-            builder.Property(s => s.TypeOfService)
-                   .HasMaxLength(100);
+            builder.Property(s => s.TypeId);
 
-            builder.Property(s => s.ServiceName)
-                   .HasMaxLength(100);
+            builder.Property(s => s.Code)
+                   .HasMaxLength(5);
 
-            builder.Property(s => s.Price)
-                   .IsRequired();
+            builder.Property(s => s.Name)
+                   .HasMaxLength(50);
+
+            builder.Property(s => s.Price);
 
             builder.Property(s => s.Status)
                    .HasMaxLength(50);

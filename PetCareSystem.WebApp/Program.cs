@@ -11,15 +11,16 @@ using PetCareSystem.Services.Helpers;
 using PetCareSystem.Services.Services.Bookings;
 using System.Text;
 using Microsoft.AspNetCore.Mvc.ViewFeatures;
-using PetCareSystem.WebApp.Helpers;
+using PetCareSystem.WebApp.Models;
 using PetCareSystem.Data.Repositories.Customers;
+using PetCareSystem.Services.Services.Serivces;
+using PetCareSystem.Data.Repositories.Services;
 using PetCareSystem.Services.Services.Pets;
 using PetCareSystem.Data.Entites;
 using PetCareSystem.Data.Repositories.Pets;
 
 
-
-
+LoadWebpack.Load();
 IConfiguration configuration = new ConfigurationBuilder()
             .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
             .Build();
@@ -28,7 +29,7 @@ IConfiguration configuration = new ConfigurationBuilder()
 var appSetting = configuration["AppSettings:Secret"];
 var builder = WebApplication.CreateBuilder(args);
 builder.Services.Configure<GoogleKeys>(builder.Configuration.GetSection("GoogleKeys"));
-
+builder.Services.AddControllersWithViews().AddRazorRuntimeCompilation();
 
 builder.Services.AddAuthentication(option =>
 {
@@ -59,6 +60,8 @@ builder.Services.AddScoped<IAuthService, AuthService>();
 builder.Services.AddScoped<IBookingServices, BookingServices>();
 builder.Services.AddScoped<IBookingRepository, BookingRepository>();
 builder.Services.AddScoped<ICustomerRepository, CustomerRepository>();
+builder.Services.AddScoped<IServiceServices, ServiceServices>();
+builder.Services.AddScoped<IServicesRepository, ServicesRepository>();
 builder.Services.AddScoped<IPetRepository, PetRepository>();
 builder.Services.AddScoped<IPetService, PetService>();
 //builder.Services.AddScoped<ICustomerRepository, CustomerRepository>();

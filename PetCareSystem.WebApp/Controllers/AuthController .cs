@@ -59,7 +59,7 @@ namespace PetCareSystem.WebApp.Controllers
             }
 
             await _authService.RegisterAsync(model);
-            return Ok("'add db true'");
+            return Ok("User have been created");
         }
 
 

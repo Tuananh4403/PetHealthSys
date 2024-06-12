@@ -1,5 +1,4 @@
-import { createApp } from 'vue';
+import { createApp } from "vue";
+import HomePage from "./components/HomePage";
 
-import HelloWorld from './components/HelloWorld.vue';
-
-createApp(HelloWorld).mount('#app');
+createApp(HomePage).mount("#home-app");
