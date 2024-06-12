@@ -6,6 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
+using System.Numerics;
 
 namespace PetCareSystem.Data.Repositories.Users
 {
@@ -32,6 +33,14 @@ namespace PetCareSystem.Data.Repositories.Users
         public async Task<User> GetUserById(int id)
         {
             return await _dbContext.Users.SingleOrDefaultAsync(u => u.Id == id);
+        }
+        public async Task<User> GetUserByPhone(string phone)
+        {
+            return await _dbContext.Users.SingleOrDefaultAsync(u => u.PhoneNumber == phone);
+        }
+        public async Task<User> GetUserByEmail(string phone)
+        {
+            return await _dbContext.Users.SingleOrDefaultAsync(u => u.PhoneNumber == phone);
         }
 
         public async Task<User> GetUserByUsernameAsync(string username)

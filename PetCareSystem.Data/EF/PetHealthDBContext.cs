@@ -47,7 +47,7 @@ namespace PetCareSystem.Data.EF
                     modelBuilder.Entity(entityType.ClrType).HasQueryFilter(lambda);
                 }
             }
-                modelBuilder.ApplyConfiguration(new CustomerConfig());
+            modelBuilder.ApplyConfiguration(new CustomerConfig());
             modelBuilder.ApplyConfiguration(new PetConfig());
             modelBuilder.ApplyConfiguration(new StaffConfig());
             modelBuilder.ApplyConfiguration(new RecordDetailConfig());

@@ -9,6 +9,7 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
 using Microsoft.Extensions.Configuration;
+using PetCareSystem.Services.Helpers;
 
 namespace PetCareSystem.Services.Services.Auth
 {
@@ -37,6 +38,10 @@ namespace PetCareSystem.Services.Services.Auth
 
         public async Task RegisterAsync(RegisterRequest model)
         {
+            if(_userRepository.GetUserByEmail(model.Email) == null || _userRepository.GetUserByPhone(model.Phone) == null)
+            {
+                throw new AppException("Email  or Phone is already taken");
+            }
             var user = new User
             {
                 Username = model.Username,
@@ -44,8 +49,8 @@ namespace PetCareSystem.Services.Services.Auth
                 LastName = model.LastName,
                 Email = model.Email,
                 Birthday = DateTime.Now,
-                PhoneNumber = "0900003",
-                 Address = "test",
+                PhoneNumber = model.Phone,
+                Address = "test",
                 Password = HashPassword(model.Password)
             };
            
