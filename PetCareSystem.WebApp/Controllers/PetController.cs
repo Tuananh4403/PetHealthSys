@@ -46,5 +46,32 @@ namespace PetCareSystem.WebApp.Controllers
                 return StatusCode(500, new { message = "An error occurred while registering the pet", details = ex.Message });
             }
         }
+
+        [HttpGet("pet-detail/{petId}")]
+        public async Task<IActionResult> GetPetDetails(int petId)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            try
+            {
+                var petDetails = await _petService.GetPetDetailsAsync(petId);
+                if (petDetails != null)
+                {
+                    return Ok(petDetails);
+                }
+                else
+                {
+                    return NotFound(new { message = "Pet not found" });
+                }
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new { message = "An error occurred while retrieving the pet details", details = ex.Message });
+            }
+        }
+
     }
 }

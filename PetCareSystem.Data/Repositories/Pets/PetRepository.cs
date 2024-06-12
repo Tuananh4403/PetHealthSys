@@ -1,4 +1,5 @@
 ﻿
+using Microsoft.EntityFrameworkCore;
 using PetCareSystem.Data.EF;
 using PetCareSystem.Data.Entites;
 using System;
@@ -21,6 +22,15 @@ namespace PetCareSystem.Data.Repositories.Pets
         {
             await _dbContext.Pets.AddAsync(pet);
             await _dbContext.SaveChangesAsync();
+        }
+        public async Task<bool> PetExists(int petId)
+        {
+            return await _dbContext.Pets.AnyAsync(p => p.Id == petId);
+        }
+
+        public async Task<Pet> GetPetByIdAsync(int petId)
+        {
+            return await _dbContext.Pets.FindAsync(petId);
         }
     }
 }

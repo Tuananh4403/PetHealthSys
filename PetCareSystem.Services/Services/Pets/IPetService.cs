@@ -10,5 +10,6 @@ namespace PetCareSystem.Services.Services.Pets
     public interface IPetService
     {
         Task<bool> RegisterPetAsync(PetRequest model, string token);
+        Task<PetRequest> GetPetDetailsAsync(int petId);
     }
 }

@@ -76,5 +76,34 @@ namespace PetCareSystem.Services.Services.Pets
             
             return true;
         }
+
+        public async Task<PetRequest> GetPetDetailsAsync(int petId)
+        {
+            // check if id pet exist
+            bool exists = await _petRepository.PetExists(petId);
+            if (!exists)
+            {
+                return null;
+            }
+
+            var pet = await _petRepository.GetPetByIdAsync(petId);
+            if (pet == null)
+            {
+                return null;
+            }
+
+
+            var petRequest = new PetRequest
+            {
+                PetName = pet.PetName,
+                KindOfPet = pet.KindOfPet,
+                Gender = pet.Gender,
+                Birthday = pet.Birthday,
+                Species = pet.Species
+            };
+
+            return petRequest;
+        }
+
     }
 }

@@ -10,5 +10,8 @@ namespace PetCareSystem.Data.Repositories.Pets
     public interface IPetRepository
     {
         Task AddPetAsync(Pet pet);
+        Task<bool> PetExists(int petId);
+        Task<Pet> GetPetByIdAsync(int petId);
+
     }
 }
