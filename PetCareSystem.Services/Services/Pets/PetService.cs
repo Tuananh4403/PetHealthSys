@@ -10,6 +10,7 @@ using System.Threading.Tasks;
 using System.IdentityModel.Tokens.Jwt;
 using PetCareSystem.Data.Repositories.Customers;
 using Microsoft.IdentityModel.Tokens;
+using PetCareSystem.Services.Models.Booking;
 
 namespace PetCareSystem.Services.Services.Pets
 {
@@ -109,6 +110,22 @@ namespace PetCareSystem.Services.Services.Pets
         {
             return await _petRepository.GetListPet(petName, nameOfCustomer, kindOfPet, speciesOfPet, genderOfPet, birthdayOfPet);
         }
+
+        public async Task<bool> UpdatePetAsync(int id, PetRequest updatePet)
+        {
+            // Trích xuất thông tin từ updatePet và gọi phương thức UpdatePet với các tham số riêng lẻ
+            bool isUpdated = await _petRepository.UpdatePet(
+                id,
+                updatePet.PetName,
+                updatePet.KindOfPet,
+                updatePet.Gender,
+                updatePet.Birthday,
+                updatePet.Species
+            );
+            return isUpdated;
+        }
+
+
 
     }
 }

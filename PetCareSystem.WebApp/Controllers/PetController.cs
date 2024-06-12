@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using PetCareSystem.Data.Entites;
+using PetCareSystem.Services.Models.Booking;
 using PetCareSystem.Services.Models.Pet;
 using PetCareSystem.Services.Services.Auth;
 using PetCareSystem.Services.Services.Pets;
@@ -97,5 +98,27 @@ namespace PetCareSystem.WebApp.Controllers
             }
         }
 
+        [HttpPut("update-pet/{id}")]
+        public async Task<IActionResult> UpdatePet(int id, PetRequest model)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            try
+            {
+                var result = await _petService.UpdatePetAsync(id, model);
+                if (result)
+                {
+                    return Ok("Pet updated successfully");
+                }
+                return NotFound("Pet not found");
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, "Internal server error");
+            }
+        }
     }
 }
