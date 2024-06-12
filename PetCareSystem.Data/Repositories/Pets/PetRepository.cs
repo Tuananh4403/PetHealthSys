@@ -87,5 +87,26 @@ namespace PetCareSystem.Data.Repositories.Pets
             return true; 
         }
 
+        public async Task<bool> DeletePet(int id)
+        {
+            var pet = await _dbContext.Pets.FindAsync(id);
+            if (pet == null)
+            {
+                return false; 
+            }
+
+            bool isBooked = await _dbContext.Bookings.AnyAsync(b => b.PetId == id);
+            bool hasRecords = await _dbContext.Records.AnyAsync(r => r.PetId == id);
+            if (isBooked || hasRecords)
+            {
+                return false; 
+            }
+
+            _dbContext.Pets.Remove(pet);
+            await _dbContext.SaveChangesAsync();
+
+            return true; 
+        }
+
     }
 }

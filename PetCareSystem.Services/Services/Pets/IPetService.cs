@@ -15,5 +15,6 @@ namespace PetCareSystem.Services.Services.Pets
         Task<PetRequest> GetPetDetailsAsync(int petId);
         Task<IList<Pet>> GetListPet(string petName, string nameOfCustomer, string kindOfPet, string speciesOfPet, bool? genderOfPet, DateTime? birthdayOfPet);
         Task<bool> UpdatePetAsync(int id, PetRequest updatePet);
+        Task<bool> DeletePetAsync(int id);
     }
 }

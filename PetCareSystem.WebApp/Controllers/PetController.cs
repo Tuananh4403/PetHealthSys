@@ -120,5 +120,23 @@ namespace PetCareSystem.WebApp.Controllers
                 return StatusCode(500, "Internal server error");
             }
         }
+
+        [HttpDelete("delete-pet/{id}")]
+        public async Task<IActionResult> DeletePet(int id)
+        {
+            try
+            {
+                var result = await _petService.DeletePetAsync(id);
+                if (result)
+                {
+                    return Ok("Pet deleted successfully");
+                }
+                return NotFound("Pet not found");
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, "Internal server error");
+            }
+        }
     }
 }

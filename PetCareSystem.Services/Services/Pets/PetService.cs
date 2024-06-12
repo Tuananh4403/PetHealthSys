@@ -113,7 +113,6 @@ namespace PetCareSystem.Services.Services.Pets
 
         public async Task<bool> UpdatePetAsync(int id, PetRequest updatePet)
         {
-            // Trích xuất thông tin từ updatePet và gọi phương thức UpdatePet với các tham số riêng lẻ
             bool isUpdated = await _petRepository.UpdatePet(
                 id,
                 updatePet.PetName,
@@ -123,6 +122,11 @@ namespace PetCareSystem.Services.Services.Pets
                 updatePet.Species
             );
             return isUpdated;
+        }
+
+        public async Task<bool> DeletePetAsync(int id)
+        {
+            return await _petRepository.DeletePet(id);
         }
 
 
