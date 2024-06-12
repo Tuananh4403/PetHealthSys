@@ -12,6 +12,6 @@ namespace PetCareSystem.Data.Repositories.Pets
         Task AddPetAsync(Pet pet);
         Task<bool> PetExists(int petId);
         Task<Pet> GetPetByIdAsync(int petId);
-
+        Task<IList<Pet>> GetListPet(string petName, string nameOfCustomer, string kindOfPet, string speciesOfPet, bool? genderOfPet, DateTime? birthdayOfPet);
     }
 }

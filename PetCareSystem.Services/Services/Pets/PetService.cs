@@ -105,5 +105,10 @@ namespace PetCareSystem.Services.Services.Pets
             return petRequest;
         }
 
+        public async Task<IList<Pet>> GetListPet(string petName, string nameOfCustomer, string kindOfPet, string speciesOfPet, bool? genderOfPet, DateTime? birthdayOfPet)
+        {
+            return await _petRepository.GetListPet(petName, nameOfCustomer, kindOfPet, speciesOfPet, genderOfPet, birthdayOfPet);
+        }
+
     }
 }

@@ -32,5 +32,37 @@ namespace PetCareSystem.Data.Repositories.Pets
         {
             return await _dbContext.Pets.FindAsync(petId);
         }
+
+        public async Task<IList<Pet>> GetListPet(string petName, string nameOfCustomer, string kindOfPet, string speciesOfPet, bool? genderOfPet, DateTime? birthdayOfPet)
+        {
+            var query = _dbContext.Pets.AsQueryable();
+
+            if (!string.IsNullOrEmpty(petName))
+            {
+                query = query.Where(p => p.PetName.Contains(petName));
+            }
+            if (!string.IsNullOrEmpty(nameOfCustomer))
+            {
+                query = query.Include(p => p.Customer).Where(p => p.Customer.User.Username.Contains(nameOfCustomer));
+            }
+            if (!string.IsNullOrEmpty(kindOfPet))
+            {
+                query = query.Where(p => p.KindOfPet.Contains(kindOfPet));
+            }
+            if (!string.IsNullOrEmpty(speciesOfPet))
+            {
+                query = query.Where(p => p.Species.Contains(speciesOfPet));
+            }
+            if (genderOfPet.HasValue)
+            {
+                query = query.Where(p => p.Gender == genderOfPet.Value);
+            }
+            if (birthdayOfPet.HasValue)
+            {
+                query = query.Where(p => p.Birthday.Date == birthdayOfPet.Value.Date);
+            }
+
+            return query.ToList<Pet>();
+        }
     }
 }

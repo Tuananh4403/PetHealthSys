@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using PetCareSystem.Data.Entites;
 using PetCareSystem.Services.Models.Pet;
 using PetCareSystem.Services.Services.Auth;
 using PetCareSystem.Services.Services.Pets;
@@ -66,6 +67,29 @@ namespace PetCareSystem.WebApp.Controllers
                 {
                     return NotFound(new { message = "Pet not found" });
                 }
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new { message = "An error occurred while retrieving the pet details", details = ex.Message });
+            }
+        }
+
+        [HttpGet("getListPet")]
+        public async Task<IActionResult> GetListPet(string petName, string nameOfCustomer, string kindOfPet, string speciesOfPet, bool? genderOfPet, DateTime? birthdayOfPet)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            try
+            {
+                var pets = await _petService.GetListPet(petName, nameOfCustomer, kindOfPet, speciesOfPet, genderOfPet, birthdayOfPet);
+                if (pets.Any())
+                {
+                    return Ok(pets);
+                }
+                return NotFound("No pets found matching the search criteria.");
             }
             catch (Exception ex)
             {
