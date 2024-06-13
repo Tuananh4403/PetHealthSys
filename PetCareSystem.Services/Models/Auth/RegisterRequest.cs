@@ -15,6 +15,8 @@ namespace PetCareSystem.Services.Models.Auth
 
         [Required]
         public string? Email { get; set; }
+        [Required]
+        public string? Phone { get; set; }
 
         [Required]
         public bool IsCustomer { get; set; }

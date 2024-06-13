@@ -48,48 +48,6 @@ namespace PetCareSystem.Data.Repositories.Bookings
             }
             return false; 
         }
-
-
-        public async Task<List<Booking>> GetBookingsAsync(string searchTerm, Dictionary<string, object> searchParameters, int pageNumber, int pageSize)
-        {
-            var query = _dbContext.Bookings.AsQueryable();
-
-            if (!string.IsNullOrEmpty(searchTerm))
-            {
-                query = query.Where(b => b.CustomerName.Contains(searchTerm) || b.ServiceType.Contains(searchTerm));
-            }
-
-            foreach (var param in searchParameters)
-            {
-                switch (param.Key.ToLower())
-                {
-                    case "startdate":
-                        if (param.Value is DateTime startDate)
-                        {
-                            query = query.Where(b => b.BookingDate >= startDate);
-                        }
-                        break;
-                    case "enddate":
-                        if (param.Value is DateTime endDate)
-                        {
-                            query = query.Where(b => b.BookingDate <= endDate);
-                        }
-                        break;
-                    case "servicetype":
-                        if (param.Value is string serviceType)
-                        {
-                            query = query.Where(b => b.ServiceType == serviceType);
-                        }
-                        break;
-                        // Add more cases for other parameters as needed
-                }
-            }
-
-            return await query
-                .Skip((pageNumber - 1) * pageSize)
-                .Take(pageSize)
-                .ToListAsync();
-        }
     public async Task<bool> SaveChangesAsync()
         {
             try

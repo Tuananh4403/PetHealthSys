@@ -109,11 +109,5 @@ namespace PetCareSystem.WebApp.Controllers
                 return StatusCode(500, "Internal server error");
             }
         }
-
-        [HttpPost("booking-list")]
-        public async Task<IActionResult> GetListBooking(string name)
-        {
-
-        }
     }
 }
