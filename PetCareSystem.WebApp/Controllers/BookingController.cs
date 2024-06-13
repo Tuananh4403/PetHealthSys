@@ -67,7 +67,7 @@ namespace PetCareSystem.WebApp.Controllers
 
         // PUT: api/booking/update/{id}
         [HttpPut("update/{id}")]
-        public async Task<IActionResult> Update(int id, CreateBookingReq model)
+        public async Task<IActionResult> Update(int id, UpdateBookingReq model)
         {
             if (!ModelState.IsValid)
             {
@@ -113,7 +113,20 @@ namespace PetCareSystem.WebApp.Controllers
         [HttpPost("booking-list")]
         public async Task<IActionResult> GetListBooking(string name)
         {
-
+            try
+            {
+                var booking = await _services.GetBookingbyName(name);
+                if (booking == null)
+                {
+                    return NotFound("Booking not found");
+                }
+                return Ok(booking);
+            }
+            catch (Exception ex)
+            {
+                // Log the exception (ex) here if needed
+                return StatusCode(500, "Internal server error");
+            }
         }
     }
 }

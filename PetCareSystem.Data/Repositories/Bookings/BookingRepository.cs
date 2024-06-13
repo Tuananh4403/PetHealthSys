@@ -24,73 +24,31 @@ namespace PetCareSystem.Data.Repositories.Bookings
             return await SaveChangesAsync();
         }
 
-        public async Task<bool> CreateBookingAsync(Booking booking)        {
+        public async Task<bool> CreateBookingAsync(Booking booking)
+        {
             _dbContext.Bookings.Add(booking);
             return await SaveChangesAsync();
         }
 
-        public async Task<IList<Booking>> GetListBooking(int BookingId)
+        public async Task<Booking> GetListBooking(int bookingId)
         {
-            var bookings = await _dbContext.Bookings.Where(b => b.Id == BookingId).ToListAsync();
-            return bookings.ToList<Booking>();
+            return await _dbContext.Bookings.Include(b => b.Customer).FirstOrDefaultAsync(b => b.Id == bookingId);
         }
 
-        public async Task<bool> DeleteBookingAsync(int BookingId)
+
+        public async Task<bool> DeleteBookingAsync(int bookingId)
         {
-            var bookings = await GetListBooking(BookingId);
-            if (bookings != null && bookings.Any())
+            var bookings = await GetListBooking(bookingId);
+            if (bookings != null)
             {
-                foreach (var booking in bookings)
-        {
-                    _dbContext.Bookings.Remove(booking);
-                }
+                _dbContext.Remove(bookings);
                 return await SaveChangesAsync();
             }
-            return false; 
+            return false;
         }
 
 
-        public async Task<List<Booking>> GetBookingsAsync(string searchTerm, Dictionary<string, object> searchParameters, int pageNumber, int pageSize)
-        {
-            var query = _dbContext.Bookings.AsQueryable();
-
-            if (!string.IsNullOrEmpty(searchTerm))
-            {
-                query = query.Where(b => b.CustomerName.Contains(searchTerm) || b.ServiceType.Contains(searchTerm));
-            }
-
-            foreach (var param in searchParameters)
-            {
-                switch (param.Key.ToLower())
-                {
-                    case "startdate":
-                        if (param.Value is DateTime startDate)
-                        {
-                            query = query.Where(b => b.BookingDate >= startDate);
-                        }
-                        break;
-                    case "enddate":
-                        if (param.Value is DateTime endDate)
-                        {
-                            query = query.Where(b => b.BookingDate <= endDate);
-                        }
-                        break;
-                    case "servicetype":
-                        if (param.Value is string serviceType)
-                        {
-                            query = query.Where(b => b.ServiceType == serviceType);
-                        }
-                        break;
-                        // Add more cases for other parameters as needed
-                }
-            }
-
-            return await query
-                .Skip((pageNumber - 1) * pageSize)
-                .Take(pageSize)
-                .ToListAsync();
-        }
-    public async Task<bool> SaveChangesAsync()
+        public async Task<bool> SaveChangesAsync()
         {
             try
             {
@@ -102,6 +60,37 @@ namespace PetCareSystem.Data.Repositories.Bookings
                 // Log or handle the exception as needed
                 return false;
             }
+        }
+
+        public async Task<IList<Booking>> GetListBooking(string name)
+        {
+            var bookings = await _dbContext.Bookings
+                .Include(b => b.Customer)
+                .ThenInclude(c => c.User)
+                .Where(b => b.Customer.User.FirstName.Contains(name))
+                .ToListAsync();
+            return bookings;
+        }
+
+        public async Task<bool> UpdateBookingTimeAsync(int bookingId, DateTime time)
+        {
+            var bookingToUpdate = await GetListBooking(bookingId);
+
+            if (bookingToUpdate != null)
+            {
+                bookingToUpdate.BookingTime = time;
+
+                try
+                {
+                    
+                    return await SaveChangesAsync();
+                }
+                catch (DbUpdateException)
+                {
+                    return false;
+                }
+            }
+            return true;
         }
     }
 }

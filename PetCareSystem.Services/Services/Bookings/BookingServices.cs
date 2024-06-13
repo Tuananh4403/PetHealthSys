@@ -1,6 +1,8 @@
 ﻿using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using PetCareSystem.Data.Entites;
 using PetCareSystem.Data.Repositories.Bookings;
+using PetCareSystem.Data.Repositories.BookingServices;
+using PetCareSystem.Data.Repositories.Services;
 using PetCareSystem.Services.Models.Booking;
 using System;
 using System.Collections.Generic;
@@ -13,10 +15,12 @@ namespace PetCareSystem.Services.Services.Bookings
     public class BookingServices : IBookingServices
     {
         private readonly IBookingRepository _bookingRepository;
+        private readonly IBookingServiceRepository _bookingServiceRepository;
         
-        public BookingServices(IBookingRepository bookingRepository)
+        public BookingServices(IBookingRepository bookingRepository, IBookingServiceRepository bookingServiceRepository)
         {
             _bookingRepository = bookingRepository;
+           _bookingServiceRepository = bookingServiceRepository;
         }
 
         public async Task<bool> CreateBookingAsync(CreateBookingReq bookingReq)
@@ -29,7 +33,6 @@ namespace PetCareSystem.Services.Services.Bookings
                 BookingTime = bookingReq.BookingDate,
                 // Set other properties of the Booking entity as needed
             };
-
             // Save the booking entity to the database
             if (!await _bookingRepository.CreateBookingAsync(booking))
             {
@@ -56,19 +59,35 @@ namespace PetCareSystem.Services.Services.Bookings
             return true;
         }
 
-        public async Task<bool> UpdateBookingAsync(int BookingId, CreateBookingReq updateReq)
+        public async Task<bool> UpdateBookingAsync(int bookingId, UpdateBookingReq updateReq)
         {
-            var bookingToUpdate = await _bookingRepository.GetListBooking(BookingId);
+            var bookingToUpdate = await _bookingRepository.GetListBooking(bookingId);
             if (bookingToUpdate == null)
             {
                     return false;
                 }
+            
+            var BookingTime = updateReq.BookingDate;
+            var newServiceIds = new HashSet<int>(updateReq.ServiceIds);
 
-            if(await _bookingRepository.DeleteBookingAsync(BookingId))
+            if (!await _bookingServiceRepository.UpdateServiceIdsAsync(bookingId,newServiceIds) && !await _bookingRepository.UpdateBookingTimeAsync(bookingId,BookingTime))
             {
-                CreateBookingAsync(updateReq);
+                return false;
             }
-            else
+            
+
+                return true;
+        }
+
+
+        public async Task<Booking> GetBookingById(int BookingId)
+        {
+            return await _bookingRepository.GetListBooking(BookingId);
+        }
+
+        public async Task<bool> DeleteBooking(int bookingId)
+        {
+            if (!(await _bookingRepository.DeleteBookingAsync(bookingId)))
             {
                 return false;
             }
@@ -76,28 +95,9 @@ namespace PetCareSystem.Services.Services.Bookings
             return true;
         }
 
-
-        public async Task<Booking> GetBookingById(int BookingId)
+        public async Task<IList<Booking>> GetBookingbyName(string Name)
         {
-            return (Booking)await _bookingRepository.GetListBooking(BookingId);
+            return await _bookingRepository.GetListBooking(Name);
         }
-
-        public async Task<bool> DeleteBooking(int BookingId)
-        {
-            if(!(await _bookingRepository.DeleteBookingAsync(BookingId)))
-            {
-                return false;
-            }
-
-                return true;
-        }
-
-
-        Task<List<Booking>> IBookingServices.GetBookingById(int BookingId)
-        {
-            throw new NotImplementedException();
-        }
-
-        
     }
 }

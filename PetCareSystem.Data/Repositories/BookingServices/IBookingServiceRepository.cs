@@ -5,12 +5,12 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace PetCareSystem.Data.Repositories.Services
+namespace PetCareSystem.Data.Repositories.BookingServices
 {
-    public interface IServicesRepository
+    public interface IBookingServiceRepository
     {
-        Task<bool> AddServiceAsync(Service service);
-
+        Task<Boolean> UpdateServiceIdsAsync(int bookingId, HashSet<int> newServiceIds);
         Task<Boolean> SaveChangesAsync();
     }
 }
+
