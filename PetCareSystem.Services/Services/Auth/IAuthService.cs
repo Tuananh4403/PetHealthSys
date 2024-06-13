@@ -10,6 +10,7 @@ namespace PetCareSystem.Services.Services.Auth
         Task<User?> GetById(int userId);
         Task<AuthenticationResult> LoginAsync(string username, string password);
         Task RegisterAsync(RegisterRequest model);
+        Task CreateRole(CreateRoleReq model);
     }
     public class AuthenticationResult
     {

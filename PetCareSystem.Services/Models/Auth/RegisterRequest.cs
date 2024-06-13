@@ -20,8 +20,8 @@ namespace PetCareSystem.Services.Models.Auth
 
         [Required]
         public bool IsCustomer { get; set; }
-        public string? Role { get; set; }
         [Required]
         public string? Password { get; set; }
+        public int? RoleId {get; set;}
     }
 }

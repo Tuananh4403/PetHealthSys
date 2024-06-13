@@ -19,10 +19,33 @@ namespace PetCareSystem.Data.Repositories.Users
             _dbContext = dbContext;
         }
 
-        public async Task AddUserAsync(User user)
+        public async Task AddUserAsync(User user, int? roleId)
         {
-            await _dbContext.Users.AddAsync(user);
-            await _dbContext.SaveChangesAsync();
+            using (var transaction = await _dbContext.Database.BeginTransactionAsync())
+            {
+                try
+                {
+                    // Add User
+                    await _dbContext.Users.AddAsync(user);
+                    await _dbContext.SaveChangesAsync();
+
+                    // Add UserRole if RoleId is provided
+                    if (roleId.HasValue)
+                    {
+                        user.UserRoles.Add(new UserRole { UserId = user.Id, RoleId = roleId.Value });
+                        await _dbContext.SaveChangesAsync();
+                    }
+
+                    // Commit transaction
+                    await transaction.CommitAsync();
+                }
+                catch (Exception)
+                {
+                    // Rollback transaction if something went wrong
+                    await transaction.RollbackAsync();
+                    throw;
+                }
+            }
         }
         public async Task AddPetAsync(Pet pet)
         {

@@ -10,6 +10,7 @@ using System.Security.Claims;
 using System.Text;
 using Microsoft.Extensions.Configuration;
 using PetCareSystem.Services.Helpers;
+using PetCareSystem.Data.Repositories.Roles;
 
 namespace PetCareSystem.Services.Services.Auth
 {
@@ -17,11 +18,13 @@ namespace PetCareSystem.Services.Services.Auth
     {
         private readonly IUserRepository _userRepository;
         private readonly ICustomerRepository _customerRepository;
+        private readonly IRoleRepository _roleRepository;
 
-        public AuthService(IUserRepository userRepository, ICustomerRepository customerRepository)
+        public AuthService(IUserRepository userRepository, ICustomerRepository customerRepository, IRoleRepository roleRepository)
         {
             _userRepository = userRepository;
             _customerRepository = customerRepository;
+            _roleRepository = roleRepository;
         }
 
         public async Task<AuthenticationResult> LoginAsync(string username, string password)
@@ -54,7 +57,7 @@ namespace PetCareSystem.Services.Services.Auth
                 Password = HashPassword(model.Password)
             };
            
-            await _userRepository.AddUserAsync(user);
+            await _userRepository.AddUserAsync(user, model.RoleId);
             if (model.IsCustomer)
             {
                 var customer = new Customer
@@ -108,9 +111,16 @@ namespace PetCareSystem.Services.Services.Auth
             return _userRepository.GetUserById(userId);
         }
 
-        public Task RegisterAsync(string username, string password)
+        public async Task CreateRole(CreateRoleReq model)
         {
-            throw new NotImplementedException();
+            if(await _roleRepository.GetRoleByTitleAsync(model.Title) != null){
+                throw new AppException("Role is already created");
+            }
+            var role = new Role{
+                Title = model.Title,
+                Name = model.Title
+            };
+            await _roleRepository.Create(role);
         }
     }
 }

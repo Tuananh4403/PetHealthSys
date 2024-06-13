@@ -10,7 +10,7 @@ namespace PetCareSystem.Data.Repositories.Users
     public interface IUserRepository
     {
         Task<User> GetUserByUsernameAsync(string username);
-        Task AddUserAsync(User user);
+        Task AddUserAsync(User user, int? roleId);
         Task AddPetAsync(Pet pet);
         Task<User?> GetUserById(int userId);
         Task<User?> GetUserByPhone(string phone);
