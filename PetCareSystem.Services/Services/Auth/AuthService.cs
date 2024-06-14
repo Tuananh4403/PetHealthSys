@@ -118,7 +118,7 @@ namespace PetCareSystem.Services.Services.Auth
             }
             var role = new Role{
                 Title = model.Title,
-                Name = model.Title
+                Name = model.Name
             };
             await _roleRepository.Create(role);
         }

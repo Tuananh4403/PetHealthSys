@@ -32,7 +32,8 @@ namespace PetCareSystem.Data.Repositories.Users
                     // Add UserRole if RoleId is provided
                     if (roleId.HasValue)
                     {
-                        user.UserRoles.Add(new UserRole { UserId = user.Id, RoleId = roleId.Value });
+                        var userRole = new UserRole { UserId = user.Id, RoleId = roleId.Value };
+                        user.UserRoles.Add(userRole);
                         await _dbContext.SaveChangesAsync();
                     }
 
