@@ -22,7 +22,7 @@ namespace PetCareSystem.WebApp.Controllers
         [HttpPost("register-pet")]
         public async Task<IActionResult> RegisterPet([FromBody] PetRequest model)
         {
-            // Check if the model state is NOT valid
+            
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
