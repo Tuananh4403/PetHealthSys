@@ -76,7 +76,7 @@ namespace PetCareSystem.Data.Repositories.Bookings
             {
                 return false;
             }
-            booking.Status = 0;
+            booking.Status = null;
             await _dbContext.SaveChangesAsync();
             return true;
         }
