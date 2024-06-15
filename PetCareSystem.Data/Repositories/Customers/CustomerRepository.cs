@@ -25,33 +25,9 @@ namespace PetCareSystem.Data.Repositories.Customers
             await _dbContext.SaveChangesAsync();
         }
 
-        public async Task<User> GetCusById(int id)
+        public async Task<Customer> GetCusById(int id)
         {
-            return await _dbContext.Users.SingleOrDefaultAsync(u => u.Id == id);
+            return await _dbContext.Customers.SingleOrDefaultAsync(u => u.UserId == id);
         }
-        public int? GetUserIdFromToken(string token)
-        {
-            
-            var tokenHandler = new JwtSecurityTokenHandler();
-            try
-            {
-                
-                var jwtToken = tokenHandler.ReadToken(token) as JwtSecurityToken;
-
-                
-                var userIdClaim = jwtToken?.Claims.FirstOrDefault(claim => claim.Type == "id");
-
-                
-                if (int.TryParse(userIdClaim?.Value, out int userId))
-                {
-                    return userId;
-                }
-            } catch
-            {
-                return null;
-            }
-            return null;
-        }
-
     }
 }

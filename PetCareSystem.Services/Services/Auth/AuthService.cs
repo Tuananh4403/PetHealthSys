@@ -11,6 +11,7 @@ using System.Text;
 using Microsoft.Extensions.Configuration;
 using PetCareSystem.Services.Helpers;
 using PetCareSystem.Data.Repositories.Roles;
+using PetCareSystem.Data.Repositories.Doctors;
 
 namespace PetCareSystem.Services.Services.Auth
 {
@@ -19,12 +20,14 @@ namespace PetCareSystem.Services.Services.Auth
         private readonly IUserRepository _userRepository;
         private readonly ICustomerRepository _customerRepository;
         private readonly IRoleRepository _roleRepository;
+        private readonly IDoctorRepository _doctorRepository;
 
-        public AuthService(IUserRepository userRepository, ICustomerRepository customerRepository, IRoleRepository roleRepository)
+        public AuthService(IUserRepository userRepository, ICustomerRepository customerRepository, IRoleRepository roleRepository, IDoctorRepository doctorRepository)
         {
             _userRepository = userRepository;
             _customerRepository = customerRepository;
             _roleRepository = roleRepository;
+            _doctorRepository = doctorRepository;
         }
 
         public async Task<AuthenticationResult> LoginAsync(string username, string password)
@@ -68,6 +71,15 @@ namespace PetCareSystem.Services.Services.Auth
 
                 // Add the customer
                 await _customerRepository.AddCustomerAsync(customer);
+            }
+            else
+            {
+                Role role = await _roleRepository.GetRoleByIdAsync(model.RoleId ?? 2);
+                if(role.Title == "DT")
+                {
+                    Doctor doc =new Doctor { UserId = user.Id };
+                    await _doctorRepository.AddDoctorAsync(doc);
+                }
             }
         }
 

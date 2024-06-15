@@ -6,6 +6,7 @@ namespace PetCareSystem.Data.Repositories.Roles
     {
         IEnumerable<Role> GetAll();
         Task<Role> GetRoleByTitleAsync(string RoleTilte);
+        Task<Role> GetRoleByIdAsync(int RoleId);
         Task Create(Role role);
         void Delete(int id);
     }
