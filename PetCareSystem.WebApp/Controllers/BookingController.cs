@@ -72,8 +72,6 @@ namespace PetCareSystem.WebApp.Controllers
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
-
-
             }
 
             try
