@@ -24,31 +24,64 @@ namespace PetCareSystem.Data.Repositories.Bookings
             return await SaveChangesAsync();
         }
 
-        public async Task<bool> CreateBookingAsync(Booking booking)        {
+        public async Task<bool> CreateBookingAsync(Booking booking)
+        {
             _dbContext.Bookings.Add(booking);
             return await SaveChangesAsync();
         }
 
-        public async Task<IList<Booking>> GetListBooking(int BookingId)
+        public async Task<Booking> GetListBooking(int bookingId)
         {
-            var bookings = await _dbContext.Bookings.Where(b => b.Id == BookingId).ToListAsync();
-            return bookings.ToList<Booking>();
+            return await _dbContext.Bookings.Include(b => b.Customer).FirstOrDefaultAsync(b => b.Id == bookingId);
         }
 
-        public async Task<bool> DeleteBookingAsync(int BookingId)
+        public async Task<IList<Booking>> GetListBooking(string name)
         {
-            var bookings = await GetListBooking(BookingId);
-            if (bookings != null && bookings.Any())
-            {
-                foreach (var booking in bookings)
-        {
-                    _dbContext.Bookings.Remove(booking);
-                }
-                return await SaveChangesAsync();
-            }
-            return false; 
+            var bookings = await _dbContext.Bookings
+                .Include(b => b.Customer)
+                .ThenInclude(c => c.User)
+                .Where(b => b.Customer.User.FirstName.Contains(name))
+                .ToListAsync();
+            return bookings;
         }
-    public async Task<bool> SaveChangesAsync()
+
+        public async Task<bool> UpdateBooking(int bookingId, DateTime bookingTime, int[] serviceIds)
+        {
+            var booking = await _dbContext.Bookings.FirstOrDefaultAsync(id=>id.Id == bookingId);
+            if(booking == null)
+            {
+                return false;
+            }
+            booking.BookingTime = bookingTime;
+            _dbContext.BookingService.RemoveRange(booking.BookingServices);
+
+            foreach (var serviceId in serviceIds)
+            {
+                var bookingService = new BookingService
+                {
+                    ServiceId = serviceId,
+                    BookingId = bookingId
+                };
+                _dbContext.BookingService.Add(bookingService);
+            }
+            await _dbContext.SaveChangesAsync();
+
+            return true;
+        }
+
+        public async Task<bool> CancelBooking(int bookingId)
+        {
+            var booking = await _dbContext.Bookings.FirstOrDefaultAsync(id=> id.Id == bookingId);
+            if (booking == null)
+            {
+                return false;
+            }
+            booking.Status = 0;
+            await _dbContext.SaveChangesAsync();
+            return true;
+        }
+
+        public async Task<bool> SaveChangesAsync()
         {
             try
             {
@@ -61,5 +94,6 @@ namespace PetCareSystem.Data.Repositories.Bookings
                 return false;
             }
         }
+        
     }
 }

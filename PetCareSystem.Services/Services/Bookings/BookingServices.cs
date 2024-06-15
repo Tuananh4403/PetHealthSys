@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using PetCareSystem.Data.Entites;
 using PetCareSystem.Data.Repositories.Bookings;
+using PetCareSystem.Data.Repositories.Services;
 using PetCareSystem.Services.Models.Booking;
 using System;
 using System.Collections.Generic;
@@ -13,7 +14,7 @@ namespace PetCareSystem.Services.Services.Bookings
     public class BookingServices : IBookingServices
     {
         private readonly IBookingRepository _bookingRepository;
-        
+
         public BookingServices(IBookingRepository bookingRepository)
         {
             _bookingRepository = bookingRepository;
@@ -22,14 +23,13 @@ namespace PetCareSystem.Services.Services.Bookings
         public async Task<bool> CreateBookingAsync(CreateBookingReq bookingReq)
         {
 
-            var booking = new Booking ()
+            var booking = new Booking()
             {
                 CustomerId = bookingReq.CustomerId,
                 PetId = bookingReq.PetId,
                 BookingTime = bookingReq.BookingDate,
                 // Set other properties of the Booking entity as needed
             };
-
             // Save the booking entity to the database
             if (!await _bookingRepository.CreateBookingAsync(booking))
             {
@@ -56,19 +56,31 @@ namespace PetCareSystem.Services.Services.Bookings
             return true;
         }
 
-        public async Task<bool> UpdateBookingAsync(int BookingId, CreateBookingReq updateReq)
+        public async Task<bool> UpdateBookingAsync(int bookingId, UpdateBookingReq updateReq)
         {
-            var bookingToUpdate = await _bookingRepository.SaveChangesAsync();
-            if (bookingToUpdate == null)
-            {
-                    return false;
-                }
+            bool isUpdate = await _bookingRepository.UpdateBooking(
+                bookingId,
+                updateReq.BookingDate,
+                updateReq.ServiceIds
+                );
 
-            if(await _bookingRepository.DeleteBookingAsync(BookingId))
-            {
-                CreateBookingAsync(updateReq);
-            }
-            else
+            return isUpdate;
+        }
+
+
+        public async Task<Booking> GetBookingById(int BookingId)
+        {
+            return await _bookingRepository.GetListBooking(BookingId);
+        }
+
+        public async Task<IList<Booking>> GetBookingbyName(string Name)
+        {
+            return await _bookingRepository.GetListBooking(Name);
+        }
+
+        public async Task<bool> DeleteBooking(int bookingId)
+        {
+            if (!(await _bookingRepository.CancelBooking(bookingId)))
             {
                 return false;
             }
@@ -76,25 +88,6 @@ namespace PetCareSystem.Services.Services.Bookings
             return true;
         }
 
-
-        //public async Task<Booking> GetBookingById(int BookingId)
-        //{
-        //    return (Booking)await _bookingRepository.GetListBooking(BookingId);
-        //}
-
-        public async Task<bool> DeleteBooking(int BookingId)
-        {
-            if(!(await _bookingRepository.DeleteBookingAsync(BookingId)))
-            {
-                return false;
-            }
-
-                return true;
-        }
-
-        Task<Booking> IBookingServices.GetBookingById(int BookingId)
-        {
-            throw new NotImplementedException();
-        }
+        
     }
 }
