@@ -55,7 +55,6 @@ namespace PetCareSystem.Data.Repositories.Bookings
             booking.BookingTime = bookingTime;
             _dbContext.BookingService.RemoveRange(booking.BookingServices);
 
-
             foreach (var serviceId in serviceIds)
             {
                 var bookingService = new BookingService
