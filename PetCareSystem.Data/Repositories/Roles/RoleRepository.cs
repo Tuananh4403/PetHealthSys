@@ -34,6 +34,11 @@ namespace PetCareSystem.Data.Repositories.Roles
             throw new NotImplementedException();
         }
 
+        public async Task<Role> GetRoleByIdAsync(int RoleId)
+        {
+            return await _dBContext.Roles.SingleOrDefaultAsync(u => u.Id == RoleId);
+        }
+
         public async Task<Role> GetRoleByTitleAsync(string RoleTilte)
         {
             return await _dBContext.Roles.SingleOrDefaultAsync(u => u.Title == RoleTilte);
