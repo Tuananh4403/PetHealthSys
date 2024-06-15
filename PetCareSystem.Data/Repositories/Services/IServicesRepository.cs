@@ -10,6 +10,7 @@ namespace PetCareSystem.Data.Repositories.Services
     public interface IServicesRepository
     {
         Task<bool> AddServiceAsync(Service service);
+        Task<(List<Service> Services, int TotalCount)> GetListService(string searchString, int pageNumber = 1, int pageSize = 10);
         Task<Boolean> SaveChangesAsync();
     }
 }

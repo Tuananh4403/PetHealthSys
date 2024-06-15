@@ -1,4 +1,5 @@
-﻿using PetCareSystem.Services.Models.Booking;
+﻿using PetCareSystem.Data.Entites;
+using PetCareSystem.Services.Models.Booking;
 using PetCareSystem.Services.Models.Services;
 using System;
 using System.Collections.Generic;
@@ -11,5 +12,6 @@ namespace PetCareSystem.Services.Services.Serivces
     public interface IServiceServices
     {
         Task<bool> CreateServiceAsync(CreateServiceReq serviceReq);
+        Task<(List<Service> Services, int TotalCount)> GetListServiceAsync(string searchString, int pageNumber = 1, int pageSize = 10);
     }
 }

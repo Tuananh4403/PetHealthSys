@@ -23,6 +23,20 @@ namespace PetCareSystem.Data.Repositories.Services
             return await SaveChangesAsync();
         }
 
+        public async Task<(List<Service> Services, int TotalCount)> GetListService(string searchString,int pageNumber = 1 , int pageSize = 10)
+        {
+            var query = _dBContext.Services
+           .Where(s => s.Name.Contains(searchString));
+
+            var totalCount = await query.CountAsync();
+            var services = await query
+                .Skip((pageNumber - 1) * pageSize)
+                .Take(pageSize)
+                .ToListAsync();
+
+            return (services, totalCount);
+        }
+
         public async Task<bool> SaveChangesAsync()
         {
             try

@@ -40,5 +40,26 @@ namespace PetCareSystem.WebApp.Controllers
                 return StatusCode(500, "Internal server error");
             }
         }
+        [HttpGet("get-cus-service")]
+        public async Task<IActionResult> GetCusService([FromQuery] string searchOption)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+            try
+            {
+                var (services, totalCount) = await _serviceServices.GetListServiceAsync(searchOption, 1, 20);
+
+                // Process services and totalCount as needed
+
+                return Ok(new { Services = services, TotalCount = totalCount });
+            }
+            catch (Exception ex)
+            {
+                // Log the exception (ex) here if needed
+                return StatusCode(500, "Internal server error");
+            }
+        }
     }
 }

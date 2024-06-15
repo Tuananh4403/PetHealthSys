@@ -48,5 +48,9 @@ namespace PetCareSystem.Services.Services.Serivces
         {
             return _categoryMap.TryGetValue(categoryId, out var categoryName) ? categoryName : "Unknown";
         }
+        public async Task<(List<Service> Services, int TotalCount)> GetListServiceAsync(string searchString, int pageNumber = 1, int pageSize = 10)
+        {
+             return await _servicesRepository.GetListService(searchString, pageNumber, pageSize);
+        }
     }
 }
