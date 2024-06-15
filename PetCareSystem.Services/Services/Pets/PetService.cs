@@ -10,6 +10,8 @@ using System.Threading.Tasks;
 using System.IdentityModel.Tokens.Jwt;
 using PetCareSystem.Data.Repositories.Customers;
 using Microsoft.IdentityModel.Tokens;
+using PetCareSystem.Services.Services.Auth;
+using PetCareSystem.Services.Helpers;
 
 namespace PetCareSystem.Services.Services.Pets
 {
@@ -25,14 +27,14 @@ namespace PetCareSystem.Services.Services.Pets
         }
         public async Task<bool> RegisterPetAsync(PetRequest model, string token)
         {
-            var userId = _customerRepository.GetUserIdFromToken(token);
+            int? userId = CommonHelpers.GetUserIdByToken(token);
             if (!userId.HasValue || userId <= 0)
             {
                 throw new ArgumentException("Invalid token");
             }
 
-            var user = await _customerRepository.GetCusById((int)userId);
-            if (user == null)
+            var customer = await _customerRepository.GetCusById((int)userId);
+            if (customer == null)
             {
                 throw new ArgumentException("Customer does not exist! You need to register");
             }
@@ -67,7 +69,7 @@ namespace PetCareSystem.Services.Services.Pets
                 Gender = model.Gender,
                 Birthday = model.Birthday,
                 Species = model.Species,
-                CustomerId = user.Id 
+                CustomerId = customer.Id 
             };
 
             
