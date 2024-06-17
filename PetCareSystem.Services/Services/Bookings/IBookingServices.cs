@@ -17,7 +17,7 @@ namespace PetCareSystem.Services.Services.Bookings
         Task<Booking> GetBookingById(int BookingId);
 
         Task<IList<Booking>> GetBookingbyName(string Name);
-        Task<bool> DeleteBooking(int BookingId);
+        Task<bool> CancleBooking(int BookingId);
 
     }
 }

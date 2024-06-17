@@ -7,83 +7,68 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
-using System.Web.Mvc;
 using PetCareSystem.Data.Entites;
 
 
 namespace PetCareSystem.WebApp.Controllers
 {
-    public class BookingController : Controller
+    [ApiController]
+    [Route("api/[controller]")]
+    public class BookingController : ControllerBase
     {
-        [HttpGet]
-        public ActionResult Insert()
+        private readonly IBookingServices _services;
+
+        public BookingController(IBookingServices bookingServices)
         {
-            using (var context = new DB())
-            {
-                var services = context.Service.ToList();
-                ViewBag.Services = services;
-        }
-            return View();
+            _services = bookingServices;
         }
 
-        [HttpPost]
-        public ActionResult Insert(Booking model, List<int> SelectedServices)
+        // POST: api/booking/create
+        [HttpPost("create")]
+        public async Task<IActionResult> Create(CreateBookingReq model)
         {
-            using (var context = new DB())
+            if (!ModelState.IsValid)
             {
-                decimal totalPrice = 0;
-                int totalServices = 1;
-
-
-                for (int i = 0; i < SelectedServices.Count; i++)
+                return BadRequest(ModelState);
+            }
+            try
             {
-                    int serviceID = SelectedServices[i];
-                    int quantity = serviceQuantities[i];
-                    var service = context.Service.FirstOrDefault(s => s.ServiceID == serviceID);
-                    if (service != null)
+                var result = await _services.CreateBookingAsync(model);
+                if (result)
                 {
-                        totalPrice += service.Price;
-                        totalServices += i;
+                    return Ok("Booking created successfully");
                 }
                 return BadRequest("Failed to create booking");
             }
-
-                model.TotalPrice = totalPrice;
-                model.NumberService = totalServices;
-
-                context.Booking.Add(model);
-                context.SaveChanges();
+            catch (Exception ex)
+            {
+                // Log the exception (ex) here if needed
+                return StatusCode(500, "Internal server error");
             }
-            string message = "Created the booking successfully";
-            ViewBag.Message = message;
-            return View();
         }
 
         // GET: api/booking/{bookingId}
         [HttpGet("{bookingId}")]
-        public async Task<IActionResult> GetDetailBooking(int bookingId)
+        public async Task<IActionResult> GetDetailBookingById(int bookingId)
         {
-            using (var context = new DB())
+            try
             {
-                var data = context.Booking.ToList();
-                return View(data);
+                var booking = await _services.GetBookingById(bookingId);
+                if (booking == null)
+                {
+                    return NotFound("Booking not found");
                 }
-
+                return Ok(booking);
             }
-
-        [HttpGet]
-        public ActionResult Update(int BookingID)
-        {
-            using (var context = new DB())
+            catch (Exception ex)
             {
-                var data = context.Booking.Include(b => b.Service).FirstOrDefault(x => x.BookingID == BookingID);
-                ViewBag.Services = context.Service.ToList(); 
-                return View(data);
+                // Log the exception (ex) here if needed
+                return StatusCode(500, "Internal server error");
             }
         }
 
         [HttpPost("booking-list")]
-        public async Task<IActionResult> GetListBooking(string name)
+        public async Task<IActionResult> GetListBookingByName(string name)
         {
             try
             {
@@ -105,51 +90,44 @@ namespace PetCareSystem.WebApp.Controllers
         [HttpPut("update/{id}")]
         public async Task<IActionResult> Update(int id, UpdateBookingReq model)
         {
-            using (var context = new DB())
+            if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
-
-
             }
 
-                foreach (int serviceID in SelectedServices)
+            try
             {
-                    var service = context.Service.FirstOrDefault(s => s.ServiceID == serviceID);
-                    if (service != null)
+                var result = await _services.UpdateBookingAsync(id, model);
+                if (result)
                 {
-                        totalPrice += service.Price;
-                        totalServices++;
-                    }
+                    return Ok("Booking updated successfully");
                 }
-
-                booking.TotalPrice = totalPrice;
-                booking.NumberService = totalServices;
-
-                context.Booking.Add(model);
-                context.SaveChanges();
-                }
-            string message = "Updated the booking successfully";
-            ViewBag.Message = message;
+                return NotFound("Booking not found");
             }
-
-        public ActionResult Delete()
+            catch (Exception ex)
             {
-            return View();
+                // Log the exception (ex) here if needed
+                return StatusCode(500, "Internal server error");
+            }
         }
 
-        [HttpPost]
-        public ActionResult Delete(int BookingID)
+        // DELETE: api/booking/delete/{id}
+        [HttpDelete("delete/{id}")]
+        public async Task<IActionResult> Delete(int id)
         {
-            using (var context = new DB())
+            try
             {
-                var data = context.Booking.FirstOrDefault(x => x.BookingID == BookingID);
-                if (data != null)
+                var result = await _services.CancleBooking(id);
+                if (result)
                 {
-                    context.Booking.Remove(data);
-                    context.SaveChanges();
+                    return Ok("Booking deleted successfully");
+                }
+                return NotFound("Booking not found");
             }
-                else
-                    return View();
+            catch (Exception ex)
+            {
+                // Log the exception (ex) here if needed
+                return StatusCode(500, "Internal server error");
             }
         }
 

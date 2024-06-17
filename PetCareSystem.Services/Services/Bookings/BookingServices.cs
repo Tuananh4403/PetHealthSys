@@ -78,7 +78,7 @@ namespace PetCareSystem.Services.Services.Bookings
             return await _bookingRepository.GetListBooking(Name);
         }
 
-        public async Task<bool> DeleteBooking(int bookingId)
+        public async Task<bool> CancleBooking(int bookingId)
         {
             if (!(await _bookingRepository.CancelBooking(bookingId)))
             {
