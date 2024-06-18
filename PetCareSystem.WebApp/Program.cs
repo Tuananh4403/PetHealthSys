@@ -19,6 +19,7 @@ using PetCareSystem.Services.Services.Pets;
 using PetCareSystem.Data.Entites;
 using PetCareSystem.Data.Repositories.Pets;
 using PetCareSystem.Data.Repositories.Roles;
+using PetCareSystem.Data.Repositories.Doctors;
 
 
 LoadWebpack.Load();
@@ -66,7 +67,7 @@ builder.Services.AddScoped<IServicesRepository, ServicesRepository>();
 builder.Services.AddScoped<IPetRepository, PetRepository>();
 builder.Services.AddScoped<IPetService, PetService>();
 builder.Services.AddScoped<IRoleRepository, RoleRepository>();
-//builder.Services.AddScoped<ICustomerRepository, CustomerRepository>();
+builder.Services.AddScoped<IDoctorRepository, DoctorRepository>();
 
 // Configure JWT authentication
 var key = Encoding.ASCII.GetBytes(appSetting);

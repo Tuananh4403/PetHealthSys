@@ -111,7 +111,7 @@ namespace PetCareSystem.WebApp.Controllers
             await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
             return Ok("Logged out successfully.");
         }
-        [AllowAnonymous]
+
         [HttpPost("create-role")]
         public async Task<IActionResult> CreateRole(CreateRoleReq model)
         {
@@ -122,6 +122,19 @@ namespace PetCareSystem.WebApp.Controllers
 
             await _authService.CreateRole(model);
             return Ok("Role have been created");
+        }
+
+        [HttpGet("get-role")]
+        public async Task<IActionResult> GetListRole()
+        {
+
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            var roles = await _authService.GetListRole();
+            return Ok(roles);
         }
 
     }

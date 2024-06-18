@@ -134,5 +134,10 @@ namespace PetCareSystem.Services.Services.Auth
             };
             await _roleRepository.Create(role);
         }
+
+        public async Task<List<Role>> GetListRole()
+        {
+            return await _roleRepository.GetAll(); 
+        }
     }
 }

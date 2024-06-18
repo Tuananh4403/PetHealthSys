@@ -11,6 +11,7 @@ namespace PetCareSystem.Services.Services.Auth
         Task<AuthenticationResult> LoginAsync(string username, string password);
         Task RegisterAsync(RegisterRequest model);
         Task CreateRole(CreateRoleReq model);
+        Task<List<Role>> GetListRole();
     }
     public class AuthenticationResult
     {

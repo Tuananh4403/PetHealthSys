@@ -29,9 +29,9 @@ namespace PetCareSystem.Data.Repositories.Roles
             throw new NotImplementedException();
         }
 
-        public IEnumerable<Role> GetAll()
+        public async Task<List<Role>> GetAll()
         {
-            throw new NotImplementedException();
+            return await _dBContext.Roles.ToListAsync();
         }
 
         public async Task<Role> GetRoleByIdAsync(int RoleId)
