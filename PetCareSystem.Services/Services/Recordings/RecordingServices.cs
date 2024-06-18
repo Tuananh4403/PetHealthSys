@@ -15,7 +15,7 @@ namespace PetCareSystem.Services.Services.Recordings
             _recordRepository = recordRepository;
         }
 
-        public async Task<bool> CreateRecordAsync(CreateRecordingReq createRecordReq, int recordId, int serviceId, CreateRecordingDetailReq cre)
+        public async Task<bool> CreateRecordAsync(CreateRecordingReq createRecordReq, int recordId, int serviceId, bool resultRecord, DateTime dateEnd)
         {
             if (!await _recordRepository.IsDoctorId(createRecordReq.DoctorId))
             {
@@ -42,6 +42,21 @@ namespace PetCareSystem.Services.Services.Recordings
             {
                 return false;
             }
+
+            if(resultRecord)
+            {
+                var barn = new Barn
+                {
+                    DateStart = DateTime.Now,
+                    DateEnd = dateEnd
+                };
+                if (! await _recordRepository.CreateBarn(barn))
+                {
+                    return false;
+                }
+            }
+
+            
 
             return true;
         }

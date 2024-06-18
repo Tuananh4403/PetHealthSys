@@ -10,6 +10,6 @@ namespace PetCareSystem.Services.Services.Recordings
 {
     public interface IRecordingServices
     {
-        Task<bool> CreateRecordAsync(CreateRecordingReq createRecordReq, int recordId, int serviceId, CreateRecordingDetailReq createRecordingDetailReq);
+        Task<bool> CreateRecordAsync(CreateRecordingReq createRecordReq, int recordId, int serviceId, bool resultRecord, DateTime dateEnd);
     }
 }

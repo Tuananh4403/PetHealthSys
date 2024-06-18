@@ -14,6 +14,8 @@ namespace PetCareSystem.Data.Repositories.Records
         Task<bool> CreateRecordingAsyn(Record record);
 
         Task<bool> CreateRecordingDetailAsyn(RecordDetail recordDetail);
+
+        Task<bool> CreateBarn(Barn barn);
         Task<Boolean> SaveChangesAsync();
     }
 }

@@ -49,6 +49,10 @@ namespace PetCareSystem.Data.Repositories.Records
             }
         }
 
-
+        public async Task<bool> CreateBarn(Barn barn)
+        {
+            _dbContext.Barns.Add(barn);
+            return await SaveChangesAsync();
+        }
     }
 }

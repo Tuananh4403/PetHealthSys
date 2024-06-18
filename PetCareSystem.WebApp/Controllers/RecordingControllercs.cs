@@ -22,7 +22,7 @@ namespace PetCareSystem.WebApp.Controllers
 
         // POST: api/record/create
         [HttpPost("create")]
-        public async Task<IActionResult> Create(CreateRecordingReq model, int recordId, int serviceId, CreateRecordingDetailReq createRecordingDetailReq)
+        public async Task<IActionResult> Create(CreateRecordingReq model, int recordId, int serviceId, bool resultRecord, DateTime dateEnd)
         {
             if (!ModelState.IsValid)
             {
@@ -31,7 +31,7 @@ namespace PetCareSystem.WebApp.Controllers
 
             try
             {
-                var result = await _service.CreateRecordAsync(model, recordId, serviceId, createRecordingDetailReq);
+                var result = await _service.CreateRecordAsync(model, recordId, serviceId, resultRecord,dateEnd);
                 if (result)
                 {
                     return Ok("Record created successfully");
