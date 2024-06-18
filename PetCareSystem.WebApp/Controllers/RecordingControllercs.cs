@@ -31,7 +31,7 @@ namespace PetCareSystem.WebApp.Controllers
 
             try
             {
-                var result = await _service.CreateRecordAsync(model, recordId, serviceId,createRecordingDetailReq);
+                var result = await _service.CreateRecordAsync(model, recordId, serviceId, createRecordingDetailReq);
                 if (result)
                 {
                     return Ok("Record created successfully");
