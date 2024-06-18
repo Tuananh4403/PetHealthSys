@@ -1,4 +1,5 @@
-﻿using PetCareSystem.Services.Services.Models.Recording;
+﻿using PetCareSystem.Services.Models.Recording;
+using PetCareSystem.Services.Services.Models.Recording;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,7 +10,6 @@ namespace PetCareSystem.Services.Services.Recordings
 {
     public interface IRecordingServices
     {
-        Task<bool> IsDoctorId(int doctorId);
-        Task<bool> CreateRecordAsync(CreateRecordingReq createRecordReq);
+        Task<bool> CreateRecordAsync(CreateRecordingReq createRecordReq, int recordId, int serviceId, CreateRecordingDetailReq createRecordingDetailReq);
     }
 }

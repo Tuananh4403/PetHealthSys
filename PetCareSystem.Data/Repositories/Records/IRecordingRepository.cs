@@ -9,9 +9,11 @@ namespace PetCareSystem.Data.Repositories.Records
 {
     public interface IRecordingRepository
     {
-        Task<bool> CreateRecordingAsyn(Record record);
 
         Task<bool> IsDoctorId(int doctorId);
+        Task<bool> CreateRecordingAsyn(Record record);
+
+        Task<bool> CreateRecordingDetailAsyn(RecordDetail recordDetail);
         Task<Boolean> SaveChangesAsync();
     }
 }

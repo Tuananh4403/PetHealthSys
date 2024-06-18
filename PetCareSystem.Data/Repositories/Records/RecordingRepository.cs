@@ -17,15 +17,21 @@ namespace PetCareSystem.Data.Repositories.Records
         {
             _dbContext = dbContext;
         }
+
+        public async Task<bool> IsDoctorId(int doctorId)
+        {
+            return await _dbContext.Doctors.AnyAsync(d => d.Id == doctorId);
+        }
         public async Task<bool> CreateRecordingAsyn(Record record)
         {
              _dbContext.Records.Add(record);
             return await SaveChangesAsync();
         }
 
-        public async Task<bool> IsDoctorId(int doctorId)
+        public async Task<bool> CreateRecordingDetailAsyn(RecordDetail recordDetail)
         {
-            return await _dbContext.Doctors.AnyAsync(d => d.Id == doctorId);
+            _dbContext.RecordDetails.Add(recordDetail);
+            return await SaveChangesAsync();
         }
 
 
@@ -42,5 +48,7 @@ namespace PetCareSystem.Data.Repositories.Records
                 return false;
             }
         }
+
+        
     }
 }

@@ -1,5 +1,6 @@
 ﻿using PetCareSystem.Data.Entites;
 using PetCareSystem.Data.Repositories.Records;
+using PetCareSystem.Services.Models.Recording;
 using PetCareSystem.Services.Services.Models.Recording;
 using System.Threading.Tasks;
 
@@ -14,31 +15,35 @@ namespace PetCareSystem.Services.Services.Recordings
             _recordRepository = recordRepository;
         }
 
-        public async Task<bool> CreateRecordAsync(CreateRecordingReq createRecordReq)
+        public async Task<bool> CreateRecordAsync(CreateRecordingReq createRecordReq, int recordId, int serviceId, CreateRecordingDetailReq cre)
         {
-            // Kiểm tra xem ID có phải của một bác sĩ không
-            if (!await IsDoctorId(createRecordReq.DoctorId))
+            if (!await _recordRepository.IsDoctorId(createRecordReq.DoctorId))
             {
-                return false; // Không phải bác sĩ, trả về false
+                return false; 
             }
 
-            // Tạo bản ghi mới
             var record = new Record
             {
                 DoctorId = createRecordReq.DoctorId,
                 PetId = createRecordReq.PetId,
-                BarnId = createRecordReq.BarnId,
-                DetailPrediction = createRecordReq.DetailPrediction,
-                Conclude = createRecordReq.Conclude
+                BarnId = createRecordReq.BarnId
             };
 
-            return await _recordRepository.CreateRecordingAsyn(record);
-        }
+            if(! await _recordRepository.CreateRecordingAsyn(record))
+            {
+                return false;
+            }
 
-        public async Task<bool> IsDoctorId(int doctorId)
-        {
-            // Kiểm tra trong cơ sở dữ liệu xem ID có phải của một bác sĩ không
-            return await _recordRepository.IsDoctorId(doctorId);
+            var recordDetail = new RecordDetail
+            {
+                RecordId = recordId,
+                ServiceId = serviceId
+            }; if(! await _recordRepository.CreateRecordingDetailAsyn(recordDetail))
+            {
+                return false;
+            }
+
+            return true;
         }
     }
 }

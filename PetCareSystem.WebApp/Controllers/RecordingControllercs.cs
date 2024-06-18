@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using PetCareSystem.Data.Entites;
+using PetCareSystem.Services.Models.Recording;
 using PetCareSystem.Services.Services.Models.Recording;
 using PetCareSystem.Services.Services.Recordings;
 using System;
@@ -21,7 +22,7 @@ namespace PetCareSystem.WebApp.Controllers
 
         // POST: api/record/create
         [HttpPost("create")]
-        public async Task<IActionResult> Create(CreateRecordingReq model)
+        public async Task<IActionResult> Create(CreateRecordingReq model, int recordId, int serviceId, CreateRecordingDetailReq createRecordingDetailReq)
         {
             if (!ModelState.IsValid)
             {
@@ -30,14 +31,7 @@ namespace PetCareSystem.WebApp.Controllers
 
             try
             {
-                // Check if DoctorId is valid
-                var isDoctorValid = await _service.IsDoctorId(model.DoctorId);
-                if (!isDoctorValid)
-                {
-                    return BadRequest("You are not doctor");
-                }
-
-                var result = await _service.CreateRecordAsync(model);
+                var result = await _service.CreateRecordAsync(model, recordId, serviceId,createRecordingDetailReq);
                 if (result)
                 {
                     return Ok("Record created successfully");
