@@ -69,6 +69,7 @@ builder.Services.AddScoped<IPetRepository, PetRepository>();
 builder.Services.AddScoped<IPetService, PetService>();
 builder.Services.AddScoped<IRoleRepository, RoleRepository>();
 builder.Services.AddScoped<IDoctorRepository, DoctorRepository>();
+builder.Services.AddScoped<IDoctorRepository, DoctorRepository>();
 
 // Configure JWT authentication
 var key = Encoding.ASCII.GetBytes(appSetting);
