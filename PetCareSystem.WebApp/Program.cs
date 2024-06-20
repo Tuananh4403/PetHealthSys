@@ -19,6 +19,8 @@ using PetCareSystem.Services.Services.Pets;
 using PetCareSystem.Data.Entites;
 using PetCareSystem.Data.Repositories.Pets;
 using PetCareSystem.Data.Repositories.Roles;
+using PetCareSystem.Data.Repositories.Doctors;
+using PetCareSystem.WebApp.Helpers;
 
 
 LoadWebpack.Load();
@@ -66,7 +68,7 @@ builder.Services.AddScoped<IServicesRepository, ServicesRepository>();
 builder.Services.AddScoped<IPetRepository, PetRepository>();
 builder.Services.AddScoped<IPetService, PetService>();
 builder.Services.AddScoped<IRoleRepository, RoleRepository>();
-//builder.Services.AddScoped<ICustomerRepository, CustomerRepository>();
+builder.Services.AddScoped<IDoctorRepository, DoctorRepository>();
 
 // Configure JWT authentication
 var key = Encoding.ASCII.GetBytes(appSetting);
@@ -110,7 +112,7 @@ app.UseSwagger();
 
 app.UseAuthentication(); // Add this line
 app.UseAuthorization(); // Add this line
-//app.UseMiddleware<JwtMiddleware>();
+app.UseMiddleware<JwtMiddleware>();
 app.UseSwaggerUI(c =>
 {
     c.SwaggerEndpoint("/swagger/v1/swagger.json", "My API V1");

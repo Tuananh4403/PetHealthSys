@@ -12,6 +12,7 @@ namespace PetCareSystem.Services.Services.Serivces
     public interface IServiceServices
     {
         Task<bool> CreateServiceAsync(CreateServiceReq serviceReq);
-        Task<(List<Service> Services, int TotalCount)> GetListServiceAsync(string searchString, int pageNumber = 1, int pageSize = 10);
+        Task<(IEnumerable<Service> Services, int TotalCount)> GetListServiceAsync(string searchString, int TypeId = 1, int pageNumber = 1, int pageSize = 10);
+        string GetCategoryName(int? typeId);
     }
 }

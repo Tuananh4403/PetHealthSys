@@ -40,8 +40,8 @@ namespace PetCareSystem.WebApp.Controllers
                 return StatusCode(500, "Internal server error");
             }
         }
-        [HttpGet("get-cus-service")]
-        public async Task<IActionResult> GetCusService([FromQuery] string searchOption)
+        [HttpGet("get-service")]
+        public async Task<IActionResult> GetService([FromQuery] string searchOption)
         {
             if (!ModelState.IsValid)
             {
@@ -49,11 +49,18 @@ namespace PetCareSystem.WebApp.Controllers
             }
             try
             {
-                var (services, totalCount) = await _serviceServices.GetListServiceAsync(searchOption, 1, 20);
+                var (services, totalCount) = await _serviceServices.GetListServiceAsync(searchOption, 1,1, 20);
 
-                // Process services and totalCount as needed
+                var servicesWithCategory = services.Select(service => new
+                {
+                    service.Id,
+                    service.Name,
+                    service.TypeId,
+                    CategoryName = _serviceServices.GetCategoryName(service.TypeId)
+                    // Map other properties if needed
+                }).ToList();
 
-                return Ok(new { Services = services, TotalCount = totalCount });
+                return Ok(new { Services = servicesWithCategory, TotalCount = totalCount });
             }
             catch (Exception ex)
             {

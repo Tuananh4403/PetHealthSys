@@ -56,20 +56,25 @@ namespace PetCareSystem.Data.Repositories.Users
 
         public async Task<User> GetUserById(int id)
         {
-            return await _dbContext.Users.SingleOrDefaultAsync(u => u.Id == id);
+            return await _dbContext.Users.FindAsync( id);
         }
         public async Task<User> GetUserByPhone(string phone)
         {
             return await _dbContext.Users.SingleOrDefaultAsync(u => u.PhoneNumber == phone);
         }
-        public async Task<User> GetUserByEmail(string phone)
+        public async Task<User> GetUserByEmail(string email)
         {
-            return await _dbContext.Users.SingleOrDefaultAsync(u => u.PhoneNumber == phone);
+            return await _dbContext.Users.FirstOrDefaultAsync(u => u.Email == email);
         }
 
         public async Task<User> GetUserByUsernameAsync(string username)
         {
             return await _dbContext.Users.SingleOrDefaultAsync(u => u.Username == username);
+        }
+
+        public async Task<IEnumerable<User>> GetAll()
+        {
+            return await _dbContext.Users.ToListAsync();
         }
     }
 }

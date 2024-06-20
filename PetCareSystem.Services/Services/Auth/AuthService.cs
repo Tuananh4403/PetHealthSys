@@ -30,23 +30,23 @@ namespace PetCareSystem.Services.Services.Auth
             _doctorRepository = doctorRepository;
         }
 
-        public async Task<AuthenticationResult> LoginAsync(string username, string password)
+        public async Task<AuthenticateResponse ?> LoginAsync(string username, string password)
         {
-            var user = await _userRepository.GetUserByUsernameAsync(username);
+            User user = await _userRepository.GetUserByEmail(username);
             if (user == null || !VerifyPasswordHash(password, user.Password))
             {
-                return new AuthenticationResult { Success = false, Message = "Invalid credentials" };
+                return null;
             }
 
             var token = GenerateToken(user);
-            return new AuthenticationResult { Success = true, Token = token };
+            return new AuthenticateResponse( user, token );
         }
 
         public async Task RegisterAsync(RegisterRequest model)
         {
             if(_userRepository.GetUserByEmail(model.Email) == null || _userRepository.GetUserByPhone(model.Phone) == null)
             {
-                throw new AppException("Email  or Phone is already taken");
+                throw new AppException("Email or Phone is already taken");
             }
             var user = new User
             {
@@ -133,6 +133,10 @@ namespace PetCareSystem.Services.Services.Auth
                 Name = model.Name
             };
             await _roleRepository.Create(role);
+        }
+        public async Task<IEnumerable<User>> GetAll()
+        {
+            return await _userRepository.GetAll();
         }
     }
 }

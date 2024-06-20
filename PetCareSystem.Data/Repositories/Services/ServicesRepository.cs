@@ -23,10 +23,19 @@ namespace PetCareSystem.Data.Repositories.Services
             return await SaveChangesAsync();
         }
 
-        public async Task<(List<Service> Services, int TotalCount)> GetListService(string searchString,int pageNumber = 1 , int pageSize = 10)
+        public async Task<(IEnumerable<Service> Services, int TotalCount)> GetListService(string searchString, int  ?TypeId,int pageNumber = 1 , int pageSize = 10)
         {
-            var query = _dBContext.Services
-           .Where(s => s.Name.Contains(searchString));
+            var query = _dBContext.Services.AsQueryable();
+
+            if (!string.IsNullOrEmpty(searchString))
+            {
+                query = query.Where(s => s.Name.Contains(searchString));
+            }
+
+            if (TypeId.HasValue) // Assuming TypeId is a nullable type
+            {
+                query = query.Where(s => s.TypeId == TypeId.Value);
+            }
 
             var totalCount = await query.CountAsync();
             var services = await query

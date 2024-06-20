@@ -44,13 +44,13 @@ namespace PetCareSystem.Services.Services.Serivces
             // Save the service entity to the database
             return await _servicesRepository.AddServiceAsync(service);
         }
-        public string GetCategoryName(int categoryId)
+        public string GetCategoryName(int? categoryId)
         {
-            return _categoryMap.TryGetValue(categoryId, out var categoryName) ? categoryName : "Unknown";
+            return _categoryMap.TryGetValue(categoryId ?? 1, out var categoryName) ? categoryName : "Unknown";
         }
-        public async Task<(List<Service> Services, int TotalCount)> GetListServiceAsync(string searchString, int pageNumber = 1, int pageSize = 10)
+        public async Task<(IEnumerable<Service> Services, int TotalCount)> GetListServiceAsync(string searchString, int TypeId = 1 , int pageNumber = 1, int pageSize = 10)
         {
-             return await _servicesRepository.GetListService(searchString, pageNumber, pageSize);
+             return await _servicesRepository.GetListService(searchString, TypeId,pageNumber, pageSize);
         }
     }
 }

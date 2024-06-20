@@ -8,14 +8,10 @@ namespace PetCareSystem.Services.Services.Auth
     public interface IAuthService
     {
         Task<User?> GetById(int userId);
-        Task<AuthenticationResult> LoginAsync(string username, string password);
+        Task<AuthenticateResponse> LoginAsync(string username, string password);
         Task RegisterAsync(RegisterRequest model);
         Task CreateRole(CreateRoleReq model);
-    }
-    public class AuthenticationResult
-    {
-        public bool Success { get; set; }
-        public string Message { get; set; }
-        public string Token { get; set; }
+        Task<IEnumerable<User>> GetAll();
+
     }
 }

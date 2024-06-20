@@ -23,7 +23,7 @@ namespace PetCareSystem.WebApp.Controllers
         {
             _authService = authService;
         }
-        [AllowAnonymous]
+
         [HttpPost("authenticate")]
         public async Task<IActionResult> Login(AuthenticateRequest model)
         {
@@ -35,9 +35,9 @@ namespace PetCareSystem.WebApp.Controllers
             try
             {
                 var result = await _authService.LoginAsync(model.Username, model.Password);
-                if (result.Success)
+                if (result != null  )
                 {
-                    return Ok(new { message = "Login successful", token = result.Token });
+                    return Ok(new { message = "Login successful", result });
                 }
 
                 return Unauthorized(new { message = "Username or password is incorrect" });

@@ -23,6 +23,7 @@ namespace PetCareSystem.WebApp.Controllers
 
         // POST: api/booking/create
         [HttpPost("create")]
+        [Authorize]
         public async Task<IActionResult> Create(CreateBookingReq model)
         {
             if (!ModelState.IsValid)
@@ -34,6 +35,7 @@ namespace PetCareSystem.WebApp.Controllers
                 var result = await _services.CreateBookingAsync(model);
                 if (result)
                 {
+                    Console.WriteLine(result);
                     return Ok("Booking created successfully");
                 }
                 return BadRequest("Failed to create booking");
