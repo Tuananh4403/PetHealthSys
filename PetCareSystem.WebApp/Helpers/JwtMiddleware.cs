@@ -24,21 +24,23 @@ namespace PetCareSystem.WebApp.Helpers
             _logger = logger;
         }
 
-        public async Task<Task> Invoke(HttpContext httpContext, IAuthService authService)
+        public async Task Invoke(HttpContext httpContext, IAuthService authService)
         {
             if (httpContext.Request.Path.StartsWithSegments("/api/auth/authenticate"))
             {
                 // If the request path matches, short-circuit the middleware pipeline
-                await _next(httpContext); // This continues to the next middleware in the pipeline
-                return _next(httpContext);
+                await _next(httpContext);
+                return;
             }
+
             var token = httpContext.Request.Headers["Authorization"].FirstOrDefault()?.Split(" ").Last();
-            
+
             if (token != null)
             {
                 await AttachUserToContext(httpContext, authService, token);
             }
-            return _next(httpContext);
+
+            await _next(httpContext);
         }
         public async Task AttachUserToContext(HttpContext httpContext, IAuthService authService, string token)
         {
@@ -58,14 +60,14 @@ namespace PetCareSystem.WebApp.Helpers
                     // set clock skew to zero so tokens expire exactly at token expiration time (instead of 5 minutes later)
                     ClockSkew = TimeSpan.Zero
                 }, out SecurityToken validatedToken);
-            
+
                 var jwtToken = (JwtSecurityToken)validatedToken;
                 var userId = int.Parse(jwtToken.Claims.First(x => x.Type == "id").Value);
 
                 //Attach user to context on successful JWT validation
                 httpContext.Items["User"] = await authService.GetById(userId);
             }
-            catch(Exception e) 
+            catch (Exception e)
             {
                 _logger.LogError(e, "Error occurred in JwtMiddleware.");
             }
