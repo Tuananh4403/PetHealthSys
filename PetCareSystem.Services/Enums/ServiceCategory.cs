@@ -10,6 +10,6 @@ namespace PetCareSystem.Services.Enums
     {
         General = 1,
         Medicine = 2,
-        Vacxin = 3
+        Vaccine = 3
     }
 }

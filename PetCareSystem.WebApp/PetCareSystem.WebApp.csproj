@@ -34,11 +34,5 @@
 		<ProjectReference Include="..\PetCareSystem.Data\PetCareSystem.Data.csproj" />
 		<ProjectReference Include="..\PetCareSystem.Services\PetCareSystem.Services.csproj" />
 	</ItemGroup>
-	<ItemGroup>
-		<None Include="webpack.config.js" />
-	</ItemGroup>
-	<ItemGroup>
-		<Content  Remove="webpack.config.js" />
-	</ItemGroup>
 
 </Project>

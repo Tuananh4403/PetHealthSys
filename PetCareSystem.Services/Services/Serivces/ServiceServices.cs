@@ -16,7 +16,7 @@ namespace PetCareSystem.Services.Services.Serivces
     {
         private readonly IServicesRepository _servicesRepository;
         private readonly IConfiguration _configuration;
-        public ServiceServices(IServicesRepository servicesRepository, IConfiguration configuration )
+        public ServiceServices(IServicesRepository servicesRepository, IConfiguration configuration)
         {
             _servicesRepository = servicesRepository;
             _configuration = configuration;
@@ -26,24 +26,54 @@ namespace PetCareSystem.Services.Services.Serivces
 
             var service = new Service()
             {
-                TypeId      = serviceReq.TypeOfService,
-                Code        = serviceReq.Code,
-                Name        = serviceReq.Name,
-                Price       = serviceReq.Price,
-                Status      = "NEW",
-                Note        = serviceReq.Note
+                TypeId = serviceReq.TypeOfService,
+                Code = serviceReq.Code,
+                Name = serviceReq.Name,
+                Price = serviceReq.Price,
+                Status = "NEW",
+                Note = serviceReq.Note
             };
 
             // Save the service entity to the database
             return await _servicesRepository.AddServiceAsync(service);
         }
-        public string GetCategoryName(int? categoryId)
+        public object GetServiceByCategory(ServiceCategory category)
         {
-            return _categoryMap.TryGetValue(categoryId ?? 1, out var categoryName) ? categoryName : "Unknown";
+            string categoryName = category.ToString(); // Converts enum to string
+                                                       // Business logic to get services by category
+            switch (category)
+            {
+                case ServiceCategory.General:
+                    return new { Category = categoryName, Data = GetGeneralService() };
+                case ServiceCategory.Medicine:
+                    return new { Category = categoryName, Data = GetMedicine() };
+                case ServiceCategory.Vaccine:
+                    return new { Category = categoryName, Data = GetVaccine() };
+                default:
+                    throw new ArgumentOutOfRangeException(nameof(category), category, null);
+            }
         }
-        public async Task<(IEnumerable<Service> Services, int TotalCount)> GetListServiceAsync(string searchString, int TypeId = 1 , int pageNumber = 1, int pageSize = 10)
+
+        private object GetGeneralService()
         {
-             return await _servicesRepository.GetListService(searchString, TypeId,pageNumber, pageSize);
+            // Implementation
+            return new { Description = "General service details" };
+        }
+
+        private object GetMedicine()
+        {
+            // Implementation
+            return new { Description = "Medicine details" };
+        }
+
+        private object GetVaccine()
+        {
+            // Implementation
+            return new { Description = "Vaccine details" };
+        }
+        public async Task<(IEnumerable<Service> Services, int TotalCount)> GetListServiceAsync(string searchString, int TypeId = 1, int pageNumber = 1, int pageSize = 10)
+        {
+            return await _servicesRepository.GetListService(searchString, TypeId, pageNumber, pageSize);
         }
     }
 }

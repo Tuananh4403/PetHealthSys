@@ -11,7 +11,6 @@ using PetCareSystem.Services.Helpers;
 using PetCareSystem.Services.Services.Bookings;
 using System.Text;
 using Microsoft.AspNetCore.Mvc.ViewFeatures;
-using PetCareSystem.WebApp.Models;
 using PetCareSystem.Data.Repositories.Customers;
 using PetCareSystem.Services.Services.Serivces;
 using PetCareSystem.Data.Repositories.Services;
@@ -21,9 +20,9 @@ using PetCareSystem.Data.Repositories.Pets;
 using PetCareSystem.Data.Repositories.Roles;
 using PetCareSystem.Data.Repositories.Doctors;
 using PetCareSystem.WebApp.Helpers;
+using Microsoft.OpenApi.Models;
 
 
-LoadWebpack.Load();
 IConfiguration configuration = new ConfigurationBuilder()
             .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
             .Build();
@@ -50,7 +49,41 @@ builder.Services.AddAuthentication(option =>
 
 // Add services to the container.
 builder.Services.AddControllers();
-builder.Services.AddSwaggerGen();
+builder.Services.AddSwaggerGen(swagger =>
+{
+    swagger.SwaggerDoc("v1", new OpenApiInfo
+    {
+        Version = "v1",
+        Title = "JWT Token Authentication API",
+        Description = ".NET 8 Web API"
+    });
+    // To Enable authorization using Swagger (JWT)
+    swagger.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme()
+    {
+        Name = "Authorization",
+        Type = SecuritySchemeType.ApiKey,
+        Scheme = "Bearer",
+        BearerFormat = "JWT",
+        In = ParameterLocation.Header,
+        Description = "JWT Authorization header using the Bearer scheme. \r\n\r\n Enter 'Bearer' [space] and then your token in the text input below.\r\n\r\nExample: \"Bearer 12345abcdef\"",
+    });
+    swagger.AddSecurityRequirement(new OpenApiSecurityRequirement
+                {
+                    {
+                          new OpenApiSecurityScheme
+                            {
+                                Reference = new OpenApiReference
+                                {
+                                    Type = ReferenceType.SecurityScheme,
+                                    Id = "Bearer"
+                                }
+                            },
+                            Array.Empty<string>()
+
+                    }
+                });
+}
+);
 
 // Register the DbContext, Repositories, and Services
 builder.Services.AddDbContext<PetHealthDBContext>(options =>
