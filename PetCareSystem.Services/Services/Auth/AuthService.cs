@@ -132,12 +132,12 @@ namespace PetCareSystem.Services.Services.Auth
                 Title = model.Title,
                 Name = model.Name
             };
-            await _roleRepository.Create(role);
+            await _roleRepository.AddAsync(role);
         }
 
-        public async Task<List<Role>> GetListRole()
+        public async Task<IEnumerable<Role>> GetListRole()
         {
-            return await _roleRepository.GetAll(); 
+            return await _roleRepository.GetAllAsync(); 
         }
         public async Task<IEnumerable<User>> GetAll()
         {

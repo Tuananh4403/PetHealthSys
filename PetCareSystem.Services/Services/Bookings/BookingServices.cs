@@ -1,6 +1,8 @@
 ﻿using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using PetCareSystem.Data.Entites;
 using PetCareSystem.Data.Repositories.Bookings;
+using PetCareSystem.Data.Repositories.Customers;
+using PetCareSystem.Services.Helpers;
 using PetCareSystem.Services.Models.Booking;
 using System;
 using System.Collections.Generic;
@@ -13,18 +15,26 @@ namespace PetCareSystem.Services.Services.Bookings
     public class BookingServices : IBookingServices
     {
         private readonly IBookingRepository _bookingRepository;
+        private readonly ICustomerRepository _customerRepository;
         
-        public BookingServices(IBookingRepository bookingRepository)
+        public BookingServices(IBookingRepository bookingRepository, ICustomerRepository customerRepository)
         {
             _bookingRepository = bookingRepository;
+            _customerRepository = customerRepository;
         }
 
-        public async Task<bool> CreateBookingAsync(CreateBookingReq bookingReq)
+        public async Task<bool> CreateBookingAsync(CreateBookingReq bookingReq, string token)
         {
+            int? userId = CommonHelpers.GetUserIdByToken(token);
+            if (!userId.HasValue || userId <= 0)
+            {
+                throw new ArgumentException("Invalid token");
+            }
 
+            var customer = await _customerRepository.GetCusById((int)userId);
             var booking = new Booking ()
             {
-                CustomerId = bookingReq.CustomerId,
+                CustomerId = customer.Id,
                 PetId = bookingReq.PetId,
                 BookingTime = bookingReq.BookingDate,
                 // Set other properties of the Booking entity as needed
@@ -56,7 +66,7 @@ namespace PetCareSystem.Services.Services.Bookings
             return true;
         }
 
-        public async Task<bool> UpdateBookingAsync(int BookingId, CreateBookingReq updateReq)
+        public async Task<bool> UpdateBookingAsync(int BookingId, CreateBookingReq updateReq, string token)
         {
             var bookingToUpdate = await _bookingRepository.SaveChangesAsync();
             if (bookingToUpdate == null)
@@ -66,7 +76,7 @@ namespace PetCareSystem.Services.Services.Bookings
 
             if(await _bookingRepository.DeleteBookingAsync(BookingId))
             {
-                CreateBookingAsync(updateReq);
+                CreateBookingAsync(updateReq, token);
             }
             else
             {

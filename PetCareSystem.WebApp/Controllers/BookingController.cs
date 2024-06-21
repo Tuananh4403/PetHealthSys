@@ -33,7 +33,8 @@ namespace PetCareSystem.WebApp.Controllers
             }
             try
             {
-                var result = await _services.CreateBookingAsync(model);
+                var token = Request.Headers["Authorization"].ToString().Replace("Bearer ", "");
+                var result = await _services.CreateBookingAsync(model, token);
                 if (result)
                 {
                     Console.WriteLine(result);
@@ -79,7 +80,9 @@ namespace PetCareSystem.WebApp.Controllers
 
             try
             {
-                var result = await _services.UpdateBookingAsync(id, model);
+                var token = Request.Headers["Authorization"].ToString().Replace("Bearer ", "");
+
+                var result = await _services.UpdateBookingAsync(id, model, token);
                 if (result)
                 {
                     return Ok("Booking updated successfully");

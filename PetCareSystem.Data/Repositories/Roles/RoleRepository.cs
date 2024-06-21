@@ -7,32 +7,15 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
 
 namespace PetCareSystem.Data.Repositories.Roles
 {
-    public class RoleRepository : IRoleRepository
+    public class RoleRepository(PetHealthDBContext dBContext, ILogger<RoleRepository> logger) : BaseRepository<Role>(dBContext, logger), IRoleRepository
     {
-        private readonly PetHealthDBContext _dBContext;
+        private readonly PetHealthDBContext _dBContext = dBContext;
+        private readonly ILogger<RoleRepository> _logger = logger;
 
-        public RoleRepository(PetHealthDBContext dBContext){
-            _dBContext = dBContext;
-        }
-
-        public async Task Create(Role role)
-        {
-            await _dBContext.Roles.AddAsync(role); 
-            await _dBContext.SaveChangesAsync();
-        }
-
-        public void Delete(int id)
-        {
-            throw new NotImplementedException();
-        }
-
-        public async Task<List<Role>> GetAll()
-        {
-            return await _dBContext.Roles.ToListAsync();
-        }
 
         public async Task<Role> GetRoleByIdAsync(int RoleId)
         {

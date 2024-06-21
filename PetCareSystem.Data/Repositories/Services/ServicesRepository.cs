@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
 using PetCareSystem.Data.EF;
 using PetCareSystem.Data.Entites;
 using System;
@@ -9,19 +10,10 @@ using System.Threading.Tasks;
 
 namespace PetCareSystem.Data.Repositories.Services
 {
-    public class ServicesRepository : IServicesRepository
+    public class ServicesRepository(PetHealthDBContext dBContext, ILogger<ServicesRepository> logger) : BaseRepository<Service>(dBContext, logger), IServicesRepository
     {
-        private readonly PetHealthDBContext _dBContext;
-
-        public ServicesRepository(PetHealthDBContext dBContext)
-        {
-            _dBContext = dBContext;
-        }
-        public async Task<bool> AddServiceAsync(Service service)
-        {
-            await _dBContext.Services.AddAsync(service);
-            return await SaveChangesAsync();
-        }
+        private readonly PetHealthDBContext _dBContext = dBContext;
+        private readonly ILogger<ServicesRepository> _logger = logger;
 
         public async Task<(IEnumerable<Service> Services, int TotalCount)> GetListService(string searchString, int  ?TypeId,int pageNumber = 1 , int pageSize = 10)
         {
@@ -44,20 +36,6 @@ namespace PetCareSystem.Data.Repositories.Services
                 .ToListAsync();
 
             return (services, totalCount);
-        }
-
-        public async Task<bool> SaveChangesAsync()
-        {
-            try
-            {
-                await _dBContext.SaveChangesAsync();
-                return true;
-            }
-            catch (DbUpdateException)
-            {
-                // Log or handle the exception as needed
-                return false;
-            }
         }
     }
 }
