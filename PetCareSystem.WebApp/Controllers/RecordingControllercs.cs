@@ -1,7 +1,9 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿
+using Microsoft.AspNetCore.Mvc;
 using PetCareSystem.Data.Entites;
 using PetCareSystem.Services.Services.Models.Recording;
 using PetCareSystem.Services.Services.Recordings;
+using PetCareSystem.WebApp.Helpers;
 using System;
 using System.Threading.Tasks;
 
@@ -9,6 +11,7 @@ namespace PetCareSystem.WebApp.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
+    [Authorize]
     public class RecordingControllercs : ControllerBase
     {
         private readonly IRecordingServices _service;

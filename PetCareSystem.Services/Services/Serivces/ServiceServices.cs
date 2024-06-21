@@ -37,10 +37,10 @@ namespace PetCareSystem.Services.Services.Serivces
             // Save the service entity to the database
             return await _servicesRepository.AddServiceAsync(service);
         }
-        public object GetServiceByCategory(ServiceCategory category)
+        public object GetServiceByCategory(int categoryId)
         {
+            ServiceCategory category = GetServiceCategoryById(categoryId);
             string categoryName = category.ToString(); // Converts enum to string
-                                                       // Business logic to get services by category
             switch (category)
             {
                 case ServiceCategory.General:
@@ -57,19 +57,27 @@ namespace PetCareSystem.Services.Services.Serivces
         private object GetGeneralService()
         {
             // Implementation
-            return new { Description = "General service details" };
+            return new { Description = "General service " };
         }
 
         private object GetMedicine()
         {
             // Implementation
-            return new { Description = "Medicine details" };
+            return new { Description = "Medicine service" };
         }
 
         private object GetVaccine()
         {
             // Implementation
-            return new { Description = "Vaccine details" };
+            return new { Description = "Vaccine service" };
+        }
+        public ServiceCategory GetServiceCategoryById(int id)
+        {
+            if (!Enum.IsDefined(typeof(ServiceCategory), id))
+            {
+                throw new ArgumentOutOfRangeException(nameof(id), id, "Invalid service category ID");
+            }
+            return (ServiceCategory)id;
         }
         public async Task<(IEnumerable<Service> Services, int TotalCount)> GetListServiceAsync(string searchString, int TypeId = 1, int pageNumber = 1, int pageSize = 10)
         {
