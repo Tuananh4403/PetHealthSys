@@ -11,5 +11,7 @@ namespace PetCareSystem.Services.Enums
         General = 1,
         Medicine = 2,
         Vaccine = 3
+        
     }
+    
 }

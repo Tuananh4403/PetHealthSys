@@ -5,11 +5,13 @@ using PetCareSystem.Services.Models.Booking;
 using PetCareSystem.Services.Models.Pet;
 using PetCareSystem.Services.Services.Auth;
 using PetCareSystem.Services.Services.Pets;
+using PetCareSystem.WebApp.Helpers;
 
 namespace PetCareSystem.WebApp.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize]
     public class PetController : ControllerBase
     {
         private readonly IPetService _petService;

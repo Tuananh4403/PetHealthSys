@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using PetCareSystem.WebApp.Helpers;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using PetCareSystem.Data.Entites;
 using PetCareSystem.Services.Models.Services;
@@ -8,6 +9,7 @@ namespace PetCareSystem.WebApp.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
+    [Authorize]
     public class ServiceController : ControllerBase
     {
         private readonly IServiceServices _serviceServices;
@@ -18,6 +20,7 @@ namespace PetCareSystem.WebApp.Controllers
         }
 
         // POST: ServiceController/Create
+        [Authorize]
         [HttpPost("create")]
         public async Task<IActionResult> Create(CreateServiceReq model)
         {
@@ -56,7 +59,7 @@ namespace PetCareSystem.WebApp.Controllers
                     service.Id,
                     service.Name,
                     service.TypeId,
-                    CategoryName = _serviceServices.GetCategoryName(service.TypeId)
+                    CategoryName = _serviceServices.GetServiceByCategory(service.TypeId)
                     // Map other properties if needed
                 }).ToList();
 

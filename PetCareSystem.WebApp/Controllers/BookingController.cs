@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Authorization;
+// using Microsoft.AspNetCore.Authorization;
+using PetCareSystem.WebApp.Helpers;
 using PetCareSystem.Services.Models.Booking;
 using PetCareSystem.Services.Services.Bookings;
 using System;
@@ -12,6 +13,7 @@ namespace PetCareSystem.WebApp.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
+    [Authorize]
     public class BookingController : ControllerBase
     {
         private readonly IBookingServices _services;
@@ -23,7 +25,6 @@ namespace PetCareSystem.WebApp.Controllers
 
         // POST: api/booking/create
         [HttpPost("create")]
-        [Authorize]
         public async Task<IActionResult> Create(CreateBookingReq model)
         {
             if (!ModelState.IsValid)

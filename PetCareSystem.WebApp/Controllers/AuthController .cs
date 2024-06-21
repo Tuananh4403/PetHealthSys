@@ -24,6 +24,7 @@ namespace PetCareSystem.WebApp.Controllers
             _authService = authService;
         }
 
+        [AllowAnonymous]
         [HttpPost("authenticate")]
         public async Task<IActionResult> Login(AuthenticateRequest model)
         {
@@ -49,6 +50,7 @@ namespace PetCareSystem.WebApp.Controllers
                 return StatusCode(StatusCodes.Status500InternalServerError, new { message = "An error occurred during login" });
             }
         }
+        
         [AllowAnonymous]
         [HttpPost("register")]
         public async Task<IActionResult> Register(RegisterRequest model)
