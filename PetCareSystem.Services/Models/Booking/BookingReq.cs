@@ -2,7 +2,7 @@
 
 namespace PetCareSystem.Services.Models.Booking
 {
-    public class CreateBookingReq
+    public class BookingReq
     {
         public int CustomerId { get; set; }
         public int PetId { get; set; }

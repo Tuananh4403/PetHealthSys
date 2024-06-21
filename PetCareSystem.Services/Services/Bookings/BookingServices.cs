@@ -20,9 +20,9 @@ namespace PetCareSystem.Services.Services.Bookings
             _bookingRepository = bookingRepository;
         }
 
-        public async Task<bool> CreateBookingAsync(CreateBookingReq bookingReq)
+        public async Task<bool> CreateBookingAsync(BookingReq bookingReq)
         {
-
+            Validation(bookingReq);
             var booking = new Booking()
             {
                 CustomerId = bookingReq.CustomerId,
@@ -56,12 +56,13 @@ namespace PetCareSystem.Services.Services.Bookings
             return true;
         }
 
-        public async Task<bool> UpdateBookingAsync(int bookingId, UpdateBookingReq updateReq)
+        public async Task<bool> UpdateBookingAsync(int bookingId, BookingReq bookingReq)
         {
+            Validation(bookingReq);
             bool isUpdate = await _bookingRepository.UpdateBooking(
                 bookingId,
-                updateReq.BookingDate,
-                updateReq.ServiceIds
+                bookingReq.BookingDate,
+                bookingReq.ServiceIds
                 );
 
             return isUpdate;
@@ -88,6 +89,21 @@ namespace PetCareSystem.Services.Services.Bookings
             return true;
         }
 
-        
+        public bool Validation(BookingReq bookingReq)
+        {
+            if (bookingReq == null)
+            {
+                Console.WriteLine("BookingReq invalid");
+                return false;
+            }
+            if (bookingReq.BookingDate == null)
+            {
+                Console.WriteLine("Booking time is required!");
+                return false;
+            }
+            return true;
+        }
+
+
     }
 }
