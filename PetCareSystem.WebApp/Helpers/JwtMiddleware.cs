@@ -26,7 +26,7 @@ namespace PetCareSystem.WebApp.Helpers
 
         public async Task Invoke(HttpContext httpContext, IAuthService authService)
         {
-            if (httpContext.Request.Path.StartsWithSegments("/api/auth/authenticate"))
+            if (httpContext.Request.Path.StartsWithSegments("/api/auth/authenticate") || httpContext.Request.Path.StartsWithSegments("/api/auth/register"))
             {
                 // If the request path matches, short-circuit the middleware pipeline
                 await _next(httpContext);
