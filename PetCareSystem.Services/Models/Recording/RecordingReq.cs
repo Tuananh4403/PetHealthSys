@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace PetCareSystem.Services.Services.Models.Recording
 {
-    public class CreateRecordingReq
+    public class RecordingReq
     {
         public int DoctorId { get; set; }
 

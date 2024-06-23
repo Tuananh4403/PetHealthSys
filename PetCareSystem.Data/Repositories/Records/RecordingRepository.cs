@@ -54,5 +54,44 @@ namespace PetCareSystem.Data.Repositories.Records
             _dbContext.Barns.Add(barn);
             return await SaveChangesAsync();
         }
+
+        public async Task<Record> GetRecordByIdAsync(int recordId)
+        {
+            return await _dbContext.Records.FirstOrDefaultAsync(id => id.Id == recordId);
+        }
+
+
+        public async Task<bool> UpdateRecordAsync(int recordId, Record record)
+        {
+            try
+            {
+                var existingRecord = await _dbContext.Records.FirstOrDefaultAsync(r => r.Id == recordId);
+
+                if (existingRecord == null)
+                {
+                    return false;
+                }
+
+                existingRecord.DoctorId = record.DoctorId;
+                existingRecord.PetId = record.PetId;
+                existingRecord.BarnId = record.BarnId;
+                existingRecord.saveBarn = record.saveBarn;
+                existingRecord.Conclude = record.Conclude;
+                existingRecord.DetailPrediction = record.DetailPrediction;
+
+                await _dbContext.SaveChangesAsync();
+
+                return true;
+            }
+            catch (Exception)
+            {
+                return false;
+            }
+        }
+
+        public async Task<RecordDetail> GetRecordDetailByIdAsync(int recordDetailId)
+        {
+            return await _dbContext.RecordDetails.FirstOrDefaultAsync(id => id.Id == recordDetailId);
+        }
     }
 }

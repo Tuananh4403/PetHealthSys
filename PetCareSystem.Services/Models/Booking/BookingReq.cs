@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace PetCareSystem.Services.Models.Booking
 {
-    public class UpdateBookingReq
+    public class BookingReq
     {
         public int CustomerId { get; set; }
         public int PetId { get; set; }

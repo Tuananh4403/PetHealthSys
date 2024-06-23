@@ -25,7 +25,7 @@ namespace PetCareSystem.WebApp.Controllers
 
         // POST: api/booking/create
         [HttpPost("create")]
-        public async Task<IActionResult> Create(CreateBookingReq model)
+        public async Task<IActionResult> Create(BookingReq model)
         {
             if (!ModelState.IsValid)
             {
@@ -88,7 +88,7 @@ namespace PetCareSystem.WebApp.Controllers
 
         // PUT: api/booking/update/{id}
         [HttpPut("update/{id}")]
-        public async Task<IActionResult> Update(int id, UpdateBookingReq model)
+        public async Task<IActionResult> Update(int id, BookingReq model)
         {
             if (!ModelState.IsValid)
             {
@@ -131,6 +131,6 @@ namespace PetCareSystem.WebApp.Controllers
             }
         }
 
-        
+
     }
 }
