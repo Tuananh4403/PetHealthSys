@@ -7,10 +7,8 @@ using System.Threading.Tasks;
 
 namespace PetCareSystem.Data.Repositories.Customers
 {
-    public interface ICustomerRepository
+    public interface ICustomerRepository : IRepository<Customer>
     {
-       
-        Task AddCustomerAsync(Customer cus);
-        Task<Customer> GetCusById(int id);
+        Task<Customer> GetCusByUserId(int id);
     }
 }

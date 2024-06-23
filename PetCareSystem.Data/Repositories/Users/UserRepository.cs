@@ -7,34 +7,29 @@ using System.Text;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using System.Numerics;
+using Microsoft.Extensions.Logging;
 
 namespace PetCareSystem.Data.Repositories.Users
 {
-    public class UserRepository : IUserRepository
+    public class UserRepository(PetHealthDBContext dbContext, ILogger<UserRepository> logger) : BaseRepository<User>(dbContext, logger), IUserRepository
     {
-        private readonly PetHealthDBContext _dbContext;
-
-        public UserRepository(PetHealthDBContext dbContext)
-        {
-            _dbContext = dbContext;
-        }
 
         public async Task AddUserAsync(User user, int? roleId)
         {
-            using (var transaction = await _dbContext.Database.BeginTransactionAsync())
+            using (var transaction = await dbContext.Database.BeginTransactionAsync())
             {
                 try
                 {
                     // Add User
-                    await _dbContext.Users.AddAsync(user);
-                    await _dbContext.SaveChangesAsync();
+                    await dbContext.Users.AddAsync(user);
+                    await dbContext.SaveChangesAsync();
 
                     // Add UserRole if RoleId is provided
                     if (roleId.HasValue)
                     {
                         var userRole = new UserRole { UserId = user.Id, RoleId = roleId.Value };
                         user.UserRoles.Add(userRole);
-                        await _dbContext.SaveChangesAsync();
+                        await dbContext.SaveChangesAsync();
                     }
 
                     // Commit transaction
@@ -48,33 +43,19 @@ namespace PetCareSystem.Data.Repositories.Users
                 }
             }
         }
-        public async Task AddPetAsync(Pet pet)
-        {
-            await _dbContext.Pets.AddAsync(pet);
-            await _dbContext.SaveChangesAsync();
-        }
 
-        public async Task<User> GetUserById(int id)
-        {
-            return await _dbContext.Users.FindAsync( id);
-        }
         public async Task<User> GetUserByPhone(string phone)
         {
-            return await _dbContext.Users.SingleOrDefaultAsync(u => u.PhoneNumber == phone);
+            return await dbContext.Users.SingleOrDefaultAsync(u => u.PhoneNumber == phone);
         }
         public async Task<User> GetUserByEmail(string email)
         {
-            return await _dbContext.Users.FirstOrDefaultAsync(u => u.Email == email);
+            return await dbContext.Users.FirstOrDefaultAsync(u => u.Email == email);
         }
 
         public async Task<User> GetUserByUsernameAsync(string username)
         {
-            return await _dbContext.Users.SingleOrDefaultAsync(u => u.Username == username);
-        }
-
-        public async Task<IEnumerable<User>> GetAll()
-        {
-            return await _dbContext.Users.ToListAsync();
+            return await dbContext.Users.SingleOrDefaultAsync(u => u.Username == username);
         }
     }
 }

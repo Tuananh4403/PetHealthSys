@@ -44,9 +44,16 @@ namespace PetCareSystem.Services.Services.Auth
 
         public async Task RegisterAsync(RegisterRequest model)
         {
-            if(_userRepository.GetUserByEmail(model.Email) == null || _userRepository.GetUserByPhone(model.Phone) == null)
+            var existingUserByEmail = await _userRepository.GetUserByEmail(model.Email);
+            if (existingUserByEmail != null)
             {
-                throw new AppException("Email or Phone is already taken");
+                throw new AppException("Email is already taken");
+            }
+
+            var existingUserByPhone = await _userRepository.GetUserByPhone(model.Phone);
+            if (existingUserByPhone != null)
+            {
+                throw new AppException("Phone number is already taken");
             }
             var user = new User
             {
@@ -70,7 +77,7 @@ namespace PetCareSystem.Services.Services.Auth
                 };
 
                 // Add the customer
-                await _customerRepository.AddCustomerAsync(customer);
+                await _customerRepository.AddAsync(customer);
             }
             else
             {
@@ -78,7 +85,7 @@ namespace PetCareSystem.Services.Services.Auth
                 if(role.Title == "DT")
                 {
                     Doctor doc =new Doctor { UserId = user.Id };
-                    await _doctorRepository.AddDoctorAsync(doc);
+                    await _doctorRepository.AddAsync(doc);
                 }
             }
         }
@@ -120,7 +127,7 @@ namespace PetCareSystem.Services.Services.Auth
 
         public Task<User?> GetById(int userId)
         {
-            return _userRepository.GetUserById(userId);
+            return _userRepository.GetByIdAsync(userId);
         }
 
         public async Task CreateRole(CreateRoleReq model)
@@ -132,16 +139,16 @@ namespace PetCareSystem.Services.Services.Auth
                 Title = model.Title,
                 Name = model.Name
             };
-            await _roleRepository.Create(role);
+            await _roleRepository.AddAsync(role);
         }
 
-        public async Task<List<Role>> GetListRole()
+        public async Task<IEnumerable<Role>> GetListRole()
         {
-            return await _roleRepository.GetAll(); 
+            return await _roleRepository.GetAllAsync(); 
         }
         public async Task<IEnumerable<User>> GetAll()
         {
-            return await _userRepository.GetAll();
+            return await _userRepository.GetAllAsync();
         }
     }
 }

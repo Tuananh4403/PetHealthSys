@@ -28,6 +28,9 @@ namespace PetCareSystem.Data.Configurations
             builder.Property(b => b.Status)
                    .HasMaxLength(50);
 
+            builder.Property(b => b.Note)
+                   .HasMaxLength(200);
+
             // Relationships
             builder.HasOne(b => b.Customer)
                    .WithMany(c => c.Bookings)

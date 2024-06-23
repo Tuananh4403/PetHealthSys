@@ -8,12 +8,8 @@ using System.Threading.Tasks;
 
 namespace PetCareSystem.Data.Repositories.Bookings
 {
-    public interface IBookingRepository
+    public interface IBookingRepository : IRepository<Booking>
     {
-        Task<Boolean> CreateBookingAsync(Booking booking);
-        Task<Boolean> AddBookingServiceAsync(BookingService bookingService);
-        Task<Boolean> SaveChangesAsync();
-        Task<bool> DeleteBookingAsync(int BookingId);
-
+        public Task<IList<Booking>> GetListBooking(int BookingId);
     }
 }

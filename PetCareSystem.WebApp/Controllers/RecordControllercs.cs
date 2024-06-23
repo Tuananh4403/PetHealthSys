@@ -2,7 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using PetCareSystem.Data.Entites;
 using PetCareSystem.Services.Services.Models.Recording;
-using PetCareSystem.Services.Services.Recordings;
+using PetCareSystem.Services.Services.Records;
 using PetCareSystem.WebApp.Helpers;
 using System;
 using System.Threading.Tasks;
@@ -12,12 +12,12 @@ namespace PetCareSystem.WebApp.Controllers
     [ApiController]
     [Route("api/[controller]")]
     [Authorize]
-    public class RecordingControllercs : ControllerBase
+    public class RecordControllercs : ControllerBase
     {
-        private readonly IRecordingServices _service;
+        private readonly IRecordServices _service;
 
 
-        public RecordingControllercs(IRecordingServices recordServices)
+        public RecordControllercs(IRecordServices recordServices)
         {
             _service = recordServices;
         }
@@ -30,17 +30,10 @@ namespace PetCareSystem.WebApp.Controllers
             {
                 return BadRequest(ModelState);
             }
-
+            var token = Request.Headers["Authorization"].ToString().Replace("Bearer ", "");
             try
             {
-                // Check if DoctorId is valid
-                var isDoctorValid = await _service.IsDoctorId(model.DoctorId);
-                if (!isDoctorValid)
-                {
-                    return BadRequest("You are not doctor");
-                }
-
-                var result = await _service.CreateRecordAsync(model);
+                var result = await _service.CreateRecordAsync(model, token);
                 if (result)
                 {
                     return Ok("Record created successfully");

@@ -76,13 +76,18 @@ namespace PetCareSystem.Data.Migrations
                     b.Property<DateTime?>("DeletedAt")
                         .HasColumnType("datetime2");
 
+                    b.Property<string>("Note")
+                        .IsRequired()
+                        .HasMaxLength(200)
+                        .HasColumnType("nvarchar(200)");
+
                     b.Property<int?>("Number")
                         .HasColumnType("int");
 
                     b.Property<int>("PetId")
                         .HasColumnType("int");
 
-                    b.Property<int>("StaffId")
+                    b.Property<int?>("StaffId")
                         .HasColumnType("int");
 
                     b.Property<string>("Status")
@@ -387,7 +392,7 @@ namespace PetCareSystem.Data.Migrations
                         .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)");
 
-                    b.Property<int?>("TypeId")
+                    b.Property<int>("TypeId")
                         .HasColumnType("int");
 
                     b.Property<DateTime>("UpdatedAt")
@@ -509,8 +514,7 @@ namespace PetCareSystem.Data.Migrations
                     b.HasOne("PetCareSystem.Data.Entites.Staff", "Staff")
                         .WithMany("Bookings")
                         .HasForeignKey("StaffId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
+                        .OnDelete(DeleteBehavior.Restrict);
 
                     b.Navigation("Customer");
 

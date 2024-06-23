@@ -34,7 +34,7 @@ namespace PetCareSystem.Services.Services.Pets
                 throw new ArgumentException("Invalid token");
             }
 
-            var customer = await _customerRepository.GetCusById((int)userId);
+            var customer = await _customerRepository.GetCusByUserId((int)userId);
             if (customer == null)
             {
                 throw new ArgumentException("Customer does not exist! You need to register");
@@ -74,7 +74,7 @@ namespace PetCareSystem.Services.Services.Pets
             };
 
             
-            await _petRepository.AddPetAsync(pet);
+            await _petRepository.AddAsync(pet);
 
             
             return true;
@@ -89,7 +89,7 @@ namespace PetCareSystem.Services.Services.Pets
                 return null;
             }
 
-            var pet = await _petRepository.GetPetByIdAsync(petId);
+            var pet = await _petRepository.GetByIdAsync(petId);
             if (pet == null)
             {
                 return null;
@@ -115,20 +115,33 @@ namespace PetCareSystem.Services.Services.Pets
 
         public async Task<bool> UpdatePetAsync(int id, PetRequest updatePet)
         {
-            bool isUpdated = await _petRepository.UpdatePet(
-                id,
-                updatePet.PetName,
-                updatePet.KindOfPet,
-                updatePet.Gender,
-                updatePet.Birthday,
-                updatePet.Species
-            );
+            bool isUpdated = false;
+            var pet = await _petRepository.GetByIdAsync(id);
+            if (pet == null)
+            {
+                return false;
+            }
+            else
+            {
+                pet.PetName = updatePet.PetName;
+                pet.KindOfPet = updatePet.KindOfPet;
+                pet.Gender = updatePet.Gender;
+                pet.Birthday = updatePet.Birthday;
+                pet.Species = updatePet.Species;
+                isUpdated = await _petRepository.UpdateAsync(pet);
+            }
+
             return isUpdated;
         }
 
         public async Task<bool> DeletePetAsync(int id)
         {
-            return await _petRepository.DeletePet(id);
+            Pet pet = await _petRepository.GetByIdAsync(id);
+            if (pet != null)
+            {
+                return await _petRepository.DeleteAsync(pet);
+            }
+            return false;
         }
 
 

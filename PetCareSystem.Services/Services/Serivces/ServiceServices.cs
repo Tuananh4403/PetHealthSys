@@ -35,7 +35,7 @@ namespace PetCareSystem.Services.Services.Serivces
             };
 
             // Save the service entity to the database
-            return await _servicesRepository.AddServiceAsync(service);
+            return await _servicesRepository.AddAsync(service);
         }
         public object GetServiceByCategory(int categoryId)
         {

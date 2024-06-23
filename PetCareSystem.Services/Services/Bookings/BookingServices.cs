@@ -1,6 +1,9 @@
 ﻿using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using PetCareSystem.Data.Entites;
 using PetCareSystem.Data.Repositories.Bookings;
+using PetCareSystem.Data.Repositories.BookingServices;
+using PetCareSystem.Data.Repositories.Customers;
+using PetCareSystem.Services.Helpers;
 using PetCareSystem.Services.Models.Booking;
 using System;
 using System.Collections.Generic;
@@ -13,25 +16,35 @@ namespace PetCareSystem.Services.Services.Bookings
     public class BookingServices : IBookingServices
     {
         private readonly IBookingRepository _bookingRepository;
+        private readonly ICustomerRepository _customerRepository;
+        private readonly IBookingServiceRepository _bookingServiceRepository;
         
-        public BookingServices(IBookingRepository bookingRepository)
+        public BookingServices(IBookingRepository bookingRepository, ICustomerRepository customerRepository, IBookingServiceRepository bookingService)
         {
             _bookingRepository = bookingRepository;
+            _customerRepository = customerRepository;
+            _bookingServiceRepository = bookingService;
         }
 
-        public async Task<bool> CreateBookingAsync(CreateBookingReq bookingReq)
+        public async Task<bool> CreateBookingAsync(CreateBookingReq bookingReq, string token)
         {
+            int? userId = CommonHelpers.GetUserIdByToken(token);
+            if (!userId.HasValue || userId <= 0)
+            {
+                throw new ArgumentException("Invalid token");
+            }
 
+            var customer = await _customerRepository.GetCusByUserId((int)userId);
             var booking = new Booking ()
             {
-                CustomerId = bookingReq.CustomerId,
+                CustomerId = customer.Id,
                 PetId = bookingReq.PetId,
                 BookingTime = bookingReq.BookingDate,
                 // Set other properties of the Booking entity as needed
             };
 
             // Save the booking entity to the database
-            if (!await _bookingRepository.CreateBookingAsync(booking))
+            if (!await _bookingRepository.AddAsync(booking))
             {
                 return false;
             }
@@ -47,7 +60,7 @@ namespace PetCareSystem.Services.Services.Bookings
                 };
 
                 // Save each BookingService entity to the database
-                if (!await _bookingRepository.AddBookingServiceAsync(bookingService))
+                if (!await _bookingServiceRepository.AddAsync(bookingService))
                 {
                     return false;
                 }
@@ -56,22 +69,15 @@ namespace PetCareSystem.Services.Services.Bookings
             return true;
         }
 
-        public async Task<bool> UpdateBookingAsync(int BookingId, CreateBookingReq updateReq)
+        public async Task<bool> UpdateBookingAsync(int BookingId, CreateBookingReq updateReq, string token)
         {
-            var bookingToUpdate = await _bookingRepository.SaveChangesAsync();
+            var bookingToUpdate = await _bookingRepository.GetByIdAsync(BookingId);
             if (bookingToUpdate == null)
             {
                     return false;
-                }
-
-            if(await _bookingRepository.DeleteBookingAsync(BookingId))
-            {
-                CreateBookingAsync(updateReq);
             }
-            else
-            {
-                return false;
-            }
+            bookingToUpdate.BookingTime = updateReq.BookingDate;
+            //bookingToUpdate.
 
             return true;
         }
@@ -84,12 +90,12 @@ namespace PetCareSystem.Services.Services.Bookings
 
         public async Task<bool> DeleteBooking(int BookingId)
         {
-            if(!(await _bookingRepository.DeleteBookingAsync(BookingId)))
+            Booking booking = await _bookingRepository.GetByIdAsync(BookingId);
+            if(booking  != null)
             {
-                return false;
+                return await _bookingRepository.DeleteAsync(booking);
             }
-
-                return true;
+            return true;
         }
 
         Task<Booking> IBookingServices.GetBookingById(int BookingId)

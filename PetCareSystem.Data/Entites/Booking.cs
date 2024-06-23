@@ -21,7 +21,8 @@ namespace PetCareSystem.Data.Entites
         public int PetId { get; set; }
         public virtual Pet Pet { get; set; }
         public ICollection<BookingService> BookingServices { get; set; }
-        public int StaffId { get; set; }
+        public string Note {  get; set; }
+        public int? StaffId { get; set; }
         public virtual Staff Staff { get; set; }
     }
 }
