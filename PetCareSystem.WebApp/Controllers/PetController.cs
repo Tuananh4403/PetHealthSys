@@ -33,8 +33,8 @@ namespace PetCareSystem.WebApp.Controllers
 
             try
             {
-                bool isRegistered = await _petService.RegisterPetAsync(model, token);
-                if (isRegistered)
+                Pet isRegistered = await _petService.RegisterPetAsync(model, token);
+                if (isRegistered == null)
                 {
                     return Ok(new { message = "Pet registration successful" });
                 }
@@ -75,28 +75,8 @@ namespace PetCareSystem.WebApp.Controllers
             }
         }
 
-        [HttpGet("getListPet")]
-        public async Task<IActionResult> GetListPet(string petName, string nameOfCustomer, string kindOfPet, string speciesOfPet, bool? genderOfPet, DateTime? birthdayOfPet)
-        {
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
-            }
-
-            try
-            {
-                var pets = await _petService.GetListPet(petName, nameOfCustomer, kindOfPet, speciesOfPet, genderOfPet, birthdayOfPet);
-                if (pets.Any())
-                {
-                    return Ok(pets);
-                }
-                return NotFound("No pets found matching the search criteria.");
-            }
-            catch (Exception ex)
-            {
-                return StatusCode(500, new { message = "An error occurred while retrieving the pet details", details = ex.Message });
-            }
-        }
+        
+       
 
         [HttpPut("update-pet/{id}")]
         public async Task<IActionResult> UpdatePet(int id, PetRequest model)

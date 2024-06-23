@@ -24,10 +24,15 @@
     </PackageReference>
     <PackageReference Include="Microsoft.Extensions.Configuration.FileExtensions" Version="8.0.0" />
     <PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="8.0.0" />
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.0.0" />
+    <PackageReference Include="Moq" Version="4.20.70" />
     <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
+    <PackageReference Include="NUnit" Version="4.1.0" />
+    <PackageReference Include="NUnit3TestAdapter" Version="4.5.0" />
     <PackageReference Include="Swashbuckle.AspNetCore" Version="6.6.2" />
 	<PackageReference Include="Microsoft.AspNetCore.Mvc.Razor.RuntimeCompilation" Version="7.0.5" />
 	<PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
+	<PackageReference Include="xunit" Version="2.8.1" />
   </ItemGroup>
 	
 	<ItemGroup>
@@ -38,7 +43,7 @@
 		<None Include="webpack.config.js" />
 	</ItemGroup>
 	<ItemGroup>
-		<Content  Remove="webpack.config.js" />
+		<Content Remove="webpack.config.js" />
 	</ItemGroup>
 
 </Project>

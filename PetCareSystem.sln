@@ -7,7 +7,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PetCareSystem.WebApp", "Pet
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PetCareSystem.Data", "PetCareSystem.Data\PetCareSystem.Data.csproj", "{7925DD94-91D6-4A02-BDAE-D327580EFD05}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PetCareSystem.Services", "PetCareSystem.Services\PetCareSystem.Services.csproj", "{BA8C7911-9CAA-4022-A653-EE8B25ABBDD3}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PetCareSystem.Services", "PetCareSystem.Services\PetCareSystem.Services.csproj", "{BA8C7911-9CAA-4022-A653-EE8B25ABBDD3}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

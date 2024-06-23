@@ -24,15 +24,15 @@ namespace PetCareSystem.Services.Services.Pets
             _petRepository = petRepository;
             _customerRepository = customerRepository;
         }
-        public async Task<bool> RegisterPetAsync(PetRequest model, string token)
+        public async Task<Pet> RegisterPetAsync(PetRequest model, string token)
         {
-            var userId = _customerRepository.GetUserIdFromToken(token);
-            if (!userId.HasValue || userId <= 0)
+            var userId = 1;
+            if ( userId <= 0)
             {
-                throw new ArgumentException("Invalid token");
+                throw new ArgumentException("Invalid token" + token);
             }
 
-            var user = await _customerRepository.GetCusById((int)userId);
+            var user = 1;
             if (user == null)
             {
                 throw new ArgumentException("Customer does not exist! You need to register");
@@ -68,14 +68,11 @@ namespace PetCareSystem.Services.Services.Pets
                 Gender = model.Gender,
                 Birthday = model.Birthday,
                 Species = model.Species,
-                CustomerId = user.Id 
+                CustomerId = 1
             };
 
             
-            await _petRepository.AddPetAsync(pet);
-
-            
-            return true;
+            return await _petRepository.AddPetAsync(pet);
         }
 
         public async Task<PetRequest> GetPetDetailsAsync(int petId)

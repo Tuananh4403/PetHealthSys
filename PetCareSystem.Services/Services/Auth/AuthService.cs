@@ -29,7 +29,7 @@ namespace PetCareSystem.Services.Services.Auth
 
         public async Task<AuthenticationResult> LoginAsync(string username, string password)
         {
-            var user = await _userRepository.GetUserByUsernameAsync(username);
+            var user = await _userRepository.GetUserByEmail(username);
             if (user == null || !VerifyPasswordHash(password, user.Password))
             {
                 return new AuthenticationResult { Success = false, Message = "Invalid credentials" };

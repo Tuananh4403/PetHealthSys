@@ -19,10 +19,11 @@ namespace PetCareSystem.Data.Repositories.Pets
         {
             _dbContext = dbContext;
         }
-        public async Task AddPetAsync(Pet pet)
+        public async Task<Pet> AddPetAsync(Pet pet)
         {
             await _dbContext.Pets.AddAsync(pet);
             await _dbContext.SaveChangesAsync();
+            return pet;
         }
         public async Task<bool> PetExists(int petId)
         {

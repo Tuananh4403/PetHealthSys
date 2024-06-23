@@ -25,9 +25,9 @@ namespace PetCareSystem.Data.Repositories.Customers
             await _dbContext.SaveChangesAsync();
         }
 
-        public async Task<User> GetCusById(int id)
+        public async Task<Customer> GetCusById(int id)
         {
-            return await _dbContext.Users.SingleOrDefaultAsync(u => u.Id == id);
+            return await _dbContext.Customers.SingleOrDefaultAsync(u => u.Id == id);
         }
         public int? GetUserIdFromToken(string token)
         {

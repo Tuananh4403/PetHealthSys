@@ -11,7 +11,7 @@ namespace PetCareSystem.Data.Repositories.Customers
     {
        
         Task AddCustomerAsync(Customer cus);
-        Task<User> GetCusById(int id);
+        Task<Customer> GetCusById(int id);
         
         int? GetUserIdFromToken(string token);
     }
