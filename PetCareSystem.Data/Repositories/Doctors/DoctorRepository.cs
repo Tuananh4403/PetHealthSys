@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
 using PetCareSystem.Data.EF;
 using PetCareSystem.Data.Entites;
 using System;
@@ -10,24 +11,11 @@ using System.Threading.Tasks;
 
 namespace PetCareSystem.Data.Repositories.Doctors
 {
-    public class DoctorRepository : IDoctorRepository
+    public class DoctorRepository(PetHealthDBContext dbContext, ILogger<DoctorRepository> logger) : BaseRepository<Doctor>(dbContext, logger), IDoctorRepository
     {
-        private readonly PetHealthDBContext _dbContext;
-
-        public DoctorRepository(PetHealthDBContext dbContext)
+        public async Task<Doctor> GetDoctorByUserId(int? id)
         {
-            _dbContext = dbContext;
-        }
-
-        public async Task AddDoctorAsync(Doctor doc)
-        {
-            await _dbContext.Doctors.AddAsync(doc);
-            await _dbContext.SaveChangesAsync();
-        }
-
-        public async Task<Doctor> GetDoctorById(int id)
-        {
-            return await _dbContext.Doctors.SingleOrDefaultAsync(u => u.UserId == id);
+            return await dbContext.Doctors.SingleOrDefaultAsync(u => u.UserId == id);
         }
     }
 }

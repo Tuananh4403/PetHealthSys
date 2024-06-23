@@ -8,9 +8,8 @@ using System.Threading.Tasks;
 
 namespace PetCareSystem.Data.Repositories.Doctors
 {
-    public interface IDoctorRepository
+    public interface IDoctorRepository : IRepository<Doctor>
     {
-        Task AddDoctorAsync(Doctor cus);
-        Task<Doctor> GetDoctorById(int id);
+        Task<Doctor> GetDoctorByUserId(int? id);
     }
 }

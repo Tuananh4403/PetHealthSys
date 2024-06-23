@@ -83,10 +83,11 @@ namespace PetCareSystem.Data.Repositories
         return idProperty?.GetValue(entity);
     }
 
-        public async Task DeleteAsync(T entity)
+        public async Task<bool> DeleteAsync(T entity)
         {
             _dbSet.Remove(entity);
-            await _context.SaveChangesAsync();
+            int result = await _context.SaveChangesAsync();
+            return result > 0;
         }
 
         public async Task<IEnumerable<T>> FindAsync(Expression<Func<T, bool>> predicate)

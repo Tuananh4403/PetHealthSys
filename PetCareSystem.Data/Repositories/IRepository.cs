@@ -11,7 +11,7 @@ namespace PetCareSystem.Data.Repositories
         Task<T> GetByIdAsync(int id);
         Task<bool> AddAsync(T entity);
         Task<bool> UpdateAsync(T entity);
-        Task DeleteAsync(T entity);
+        Task<bool> DeleteAsync(T entity);
         Task<IEnumerable<T>> FindAsync(Expression<Func<T, bool>> predicate);
     }
 }

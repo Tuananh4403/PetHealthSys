@@ -12,12 +12,9 @@ namespace PetCareSystem.Data.Repositories.Services
 {
     public class ServicesRepository(PetHealthDBContext dBContext, ILogger<ServicesRepository> logger) : BaseRepository<Service>(dBContext, logger), IServicesRepository
     {
-        private readonly PetHealthDBContext _dBContext = dBContext;
-        private readonly ILogger<ServicesRepository> _logger = logger;
-
         public async Task<(IEnumerable<Service> Services, int TotalCount)> GetListService(string searchString, int  ?TypeId,int pageNumber = 1 , int pageSize = 10)
         {
-            var query = _dBContext.Services.AsQueryable();
+            var query = dBContext.Services.AsQueryable();
 
             if (!string.IsNullOrEmpty(searchString))
             {

@@ -13,18 +13,14 @@ namespace PetCareSystem.Data.Repositories.Roles
 {
     public class RoleRepository(PetHealthDBContext dBContext, ILogger<RoleRepository> logger) : BaseRepository<Role>(dBContext, logger), IRoleRepository
     {
-        private readonly PetHealthDBContext _dBContext = dBContext;
-        private readonly ILogger<RoleRepository> _logger = logger;
-
-
         public async Task<Role> GetRoleByIdAsync(int RoleId)
         {
-            return await _dBContext.Roles.SingleOrDefaultAsync(u => u.Id == RoleId);
+            return await dBContext.Roles.SingleOrDefaultAsync(u => u.Id == RoleId);
         }
 
         public async Task<Role> GetRoleByTitleAsync(string RoleTilte)
         {
-            return await _dBContext.Roles.SingleOrDefaultAsync(u => u.Title == RoleTilte);
+            return await dBContext.Roles.SingleOrDefaultAsync(u => u.Title == RoleTilte);
         }
     }
 }

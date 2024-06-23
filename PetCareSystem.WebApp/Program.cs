@@ -21,6 +21,7 @@ using PetCareSystem.Data.Repositories.Roles;
 using PetCareSystem.Data.Repositories.Doctors;
 using PetCareSystem.WebApp.Helpers;
 using Microsoft.OpenApi.Models;
+using PetCareSystem.Data.Repositories.BookingServices;
 
 
 IConfiguration configuration = new ConfigurationBuilder()
@@ -92,17 +93,19 @@ builder.Services.AddDbContext<PetHealthDBContext>(options =>
 builder.Services.AddControllersWithViews();
 builder.Services.AddSingleton<ITempDataDictionaryFactory, TempDataDictionaryFactory>();
 builder.Services.AddScoped<IUserRepository, UserRepository>();
-builder.Services.AddScoped<IAuthService, AuthService>();
-builder.Services.AddScoped<IBookingServices, BookingServices>();
-builder.Services.AddScoped<IBookingRepository, BookingRepository>();
-builder.Services.AddScoped<ICustomerRepository, CustomerRepository>();
-builder.Services.AddScoped<IServiceServices, ServiceServices>();
-builder.Services.AddScoped<IServicesRepository, ServicesRepository>();
-builder.Services.AddScoped<IPetRepository, PetRepository>();
-builder.Services.AddScoped<IPetService, PetService>();
 builder.Services.AddScoped<IRoleRepository, RoleRepository>();
 builder.Services.AddScoped<IDoctorRepository, DoctorRepository>();
-builder.Services.AddScoped<IDoctorRepository, DoctorRepository>();
+builder.Services.AddScoped<IBookingServiceRepository, BookingServiceRepository>();
+builder.Services.AddScoped<IBookingRepository, BookingRepository>();
+builder.Services.AddScoped<ICustomerRepository, CustomerRepository>();
+builder.Services.AddScoped<IServicesRepository, ServicesRepository>();
+builder.Services.AddScoped<IPetRepository, PetRepository>();
+
+builder.Services.AddScoped<IAuthService, AuthService>();
+builder.Services.AddScoped<IBookingServices, BookingServices>();
+builder.Services.AddScoped<IServiceServices, ServiceServices>();
+builder.Services.AddScoped<IPetService, PetService>();
+
 
 // Configure JWT authentication
 var key = Encoding.ASCII.GetBytes(appSetting);

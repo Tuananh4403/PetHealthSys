@@ -7,11 +7,8 @@ using System.Threading.Tasks;
 
 namespace PetCareSystem.Data.Repositories.Records
 {
-    public interface IRecordingRepository
+    public interface IRecordRepository : IRepository<Record>
     {
-        Task<bool> CreateRecordingAsyn(Record record);
-
         Task<bool> IsDoctorId(int doctorId);
-        Task<Boolean> SaveChangesAsync();
     }
 }
