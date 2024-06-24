@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using PetCareSystem.Data.Entites;
+using PetCareSystem.Data.Enums;
 using PetCareSystem.Data.Repositories.Bookings;
 using PetCareSystem.Data.Repositories.BookingServices;
 using PetCareSystem.Data.Repositories.Customers;
@@ -40,6 +41,7 @@ namespace PetCareSystem.Services.Services.Bookings
                 CustomerId = customer.Id,
                 PetId = bookingReq.PetId,
                 BookingTime = bookingReq.BookingDate,
+                Status      = BookingStatus.Review
                 // Set other properties of the Booking entity as needed
             };
 

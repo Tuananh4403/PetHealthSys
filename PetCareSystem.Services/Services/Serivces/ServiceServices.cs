@@ -1,7 +1,7 @@
 ﻿using Microsoft.Extensions.Configuration;
 using PetCareSystem.Data.Entites;
 using PetCareSystem.Data.Repositories.Services;
-using PetCareSystem.Services.Models.Booking;
+using PetCareSystem.Services.Models;
 using PetCareSystem.Services.Enums;
 using PetCareSystem.Services.Models.Services;
 using System;
@@ -79,9 +79,28 @@ namespace PetCareSystem.Services.Services.Serivces
             }
             return (ServiceCategory)id;
         }
-        public async Task<(IEnumerable<Service> Services, int TotalCount)> GetListServiceAsync(string searchString, int TypeId = 1, int pageNumber = 1, int pageSize = 10)
+        public async Task<string> GetServiceCategoryNameAsync(int typeId)
         {
-            return await _servicesRepository.GetListService(searchString, TypeId, pageNumber, pageSize);
+            var category = GetServiceCategoryById(typeId);
+            return category.ToString(); // Assuming you just need the name of the enum
+        }
+        public async Task<PaginatedApiResponse<Service>> GetListServiceAsync(string? searchString, int typeId = 1, int pageNumber = 1, int pageSize = 10)
+        {
+            var (services, totalCount) = await _servicesRepository.GetListService(searchString, typeId, pageNumber, pageSize);
+            if (!services.Any())
+            {
+                return new PaginatedApiResponse<Service>("No services found", true);
+            }
+            var servicesWithCategoryTasks = services.Select(async service => new
+            {
+                service.Id,
+                service.Name,
+                service.TypeId,
+                CategoryName = (await Task.Run(() => GetServiceCategoryById(service.TypeId))).ToString()
+                // Map other properties if needed
+            }).ToList();
+            var servicesWithCategory = await Task.WhenAll(servicesWithCategoryTasks);
+            return new PaginatedApiResponse<Service>(services, totalCount);
         }
     }
 }

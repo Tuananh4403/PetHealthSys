@@ -26,7 +26,7 @@ namespace PetCareSystem.Data.Configurations
                    .IsRequired(false);
 
             builder.Property(b => b.Status)
-                   .HasMaxLength(50);
+                   .HasConversion<string>();
 
             builder.Property(b => b.Note)
                    .HasMaxLength(200);

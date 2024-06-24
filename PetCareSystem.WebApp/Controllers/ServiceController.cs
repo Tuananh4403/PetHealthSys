@@ -33,7 +33,7 @@ namespace PetCareSystem.WebApp.Controllers
                 var result = await _serviceServices.CreateServiceAsync(model);
                 if (result)
                 {
-                    return Ok("Booking created successfully");
+                    return Ok("Service created successfully");
                 }
                 return BadRequest("Failed to create booking");
             }
@@ -44,7 +44,7 @@ namespace PetCareSystem.WebApp.Controllers
             }
         }
         [HttpGet("get-service")]
-        public async Task<IActionResult> GetService([FromQuery] string searchOption)
+        public async Task<IActionResult> GetService([FromQuery] string? searchOption)
         {
             if (!ModelState.IsValid)
             {
@@ -52,18 +52,13 @@ namespace PetCareSystem.WebApp.Controllers
             }
             try
             {
-                var (services, totalCount) = await _serviceServices.GetListServiceAsync(searchOption, 1,1, 20);
+                var response = await _serviceServices.GetListServiceAsync(searchOption, 1, 1, 20);
 
-                var servicesWithCategory = services.Select(service => new
+                if (response.Status == "Error")
                 {
-                    service.Id,
-                    service.Name,
-                    service.TypeId,
-                    CategoryName = _serviceServices.GetServiceByCategory(service.TypeId)
-                    // Map other properties if needed
-                }).ToList();
-
-                return Ok(new { Services = servicesWithCategory, TotalCount = totalCount });
+                    return NotFound(response.Message);
+                }
+                return Ok(response);
             }
             catch (Exception ex)
             {

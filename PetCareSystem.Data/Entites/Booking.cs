@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using PetCareSystem.Data.Enums;
 
 namespace PetCareSystem.Data.Entites
 {
@@ -16,7 +17,7 @@ namespace PetCareSystem.Data.Entites
         public decimal Total { get; set; }
         public DateTime? BookingTime { get; set; }
         public int? CustomerId { get; set; }
-        public string? Status { get; set; }
+        public BookingStatus Status { get; set; }        
         public virtual Customer Customer { get; set; }
         public int PetId { get; set; }
         public virtual Pet Pet { get; set; }
