@@ -10,6 +10,14 @@ namespace PetCareSystem.Data.Entites
     {
         public int UserId { get; set; }
         public virtual User User { get; set; }
-        public ICollection<Record>? Records { get; set; }
+        public string? Specialty { get; set; }
+        public virtual ICollection<Record> Records { get; set; }
+        public virtual ICollection<Booking> Bookings { get; set; }
+
+        public Doctor()
+        {
+            Bookings = new List<Booking>();
+            Records  = new List<Record>();
+        }
     }
 }

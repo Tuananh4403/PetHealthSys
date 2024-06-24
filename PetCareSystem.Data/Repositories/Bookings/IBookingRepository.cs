@@ -11,5 +11,6 @@ namespace PetCareSystem.Data.Repositories.Bookings
     public interface IBookingRepository : IRepository<Booking>
     {
         public Task<IList<Booking>> GetListBooking(int BookingId);
+        public Task<bool> CheckReviewBooking(Booking booking);
     }
 }

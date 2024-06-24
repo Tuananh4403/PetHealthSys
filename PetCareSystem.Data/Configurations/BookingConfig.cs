@@ -51,6 +51,10 @@ namespace PetCareSystem.Data.Configurations
                    .WithOne(bs => bs.Booking)
                    .HasForeignKey(bs => bs.BookingId)
                    .OnDelete(DeleteBehavior.Restrict);
+            builder.HasOne(b => b.Doctor)
+                    .WithMany(d => d.Bookings)
+                    .HasForeignKey(b => b.DoctorId)
+                    .OnDelete(DeleteBehavior.Restrict);
         }
     }
 }

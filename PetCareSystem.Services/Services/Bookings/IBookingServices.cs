@@ -1,4 +1,5 @@
 ﻿using PetCareSystem.Data.Entites;
+using PetCareSystem.Services.Models;
 using PetCareSystem.Services.Models.Booking;
 using System;
 using System.Collections.Generic;
@@ -15,6 +16,6 @@ namespace PetCareSystem.Services.Services.Bookings
         Task<bool> UpdateBookingAsync(int BookingId, CreateBookingReq updateReq, string token);
         Task<Booking> GetBookingById(int BookingId);
         Task<bool> DeleteBooking(int BookingId);
-
+        Task<ApiResponse<string>> ConfirmBooking(int bookingId);
     }
 }

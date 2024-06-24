@@ -7,6 +7,7 @@ using PetCareSystem.Services.Services.Bookings;
 using System;
 using System.Threading.Tasks;
 using PetCareSystem.Data.Entites;
+using Sprache;
 
 
 namespace PetCareSystem.WebApp.Controllers
@@ -16,11 +17,11 @@ namespace PetCareSystem.WebApp.Controllers
     [Authorize]
     public class BookingController : ControllerBase
     {
-        private readonly IBookingServices _services;
+        private readonly IBookingServices _bookingServices;
 
         public BookingController(IBookingServices bookingServices)
         {
-            _services = bookingServices;
+            _bookingServices = bookingServices;
         }
 
         // POST: api/booking/create
@@ -34,7 +35,7 @@ namespace PetCareSystem.WebApp.Controllers
             try
             {
                 var token = Request.Headers["Authorization"].ToString().Replace("Bearer ", "");
-                var result = await _services.CreateBookingAsync(model, token);
+                var result = await _bookingServices.CreateBookingAsync(model, token);
                 if (result)
                 {
                     Console.WriteLine(result);
@@ -55,7 +56,7 @@ namespace PetCareSystem.WebApp.Controllers
         {
             try
             {
-                var booking = await _services.GetBookingById(bookingId);
+                var booking = await _bookingServices.GetBookingById(bookingId);
                 if (booking == null)
                 {
                     return NotFound("Booking not found");
@@ -82,7 +83,7 @@ namespace PetCareSystem.WebApp.Controllers
             {
                 var token = Request.Headers["Authorization"].ToString().Replace("Bearer ", "");
 
-                var result = await _services.UpdateBookingAsync(id, model, token);
+                var result = await _bookingServices.UpdateBookingAsync(id, model, token);
                 if (result)
                 {
                     return Ok("Booking updated successfully");
@@ -102,7 +103,7 @@ namespace PetCareSystem.WebApp.Controllers
         {
             try
             {
-                var result = await _services.DeleteBooking(id);
+                var result = await _bookingServices.DeleteBooking(id);
                 if (result)
                 {
                     return Ok("Booking deleted successfully");
@@ -116,7 +117,7 @@ namespace PetCareSystem.WebApp.Controllers
             }
         }
         [HttpPost("confirm/{id}")]
-        public async Task<IActionResult> ConfirmBooking(CreateBookingReq model)
+        public async Task<IActionResult> Confirm([FromQuery] int bookingId)
         {
             if (!ModelState.IsValid)
             {
@@ -125,12 +126,7 @@ namespace PetCareSystem.WebApp.Controllers
             try
             {
                 var token = Request.Headers["Authorization"].ToString().Replace("Bearer ", "");
-                var result = await _services.CreateBookingAsync(model, token);
-                if (result)
-                {
-                    Console.WriteLine(result);
-                    return Ok("Booking created successfully");
-                }
+                var response = _bookingServices.ConfirmBooking(bookingId);
                 return BadRequest("Failed to create booking");
             }
             catch (Exception ex)

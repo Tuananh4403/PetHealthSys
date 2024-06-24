@@ -5,6 +5,7 @@ using PetCareSystem.Data.Repositories.Bookings;
 using PetCareSystem.Data.Repositories.BookingServices;
 using PetCareSystem.Data.Repositories.Customers;
 using PetCareSystem.Services.Helpers;
+using PetCareSystem.Services.Models;
 using PetCareSystem.Services.Models.Booking;
 using System;
 using System.Collections.Generic;
@@ -103,6 +104,30 @@ namespace PetCareSystem.Services.Services.Bookings
         Task<Booking> IBookingServices.GetBookingById(int BookingId)
         {
             throw new NotImplementedException();
+        }
+
+        public async Task<ApiResponse<string>> ConfirmBooking(int bookingId)
+        {
+            try
+            {
+                var booking = await _bookingRepository.GetByIdAsync(bookingId);
+                if (booking == null)
+                {
+                    return new ApiResponse<string>("Booking not exist! ", true);
+                }else if(booking.Status == BookingStatus.Review)
+                {
+                    return new ApiResponse<string>("Booking have been confirmed! ", true);
+
+                }
+                booking.Status = BookingStatus.Confirmed;
+                _bookingRepository.UpdateAsync(booking);
+                return new ApiResponse<string>("Booking Confirm successfully");
+            }
+            catch (Exception ex) 
+            {
+                return new ApiResponse<string>("Error system", true);
+            }
+           
         }
     }
 }
