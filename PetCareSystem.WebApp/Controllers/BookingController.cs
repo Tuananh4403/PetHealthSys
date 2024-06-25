@@ -113,11 +113,12 @@ namespace PetCareSystem.WebApp.Controllers
             catch (Exception ex)
             {
                 // Log the exception (ex) here if needed
+                
                 return StatusCode(500, "Internal server error");
             }
         }
-        [HttpPost("confirm/{id}")]
-        public async Task<IActionResult> Confirm([FromQuery] int bookingId)
+        [HttpPost("confirm")]
+        public async Task<IActionResult> Confirm([FromQuery] int id)
         {
             if (!ModelState.IsValid)
             {
@@ -126,8 +127,8 @@ namespace PetCareSystem.WebApp.Controllers
             try
             {
                 var token = Request.Headers["Authorization"].ToString().Replace("Bearer ", "");
-                var response = _bookingServices.ConfirmBooking(bookingId);
-                return BadRequest("Failed to create booking");
+                var response = await _bookingServices.ConfirmBooking(id);
+                return Ok(response);
             }
             catch (Exception ex)
             {

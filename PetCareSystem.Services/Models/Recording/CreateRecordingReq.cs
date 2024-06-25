@@ -12,7 +12,7 @@ namespace PetCareSystem.Services.Services.Models.Recording
         public int DoctorId { get; set; }
 
         public int PetId { get; set; }
-
+        public int[]? ServiceIds { get; set; }
         public int BarnId { get; set; }
         public string DetailPrediction { get; set; }
         public string Conclude { get; set; }

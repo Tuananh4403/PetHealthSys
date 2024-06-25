@@ -116,11 +116,19 @@ namespace PetCareSystem.Services.Services.Bookings
                     return new ApiResponse<string>("Booking not exist! ", true);
                 }else if(booking.Status == BookingStatus.Review)
                 {
-                    return new ApiResponse<string>("Booking have been confirmed! ", true);
+                    return new ApiResponse<string>("Booking status not in Review! ", true);
 
                 }
+                var checkBooking = await _bookingRepository.CheckReviewBooking(booking);
+                if(checkBooking){
                 booking.Status = BookingStatus.Confirmed;
-                _bookingRepository.UpdateAsync(booking);
+                bool result = await _bookingRepository.UpdateAsync(booking); 
+                if(result){
+                    return new ApiResponse<string>("Booking have been confirmed!");
+                }                   
+                }else{
+                    return new ApiResponse<string>("Doctor not free to receive booking!", true);
+                }
                 return new ApiResponse<string>("Booking Confirm successfully");
             }
             catch (Exception ex) 

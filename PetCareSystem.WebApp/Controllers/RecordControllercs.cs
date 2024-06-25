@@ -14,12 +14,12 @@ namespace PetCareSystem.WebApp.Controllers
     [Authorize]
     public class RecordControllercs : ControllerBase
     {
-        private readonly IRecordServices _service;
+        private readonly IRecordServices _recordService;
 
 
         public RecordControllercs(IRecordServices recordServices)
         {
-            _service = recordServices;
+            _recordService = recordServices;
         }
 
         // POST: api/record/create
@@ -33,12 +33,8 @@ namespace PetCareSystem.WebApp.Controllers
             var token = Request.Headers["Authorization"].ToString().Replace("Bearer ", "");
             try
             {
-                var result = await _service.CreateRecordAsync(model, token);
-                if (result)
-                {
-                    return Ok("Record created successfully");
-                }
-                return BadRequest("Failed to create record");
+                var response = await _recordService.CreateRecordAsync(model, token);
+                return Ok(response);
             }
             catch (Exception ex)
             {
