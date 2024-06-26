@@ -12,9 +12,5 @@ namespace PetCareSystem.Data.Repositories.Records
 {
     public class RecordRepository(PetHealthDBContext dbContext, ILogger<RecordRepository> logger) : BaseRepository<Record>(dbContext, logger), IRecordRepository
     {
-        public async Task<bool> IsDoctorId(int doctorId)
-        {
-            return await dbContext.Doctors.AnyAsync(d => d.Id == doctorId);
-        }
     }
 }

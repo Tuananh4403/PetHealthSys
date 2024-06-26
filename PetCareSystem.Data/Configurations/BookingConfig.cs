@@ -23,7 +23,7 @@ namespace PetCareSystem.Data.Configurations
                    .IsRequired();
 
             builder.Property(b => b.BookingTime)
-                   .IsRequired(false);
+                   .IsRequired();
 
             builder.Property(b => b.Status)
                    .HasConversion<string>();

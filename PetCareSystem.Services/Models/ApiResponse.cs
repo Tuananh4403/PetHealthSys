@@ -7,10 +7,10 @@
         public T? Data { get; set; }
         public ApiResponse() {}
 
-        public ApiResponse(T data)
+        public ApiResponse(T data, string message = "")
         {
             Success = true;
-            Message = string.Empty;
+            Message = message;
             Data = data;
         }
 

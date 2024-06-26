@@ -17,5 +17,6 @@ namespace PetCareSystem.Services.Services.Models.Recording
         public string DetailPrediction { get; set; }
         public string Conclude { get; set; }
         public bool SaveBarn { get; set; }
+        public Dictionary<int, int>? ServiceQuantities { get; set; }
     }
 }

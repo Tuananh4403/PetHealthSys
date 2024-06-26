@@ -50,12 +50,22 @@ namespace PetCareSystem.Data.Repositories.Users
         }
         public async Task<User> GetUserByEmail(string email)
         {
-            return await dbContext.Users.FirstOrDefaultAsync(u => u.Email == email);
+            return await dbContext.Users.Include(u => u.UserRoles)
+                                            .ThenInclude(ur => ur.Role)
+                                        .FirstOrDefaultAsync(u => u.Email == email);
         }
 
         public async Task<User> GetUserByUsernameAsync(string username)
         {
-            return await dbContext.Users.SingleOrDefaultAsync(u => u.Username == username);
+            return await dbContext.Users.Include(u => u.UserRoles)
+                                            .ThenInclude(ur => ur.Role)
+                                        .SingleOrDefaultAsync(u => u.Username == username);
+        }
+        public async Task<User> GetByIdAsync(int id)
+        {
+            return await _dbSet.Include(u => u.UserRoles)
+                                            .ThenInclude(ur => ur.Role)
+                               .FirstOrDefaultAsync(u => u.Id == id);
         }
     }
 }

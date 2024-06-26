@@ -5,9 +5,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace PetCareSystem.Data.Repositories.Records
+namespace PetCareSystem.Data.Repositories.UserRoles
 {
-    public interface IRecordRepository : IRepository<Record>
+    public interface IUserRolesRepository : IRepository<UserRole>
     {
+        public Task<UserRole> GetByUserId(int id);
     }
 }

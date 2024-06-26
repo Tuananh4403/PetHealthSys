@@ -12,6 +12,8 @@ using Microsoft.Extensions.Configuration;
 using PetCareSystem.Services.Helpers;
 using PetCareSystem.Data.Repositories.Roles;
 using PetCareSystem.Data.Repositories.Doctors;
+using PetCareSystem.Services.Models;
+using PetCareSystem.Data.Repositories.UserRoles;
 
 namespace PetCareSystem.Services.Services.Auth
 {
@@ -21,8 +23,9 @@ namespace PetCareSystem.Services.Services.Auth
         private readonly ICustomerRepository _customerRepository;
         private readonly IRoleRepository _roleRepository;
         private readonly IDoctorRepository _doctorRepository;
+        private readonly IUserRolesRepository _userRolesRepository;
 
-        public AuthService(IUserRepository userRepository, ICustomerRepository customerRepository, IRoleRepository roleRepository, IDoctorRepository doctorRepository)
+        public AuthService(IUserRepository userRepository, ICustomerRepository customerRepository, IRoleRepository roleRepository, IDoctorRepository doctorRepository, IUserRolesRepository userRolesRepository)
         {
             _userRepository = userRepository;
             _customerRepository = customerRepository;
@@ -30,30 +33,45 @@ namespace PetCareSystem.Services.Services.Auth
             _doctorRepository = doctorRepository;
         }
 
-        public async Task<AuthenticateResponse ?> LoginAsync(string username, string password)
+        public async Task<ApiResponse<AuthenticateResponse>> LoginAsync(string username, string password)
         {
             User user = await _userRepository.GetUserByEmail(username);
+            List<Role> listRoles = [];
+            var userRoles = user.UserRoles;
+
+
+            foreach (var userRole in userRoles)
+            {
+                Role role = userRole.Role;
+                Console.WriteLine($"Role id: {role.Id}, Title: {role.Title}");
+
+                if (role != null)
+                {
+                    listRoles.Add(role); // Add role to the list
+                }
+            }
+
             if (user == null || !VerifyPasswordHash(password, user.Password))
             {
                 return null;
             }
 
             var token = GenerateToken(user);
-            return new AuthenticateResponse( user, token );
+            return new ApiResponse<AuthenticateResponse>(new AuthenticateResponse( user, token, listRoles), "Login success");
         }
 
-        public async Task RegisterAsync(RegisterRequest model)
+        public async Task<ApiResponse<String>> RegisterAsync(RegisterRequest model)
         {
             var existingUserByEmail = await _userRepository.GetUserByEmail(model.Email);
             if (existingUserByEmail != null)
             {
-                throw new AppException("Email is already taken");
+                return new ApiResponse<string>("Email is already taken", true);
             }
 
             var existingUserByPhone = await _userRepository.GetUserByPhone(model.Phone);
             if (existingUserByPhone != null)
             {
-                throw new AppException("Phone number is already taken");
+                return new ApiResponse<string>("Phone number is already taken", true);
             }
             var user = new User
             {
@@ -77,7 +95,12 @@ namespace PetCareSystem.Services.Services.Auth
                 };
 
                 // Add the customer
-                await _customerRepository.AddAsync(customer);
+                var check = await _customerRepository.AddAsync(customer);
+                if (check)
+                {
+                    return new ApiResponse<string>("Registration successful", false);
+
+                }
             }
             else
             {
@@ -85,9 +108,15 @@ namespace PetCareSystem.Services.Services.Auth
                 if(role.Title == "DT")
                 {
                     Doctor doc =new Doctor { UserId = user.Id };
-                    await _doctorRepository.AddAsync(doc);
+                    var check = await _doctorRepository.AddAsync(doc);
+                    if (check)
+                    {
+                        return new ApiResponse<string>("Create doctor successful",false);
+
+                    }
                 }
             }
+            return new ApiResponse<string>("Create doctor successful", false);
         }
 
         

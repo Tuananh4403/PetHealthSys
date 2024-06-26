@@ -38,7 +38,7 @@ namespace PetCareSystem.WebApp.Controllers
                 var result = await _authService.LoginAsync(model.Username, model.Password);
                 if (result != null  )
                 {
-                    return Ok(new { message = "Login successful", result });
+                    return Ok( result );
                 }
 
                 return Unauthorized(new { message = "Username or password is incorrect" });
@@ -60,8 +60,8 @@ namespace PetCareSystem.WebApp.Controllers
                 return BadRequest(ModelState);
             }
 
-            await _authService.RegisterAsync(model);
-            return Ok("User have been created");
+            var respone = await _authService.RegisterAsync(model);
+            return Ok(respone);
         }
 
 

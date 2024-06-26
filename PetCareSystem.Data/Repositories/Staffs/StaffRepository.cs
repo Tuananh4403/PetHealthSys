@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
+using PetCareSystem.Data.EF;
 using PetCareSystem.Data.Entites;
 using System;
 using System.Collections.Generic;
@@ -9,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace PetCareSystem.Data.Repositories.Staffs
 {
-    public class StaffRepository(DbContext context, ILogger<BaseRepository<Staff>> logger) : BaseRepository<Staff>(context, logger), IStaffRepository
+    public class StaffRepository(PetHealthDBContext dbContext, ILogger<StaffRepository> logger) : BaseRepository<Staff>(dbContext, logger), IStaffRepository
     {
     }
 }

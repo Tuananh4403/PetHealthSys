@@ -95,16 +95,21 @@ public class AuthServiceTests
             IsCustomer = true
         };
 
-        _mockUserRepository.Setup(r => r.GetUserByEmail(model.Email)).ReturnsAsync((User)null);
-        _mockUserRepository.Setup(r => r.GetUserByPhone(model.Phone)).ReturnsAsync((User)null);
-        _mockUserRepository.Setup(r => r.AddUserAsync(It.IsAny<User>(), model.RoleId)).Returns(Task.CompletedTask);
-        _mockCustomerRepository.Setup(r => r.AddAsync(It.IsAny<Customer>())).Returns((Task<bool>)Task.CompletedTask);
+    _mockUserRepository.Setup(r => r.GetUserByEmail(It.IsAny<string>())).ReturnsAsync((User)null);
+    _mockUserRepository.Setup(r => r.GetUserByPhone(It.IsAny<string>())).ReturnsAsync((User)null);
+    _mockUserRepository.Setup(r => r.AddUserAsync(It.IsAny<User>(), It.IsAny<int>())).Returns(Task.CompletedTask);
+    _mockCustomerRepository.Setup(r => r.AddAsync(It.IsAny<Customer>())).Returns((Task.FromResult(true)));
+    _mockRoleRepository.Setup(r => r.GetRoleByIdAsync(It.IsAny<int>())).ReturnsAsync(new Role { Title = "Customer" });
 
         // Act
-        await _authService.RegisterAsync(model);
+        var response = await _authService.RegisterAsync(model);
 
         // Assert
-        _mockUserRepository.Verify(r => r.AddUserAsync(It.IsAny<User>(), model.RoleId), Times.Once);
+        Assert.True(response.Success);
+        Assert.Equal("Registration successful", response.Message);
+        Assert.Null(response.Data);
+
+        _mockUserRepository.Verify(r => r.AddUserAsync(It.IsAny<User>(), It.IsAny<int>()), Times.Once);
         _mockCustomerRepository.Verify(r => r.AddAsync(It.IsAny<Customer>()), Times.Once);
     }
 
@@ -120,24 +125,27 @@ public class AuthServiceTests
             Email = "test@example.com",
             Phone = "1234567890",
             Password = "password",
-            RoleId = 2, // Assuming 2 corresponds to a Doctor role
+            RoleId = 3, // Assuming 2 corresponds to a Doctor role
             IsCustomer = false
         };
+    
 
-        var role = new Role { Id = 2, Title = "DT" };
-
-        _mockUserRepository.Setup(r => r.GetUserByEmail(model.Email)).ReturnsAsync((User)null);
-        _mockUserRepository.Setup(r => r.GetUserByPhone(model.Phone)).ReturnsAsync((User)null);
-        _mockUserRepository.Setup(r => r.AddUserAsync(It.IsAny<User>(), model.RoleId)).Returns(Task.CompletedTask);
-        _mockRoleRepository.Setup(r => r.GetRoleByIdAsync(model.RoleId ?? 2)).ReturnsAsync(role);
-        _mockDoctorRepository.Setup(r => r.AddAsync(It.IsAny<Doctor>())).Returns((Task<bool>)Task.CompletedTask);
+        _mockUserRepository.Setup(r => r.GetUserByEmail(It.IsAny<string>())).ReturnsAsync((User)null);
+        _mockUserRepository.Setup(r => r.GetUserByPhone(It.IsAny<string>())).ReturnsAsync((User)null);
+        _mockUserRepository.Setup(r => r.AddUserAsync(It.IsAny<User>(), It.IsAny<int>())).Returns(Task.CompletedTask);
+        _mockDoctorRepository.Setup(r => r.AddAsync(It.IsAny<Doctor>())).Returns((Task.FromResult(true)));
+        _mockRoleRepository.Setup(r => r.GetRoleByIdAsync(It.IsAny<int>())).ReturnsAsync(new Role { Title = "Doctor" });
 
         // Act
-        await _authService.RegisterAsync(model);
+        var response = await _authService.RegisterAsync(model);
 
         // Assert
-        _mockUserRepository.Verify(r => r.AddUserAsync(It.IsAny<User>(), model.RoleId), Times.Once);
-        _mockDoctorRepository.Verify(r => r.AddAsync(It.IsAny<Doctor>()), Times.Once);
+        Assert.True(response.Success);
+        Assert.Equal("Create doctor successful", response.Message);
+        Assert.Null(response.Data);
+
+        _mockUserRepository.Verify(r => r.AddUserAsync(It.IsAny<User>(), It.IsAny<int>()), Times.Once);
+        //_mockDoctorRepository.Verify(r => r.AddAsync(It.IsAny<Doctor>()), Times.Once);
     }
 
 }

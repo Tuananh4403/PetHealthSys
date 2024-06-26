@@ -9,9 +9,11 @@ namespace PetCareSystem.Data.Repositories.Users
 {
     public interface IUserRepository : IRepository<User>
     {
+
         Task<User> GetUserByUsernameAsync(string username);
         Task AddUserAsync(User user, int? roleId);
         Task<User?> GetUserByPhone(string phone);
         Task<User?> GetUserByEmail(string email);
+        Task<User> GetByIdAsync(int id);
     }
 }

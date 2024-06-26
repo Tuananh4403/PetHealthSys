@@ -5,9 +5,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace PetCareSystem.Data.Repositories.Records
+namespace PetCareSystem.Data.Repositories.RecordDetails
 {
-    public interface IRecordRepository : IRepository<Record>
+    public interface IRecordDetailRepository : IRepository<RecordDetail>
     {
     }
 }
