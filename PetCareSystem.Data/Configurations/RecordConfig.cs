@@ -28,6 +28,12 @@ namespace PetCareSystem.Data.Configurations
             builder.Property(r => r.DetailPrediction)
                    .HasMaxLength(1000);
 
+            builder.Property(r => r.PetHeight)
+                   .IsRequired(false);
+
+            builder.Property(r => r.PetWeigth)
+                   .IsRequired(false);
+
             builder.Property(r => r.Conclude)
                    .HasMaxLength(1000);
 

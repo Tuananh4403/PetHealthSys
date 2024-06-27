@@ -11,6 +11,8 @@ namespace PetCareSystem.Data.Entites
         public Boolean saveBarn { get; set; }
         public int? DoctorId { get; set; }
         public Doctor? Doctor { get; set; }
+        public float? PetWeigth { get; set; }
+        public float? PetHeight { get; set; }
         public string? DetailPrediction { get; set; }
         public string? Conclude { get; set; }
         public int? PetId { get; set; }
