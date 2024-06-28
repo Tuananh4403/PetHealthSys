@@ -9,6 +9,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using PetCareSystem.Data.Enums;
 
 namespace PetCareSystem.Services.Services.Serivces
 {
@@ -21,21 +22,33 @@ namespace PetCareSystem.Services.Services.Serivces
             _servicesRepository = servicesRepository;
             _configuration = configuration;
         }
-        public async Task<bool> CreateServiceAsync(CreateServiceReq serviceReq)
+        public async Task<ApiResponse<string>> CreateServiceAsync(CreateServiceReq serviceReq)
         {
-
-            var service = new Service()
+            try
             {
-                TypeId = serviceReq.TypeOfService,
-                Code = serviceReq.Code,
-                Name = serviceReq.Name,
-                Price = serviceReq.Price,
-                Status = "NEW",
-                Note = serviceReq.Note
-            };
+                ServiceUnit unit = (ServiceUnit)serviceReq.UnitId;
+                var service = new Service()
+                {
+                    TypeId = serviceReq.TypeOfService,
+                    Code = serviceReq.Code,
+                    Name = serviceReq.Name,
+                    Price = serviceReq.Price,
+                    Unit = unit,
+                    Note = serviceReq.Note
+                };
 
-            // Save the service entity to the database
-            return await _servicesRepository.AddAsync(service);
+                var result = await _servicesRepository.AddAsync(service);
+                if (result)
+                {
+                    return new ApiResponse<string>(message: "Create Serivce success!", true);
+                }
+                return new ApiResponse<string>(message: "Create Service fails!", false);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("Error add ServiceServices: " + ex);
+                return new ApiResponse<string>(message: "Can create service", false);
+            }
         }
         public object GetServiceByCategory(int categoryId)
         {

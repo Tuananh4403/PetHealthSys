@@ -14,7 +14,7 @@ namespace PetCareSystem.Data.Entites
         public string? Code { get; set; }
         public string? Name { get; set; }
         public decimal? Price { get; set; }
-        public string? Status { get; set; }
+
         public string? Note { get; set; }
         public ServiceUnit Unit {get; set; }
         public virtual ICollection<BookingService>? BookingServicess { get; set; }

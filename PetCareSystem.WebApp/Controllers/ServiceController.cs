@@ -30,16 +30,13 @@ namespace PetCareSystem.WebApp.Controllers
             }
             try
             {
-                var result = await _serviceServices.CreateServiceAsync(model);
-                if (result)
-                {
-                    return Ok("Service created successfully");
-                }
-                return BadRequest("Failed to create booking");
+                var response = await _serviceServices.CreateServiceAsync(model);
+                    return Ok(response);
             }
             catch (Exception ex)
             {
                 // Log the exception (ex) here if needed
+                Console.WriteLine(ex);
                 return StatusCode(500, "Internal server error");
             }
         }
