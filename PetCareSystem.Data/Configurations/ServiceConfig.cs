@@ -38,6 +38,9 @@ namespace PetCareSystem.Data.Configurations
             builder.Property(s => s.Note)
                    .HasMaxLength(200);
 
+            builder.Property(e => e.Unit)
+            .HasConversion<int>();
+
             // Relationships
             builder.HasMany(s => s.BookingServicess)
                    .WithOne(bs => bs.Service)

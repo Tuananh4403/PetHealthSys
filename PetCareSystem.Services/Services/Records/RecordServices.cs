@@ -26,8 +26,10 @@ namespace PetCareSystem.Services.Services.Records
             }
             var record = new Record
             {
-                DoctorId = createRecordReq.DoctorId,
+                DoctorId = doctor.Id,
                 PetId = createRecordReq.PetId,
+                PetHeight = createRecordReq.Height,
+                PetWeigth = createRecordReq.Weight,
                 BarnId = createRecordReq.BarnId,
                 DetailPrediction = createRecordReq.DetailPrediction,
                 Conclude = createRecordReq.Conclude
