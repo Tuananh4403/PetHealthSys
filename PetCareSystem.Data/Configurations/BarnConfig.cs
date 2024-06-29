@@ -24,6 +24,13 @@ namespace PetCareSystem.Data.Configurations
             // Soft delete query filter
             builder.HasQueryFilter(b => b.DeletedAt == null);
 
+            builder.Property(b => b.Status)
+                   .IsRequired(false);
+
+            builder.Property(b => b.Result)
+                   .IsRequired(false);
+
+
             // Relationships
             builder.HasMany(b => b.Records)
                    .WithOne(r => r.Barn)
