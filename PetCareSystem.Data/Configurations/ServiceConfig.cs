@@ -32,8 +32,6 @@ namespace PetCareSystem.Data.Configurations
 
             builder.Property(s => s.Price);
 
-            builder.Property(s => s.Status)
-                   .HasMaxLength(50);
 
             builder.Property(s => s.Note)
                    .HasMaxLength(200);

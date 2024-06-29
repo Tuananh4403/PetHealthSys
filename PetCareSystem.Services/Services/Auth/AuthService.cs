@@ -14,6 +14,7 @@ using PetCareSystem.Data.Repositories.Roles;
 using PetCareSystem.Data.Repositories.Doctors;
 using PetCareSystem.Services.Models;
 using PetCareSystem.Data.Repositories.UserRoles;
+using PetCareSystem.Data.Repositories.Staffs;
 
 namespace PetCareSystem.Services.Services.Auth
 {
@@ -24,13 +25,16 @@ namespace PetCareSystem.Services.Services.Auth
         private readonly IRoleRepository _roleRepository;
         private readonly IDoctorRepository _doctorRepository;
         private readonly IUserRolesRepository _userRolesRepository;
+        private readonly IStaffRepository _staffRepository;
 
-        public AuthService(IUserRepository userRepository, ICustomerRepository customerRepository, IRoleRepository roleRepository, IDoctorRepository doctorRepository, IUserRolesRepository userRolesRepository)
+        public AuthService(IUserRepository userRepository, ICustomerRepository customerRepository, IRoleRepository roleRepository, 
+            IDoctorRepository doctorRepository, IUserRolesRepository userRolesRepository, IStaffRepository staffRepository)
         {
             _userRepository = userRepository;
             _customerRepository = customerRepository;
             _roleRepository = roleRepository;
             _doctorRepository = doctorRepository;
+            _staffRepository = staffRepository;
         }
 
         public async Task<ApiResponse<AuthenticateResponse>> LoginAsync(string username, string password)
@@ -38,7 +42,6 @@ namespace PetCareSystem.Services.Services.Auth
             User user = await _userRepository.GetUserByEmail(username);
             List<Role> listRoles = [];
             var userRoles = user.UserRoles;
-
 
             foreach (var userRole in userRoles)
             {
@@ -113,6 +116,15 @@ namespace PetCareSystem.Services.Services.Auth
                     {
                         return new ApiResponse<string>("Create doctor successful",false);
 
+                    }
+                }
+                if (role.Title == "ST")
+                {
+                    Staff staff = new Staff { UserId = user.Id };
+                    var check = await _staffRepository.AddAsync(staff);
+                    if (check)
+                    {
+                        return new ApiResponse<string>("Create staff successful", false);
                     }
                 }
             }

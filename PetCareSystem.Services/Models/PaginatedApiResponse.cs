@@ -2,7 +2,7 @@ namespace PetCareSystem.Services.Models
 {
     public class PaginatedApiResponse<T>
     {
-        public string? Status { get; set; }
+        public bool? Success { get; set; }
         public string? Message { get; set; }
         public IEnumerable<T>? Data { get; set; }
         public int? TotalCount { get; set; }
@@ -11,7 +11,7 @@ namespace PetCareSystem.Services.Models
 
         public PaginatedApiResponse(IEnumerable<T> data, int totalCount)
         {
-            Status = "Success";
+            Success = true;
             Message = string.Empty;
             Data = data;
             TotalCount = totalCount;
@@ -19,7 +19,7 @@ namespace PetCareSystem.Services.Models
 
         public PaginatedApiResponse(string message, bool isError)
         {
-            Status = isError ? "Error" : "Success";
+            Success = isError ? false : true;
             Message = message;
             Data = Enumerable.Empty<T>();
             TotalCount = 0;

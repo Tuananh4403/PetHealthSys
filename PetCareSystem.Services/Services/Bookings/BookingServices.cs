@@ -40,6 +40,7 @@ namespace PetCareSystem.Services.Services.Bookings
             var booking = new Booking ()
             {
                 CustomerId = customer.Id,
+                DoctorId = bookingReq.DoctorId != 0 ? bookingReq.DoctorId : null,
                 PetId = bookingReq.PetId,
                 BookingTime = bookingReq.BookingDate,
                 Status      = BookingStatus.Review
@@ -135,7 +136,15 @@ namespace PetCareSystem.Services.Services.Bookings
             {
                 return new ApiResponse<string>("Error system", true);
             }
-           
+        }
+        public async Task<PaginatedApiResponse<Booking>> GetListBookingAsync(DateTime? bookingDate = null, BookingStatus status = BookingStatus.Review, int pageNumber = 1, int pageSize = 10)
+        {
+            var (booking, totalCount) = await _bookingRepository.GetListBooking(bookingDate, status, pageNumber, pageSize);
+            if (!booking.Any())
+            {
+                return new PaginatedApiResponse<Booking>("No Booking found", true);
+            }
+            return new PaginatedApiResponse<Booking>(booking, totalCount);
         }
     }
 }

@@ -50,11 +50,6 @@ namespace PetCareSystem.WebApp.Controllers
             try
             {
                 var response = await _serviceServices.GetListServiceAsync(searchOption, 1, 1, 20);
-
-                if (response.Status == "Error")
-                {
-                    return NotFound(response.Message);
-                }
                 return Ok(response);
             }
             catch (Exception ex)

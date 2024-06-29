@@ -49,7 +49,25 @@ namespace PetCareSystem.WebApp.Controllers
                 return StatusCode(500, "Internal server error");
             }
         }
+        [HttpGet("review-booking")]
+        public async Task<IActionResult> GetReviewBooking()
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+            try
+            {
+                var response = await _bookingServices.GetListBookingAsync();
 
+                return Ok(response);
+            }
+            catch (Exception ex)
+            {
+                // Log the exception (ex) here if needed
+                return StatusCode(500, "Internal server error");
+            }
+        }
         // GET: api/booking/{bookingId}
         [HttpGet("{bookingId}")]
         public async Task<IActionResult> GetDetailBooking(int bookingId)
@@ -117,8 +135,8 @@ namespace PetCareSystem.WebApp.Controllers
                 return StatusCode(500, "Internal server error");
             }
         }
-        [HttpPost("confirm")]
-        public async Task<IActionResult> Confirm([FromQuery] int id)
+        [HttpPost("confirm/{id}")]
+        public async Task<IActionResult> Confirm(int id)
         {
             if (!ModelState.IsValid)
             {
