@@ -9,6 +9,5 @@ namespace PetCareSystem.Data.Repositories.Barns
 {
     public interface IBarnRepository : IRepository<Barn>
     {
-        Task<bool> CheckRoleAsync(int? userId);
     }
 }
