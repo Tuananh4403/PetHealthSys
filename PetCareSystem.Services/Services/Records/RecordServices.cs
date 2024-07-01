@@ -57,5 +57,18 @@ namespace PetCareSystem.Services.Services.Records
             }
             return new ApiResponse<string>("Create Record fail!", true);
         }
+
+        public async Task<ApiResponse<Record?>> GetRecordHis(int petId)
+        {
+            try
+            {
+                var record = await _recordRepository.GetRecordDetail(petId);
+                return new ApiResponse<Record?>(record, "Get data success");
+            }catch
+            {
+                return new ApiResponse<Record?>(null, message: "Get data fails!");
+
+            }
+        }
     }
 }

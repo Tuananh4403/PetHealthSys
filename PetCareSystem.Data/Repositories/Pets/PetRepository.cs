@@ -51,6 +51,58 @@ namespace PetCareSystem.Data.Repositories.Pets
             return query.ToList<Pet>();
         }
 
+        public async Task<Pet?> GetMedicalHis(int petId)
+        {
+            var query = dbContext.Pets.AsQueryable();
+            query = query.Include(p => p.Records)
+                         .Include(p => p.Customer)
+                         .Where(x => x.Id == petId);
+
+            var pet = await query.Select(p => new Pet
+            {
+                Id = p.Id,
+                PetName = p.PetName,
+                KindOfPet = p.KindOfPet,
+                Gender = p.Gender,
+                Birthday = p.Birthday,
+                Species = p.Species,
+                CustomerId = p.CustomerId,
+                Customer = new Customer
+                {
+                    Id = p.Customer.Id,
+                    User = p.Customer.User != null ? new User
+                    {
+                        Id = p.Customer.User.Id,
+                        FirstName = p.Customer.User.FirstName,
+                        LastName = p.Customer.User.LastName
+                    } : null
+                },
+                Records = p.Records.Select(rc => new Record
+                {
+                    Id = rc.Id,
+                    DoctorId = rc.DoctorId,
+                    Doctor = new Doctor
+                    {
+                        Id = rc.Doctor.Id,
+                        User =  new User
+                        {
+                            Id = rc.Doctor.User.Id,
+                            FirstName = rc.Doctor.User.FirstName,
+                            LastName = rc.Doctor.User.LastName,
+                        } 
+                    },
+                    saveBarn = rc.saveBarn,
+                    BarnId = rc.BarnId,
+                    DetailPrediction = rc.DetailPrediction,
+                    Conclude = rc.Conclude,
+                    CreatedAt = rc.CreatedAt,
+
+
+                }).ToList(),
+            }).SingleOrDefaultAsync();
+            return pet;
+        }
+
         //public async Task<bool> UpdatePet(int id, string petName, string kindOfPet, bool gender, DateTime birthday, string species)
         //{
         //    var pet = await _dbContext.Pets.FirstOrDefaultAsync(p => p.Id == id);
@@ -59,7 +111,7 @@ namespace PetCareSystem.Data.Repositories.Pets
         //        return false; 
         //    }
 
-            
+
         //    pet.PetName = petName;
         //    pet.KindOfPet = kindOfPet;
         //    pet.Gender = gender; 

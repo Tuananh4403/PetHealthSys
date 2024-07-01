@@ -12,12 +12,12 @@ namespace PetCareSystem.WebApp.Controllers
     [ApiController]
     [Route("api/[controller]")]
     [Authorize]
-    public class RecordControllercs : ControllerBase
+    public class RecordController : ControllerBase
     {
         private readonly IRecordServices _recordService;
 
 
-        public RecordControllercs(IRecordServices recordServices)
+        public RecordController(IRecordServices recordServices)
         {
             _recordService = recordServices;
         }
@@ -39,6 +39,23 @@ namespace PetCareSystem.WebApp.Controllers
             catch (Exception ex)
             {
                 // Log the exception (ex) here if needed
+                return StatusCode(500, "Internal server error");
+            }
+        }
+        [HttpGet("get-record-history")]
+        public async Task<IActionResult> GetRecordHis([FromQuery]int petId)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+            var token = Request.Headers["Authorization"].ToString().Replace("Bearer ", "");
+            try
+            {
+                var response = await _recordService.GetRecordHis(petId);
+                return Ok(response);
+            }catch(Exception ex)
+            {
                 return StatusCode(500, "Internal server error");
             }
         }

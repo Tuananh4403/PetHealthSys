@@ -13,6 +13,8 @@ using PetCareSystem.Services.Models;
 using PetCareSystem.Data.Entites;
 using PetCareSystem.Services.Services.Auth;
 using PetCareSystem.Services.Models.Auth;
+using PetCareSystem.Data.Repositories.Staffs;
+using PetCareSystem.Data.Repositories.UserRoles;
 
 public class AuthServiceTests
 {
@@ -21,6 +23,9 @@ public class AuthServiceTests
     private readonly Mock<ICustomerRepository> _mockCustomerRepository;
     private readonly Mock<IRoleRepository> _mockRoleRepository;
     private readonly Mock<IDoctorRepository> _mockDoctorRepository;
+    private readonly Mock<IStaffRepository> _mockStaffRepository;
+    private readonly Mock<IUserRolesRepository> _mockUserRolesRepository;
+
 
     public AuthServiceTests()
     {
@@ -28,7 +33,10 @@ public class AuthServiceTests
         _mockCustomerRepository = new Mock<ICustomerRepository>();
         _mockRoleRepository = new Mock<IRoleRepository>();
         _mockDoctorRepository = new Mock<IDoctorRepository>();
-        _authService = new AuthService(_mockUserRepository.Object, _mockCustomerRepository.Object, _mockRoleRepository.Object, _mockDoctorRepository.Object);
+        _mockStaffRepository = new Mock<IStaffRepository>();
+        _mockUserRolesRepository = new Mock<IUserRolesRepository>();
+
+        _authService = new AuthService(_mockUserRepository.Object, _mockCustomerRepository.Object, _mockRoleRepository.Object, _mockDoctorRepository.Object, _mockUserRolesRepository.Object, _mockStaffRepository.Object);
     }
     [Fact]
     public async Task RegisterAsync_EmailAlreadyTaken_ThrowsAppException()

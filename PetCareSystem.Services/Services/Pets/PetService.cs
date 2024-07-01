@@ -13,6 +13,7 @@ using Microsoft.IdentityModel.Tokens;
 using PetCareSystem.Services.Services.Auth;
 using PetCareSystem.Services.Helpers;
 using PetCareSystem.Services.Models.Booking;
+using PetCareSystem.Services.Models;
 
 namespace PetCareSystem.Services.Services.Pets
 {
@@ -144,7 +145,18 @@ namespace PetCareSystem.Services.Services.Pets
             return false;
         }
 
+        public async Task<ApiResponse<Pet?>> GetPetRecordHis(int petId)
+        {
+            try
+            {
+                var record = await _petRepository.GetMedicalHis(petId);
+                return new ApiResponse<Pet?>(record, "Get data success");
+            }
+            catch
+            {
+                return new ApiResponse<Pet?>(null, message: "Get data fails!");
 
-
+            }
+        }
     }
 }

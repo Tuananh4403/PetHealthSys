@@ -1,4 +1,5 @@
 ﻿using PetCareSystem.Data.Entites;
+using PetCareSystem.Services.Models;
 using PetCareSystem.Services.Models.Booking;
 using PetCareSystem.Services.Models.Pet;
 using System;
@@ -16,5 +17,6 @@ namespace PetCareSystem.Services.Services.Pets
         Task<IList<Pet>> GetListPet(string petName, string nameOfCustomer, string kindOfPet, string speciesOfPet, bool? genderOfPet, DateTime? birthdayOfPet);
         Task<bool> UpdatePetAsync(int id, PetRequest updatePet);
         Task<bool> DeletePetAsync(int id);
+        Task<ApiResponse<Pet?>> GetPetRecordHis(int petId);
     }
 }
