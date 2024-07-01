@@ -22,7 +22,7 @@ namespace PetCareSystem.Data.Configurations
 
 
             // Properties
-            builder.Property(r => r.saveBarn)
+            builder.Property(r => r.SaveBarn)
                    .IsRequired();
 
             builder.Property(r => r.DetailPrediction)

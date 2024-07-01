@@ -1,4 +1,5 @@
-﻿using PetCareSystem.Services.Models;
+﻿using PetCareSystem.Data.Entites;
+using PetCareSystem.Services.Models;
 using PetCareSystem.Services.Services.Models.Recording;
 using System;
 using System.Collections.Generic;
@@ -11,5 +12,6 @@ namespace PetCareSystem.Services.Services.Records
     public interface IRecordServices
     {
         Task<ApiResponse<string>> CreateRecordAsync(CreateRecordingReq createRecordReq, string token);
+        Task<ApiResponse<string>> CreateRecordByBookingAsync(int bookingId, string token);
     }
 }
