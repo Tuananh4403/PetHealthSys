@@ -9,5 +9,6 @@ namespace PetCareSystem.Data.Repositories.Staffs
 {
     public interface IStaffRepository : IRepository<Staff>
     {
+        Task<bool> CheckRoleAsync(int? userId);
     }
 }

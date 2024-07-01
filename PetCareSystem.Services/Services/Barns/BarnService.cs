@@ -1,5 +1,7 @@
 ﻿using PetCareSystem.Data.Entites;
 using PetCareSystem.Data.Repositories.Barns;
+using PetCareSystem.Data.Repositories.Doctors;
+using PetCareSystem.Data.Repositories.Staffs;
 using PetCareSystem.Services.Helpers;
 using PetCareSystem.Services.Models.Barn;
 using System;
@@ -14,9 +16,13 @@ namespace PetCareSystem.Services.Services.Barns
     public class BarnService : IBarnService
     {
         private readonly IBarnRepository _barnsRepository;
-        public BarnService(IBarnRepository barnsRepository)
+        private readonly IDoctorRepository _doctorRepository;
+        private readonly IStaffRepository _staffRepository;
+        public BarnService(IBarnRepository barnsRepository, IDoctorRepository doctorRepository,IStaffRepository staffRepository)
         {
             _barnsRepository = barnsRepository;
+            _doctorRepository = doctorRepository;
+            _staffRepository = staffRepository;
         }
 
         public async Task<bool> CreateBarnsAsync(BarnRequest barnRequest, string token)
@@ -26,7 +32,7 @@ namespace PetCareSystem.Services.Services.Barns
             {
                 throw new ArgumentException("Invalid token");
             }
-            else if (!await _barnsRepository.CheckRoleAsync(userId))
+            else if (!await _doctorRepository.CheckRoleAsync(userId)|| await _staffRepository.CheckRoleAsync(userId))
                 {
                 throw new ArgumentException("Just doctor or staff can create barn");
             }

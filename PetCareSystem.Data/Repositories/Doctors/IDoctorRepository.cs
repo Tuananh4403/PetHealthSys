@@ -11,5 +11,7 @@ namespace PetCareSystem.Data.Repositories.Doctors
     public interface IDoctorRepository : IRepository<Doctor>
     {
         Task<Doctor> GetDoctorByUserId(int? id);
+
+        Task<bool> CheckRoleAsync(int? userId);
     }
 }
