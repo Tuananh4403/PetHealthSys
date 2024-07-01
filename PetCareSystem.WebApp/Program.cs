@@ -24,6 +24,8 @@ using Microsoft.OpenApi.Models;
 using PetCareSystem.Data.Repositories.BookingServices;
 using PetCareSystem.Data.Repositories.UserRoles;
 using PetCareSystem.Data.Repositories.Staffs;
+using PetCareSystem.Services.Services.Barns;
+using PetCareSystem.Data.Repositories.Barns;
 
 
 IConfiguration configuration = new ConfigurationBuilder()
@@ -104,12 +106,14 @@ builder.Services.AddScoped<ICustomerRepository, CustomerRepository>();
 builder.Services.AddScoped<IServicesRepository, ServicesRepository>();
 builder.Services.AddScoped<IPetRepository, PetRepository>();
 builder.Services.AddScoped<IStaffRepository, StaffRepository>();
+builder.Services.AddScoped<IBarnRepository, BarnRepository>();
+
 
 builder.Services.AddScoped<IAuthService, AuthService>();
 builder.Services.AddScoped<IBookingServices, BookingServices>();
 builder.Services.AddScoped<IServiceServices, ServiceServices>();
 builder.Services.AddScoped<IPetService, PetService>();
-
+builder.Services.AddScoped<IBarnService, BarnService>();
 
 // Configure JWT authentication
 var key = Encoding.ASCII.GetBytes(appSetting);
