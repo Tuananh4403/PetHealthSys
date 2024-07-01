@@ -18,14 +18,11 @@ namespace PetCareSystem.Data.Repositories.Barns
         {
             try
             {
-                //Check UserRole
-                var userRoles = await dbContext.UserRoles
-                    .Where(ur => ur.UserId == userId.Value)
-                    .Select(ur => ur.Role.Title)
-                    .ToListAsync();
-
-                //If retuen ST or DC then return true
-                return userRoles.Contains("ST") || userRoles.Contains("DT");
+                bool isDoctor = await dbContext.Doctors
+                    .AnyAsync(d => d.UserId == userId.Value);
+                bool isStaff = await dbContext.Staffs
+                    .AnyAsync(s => s.UserId == userId.Value);
+                return isDoctor || isStaff;
             }
             catch (Exception ex)
             {
