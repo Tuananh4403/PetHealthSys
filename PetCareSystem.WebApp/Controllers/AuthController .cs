@@ -139,5 +139,15 @@ namespace PetCareSystem.WebApp.Controllers
             return Ok(roles);
         }
 
+        [HttpPost("update-role")]
+        public async Task<IActionResult> UpdateRole(UpdateUserRoleReq model){
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            var response = await _authService.UpdateUserRole(model);
+            return Ok(response);
+        }
     }
 }

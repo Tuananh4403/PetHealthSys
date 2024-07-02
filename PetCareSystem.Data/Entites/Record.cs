@@ -8,7 +8,7 @@ namespace PetCareSystem.Data.Entites
 {
     public class Record : BaseModel
     {
-        public Boolean saveBarn { get; set; }
+        public bool SaveBarn { get; set; }
         public int? DoctorId { get; set; }
         public Doctor? Doctor { get; set; }
         public float? PetWeigth { get; set; }

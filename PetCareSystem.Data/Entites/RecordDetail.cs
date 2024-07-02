@@ -12,6 +12,6 @@ namespace PetCareSystem.Data.Entites
         public Record? Record { get; set; }
         public int ServiceId { get; set; }
         public Service? Service { get; set;}
-        public int Quantity { get; set; }
+        public float? Quantity { get; set; }
     }
 }
