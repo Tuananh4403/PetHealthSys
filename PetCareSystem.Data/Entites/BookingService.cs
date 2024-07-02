@@ -13,6 +13,7 @@ namespace PetCareSystem.Data.Entites
         public int BookingId { get; set;}
         public virtual Booking? Booking { get; set; }
         public string? Note { get; set; }
+        public float? Quantity { get; set; }
         public decimal Price { get; set; }
     }
 }

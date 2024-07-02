@@ -38,6 +38,19 @@ namespace PetCareSystem.Data.Repositories.Bookings
             }
         }
 
+        public async Task<Booking?> GetBookingDetail(int bookingId)
+        {
+            var query = dbContext.Bookings.AsQueryable();
+            query = query.Where(b => b.Id == bookingId)
+                         .Include(b => b.BookingServices)
+                            .ThenInclude(bs => bs.Service)
+                         .Include(b => b.Pet)
+                         .Include(b => b.Customer)
+                         .Include(b => b.Staff);
+            var result = await query.SingleOrDefaultAsync();
+            return result;
+        }
+
         public async Task<(IEnumerable<Booking> Bookings, int TotalCount)> GetListBooking(DateTime? bookingDate = null, BookingStatus status = BookingStatus.Review, int pageNumber = 1, int pageSize = 10)
         {
             var query = dbContext.Bookings.AsQueryable();
