@@ -91,7 +91,7 @@ namespace PetCareSystem.Data.Repositories.Pets
                             LastName = rc.Doctor.User.LastName,
                         } 
                     },
-                    saveBarn = rc.saveBarn,
+                    SaveBarn = rc.SaveBarn,
                     BarnId = rc.BarnId,
                     DetailPrediction = rc.DetailPrediction,
                     Conclude = rc.Conclude,
