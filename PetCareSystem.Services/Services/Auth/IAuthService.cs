@@ -14,5 +14,6 @@ namespace PetCareSystem.Services.Services.Auth
         Task CreateRole(CreateRoleReq model);
         Task<IEnumerable<Role>> GetListRole();
         Task<IEnumerable<User>> GetAll();
+        Task<ApiResponse<string>> UpdateUserRole(UpdateUserRoleReq model);
     }
 }
