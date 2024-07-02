@@ -15,7 +15,7 @@ namespace PetCareSystem.Data.Configurations
             builder.HasKey(bs => bs.Id);
             builder.Property(bs => bs.Id).ValueGeneratedOnAdd();
 
-
+            builder.Property(rd => rd.Quantity);
             // Relationships
             builder.HasOne(bs => bs.Service)
                    .WithMany(s => s.BookingServicess)

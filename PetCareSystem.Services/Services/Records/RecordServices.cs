@@ -36,7 +36,7 @@ namespace PetCareSystem.Services.Services.Records
                 PetWeigth = createRecordReq.Weight,
                 BarnId = createRecordReq.BarnId,
                 DetailPrediction = createRecordReq.DetailPrediction,
-                Conclude = createRecordReq.Conclude
+                Conclude = createRecordReq.Conclude 
             };
             bool result = await _recordRepository.AddAsync(record);
             if(result && createRecordReq.ServiceQuantities != null){
@@ -64,7 +64,7 @@ namespace PetCareSystem.Services.Services.Records
 
         public async Task<ApiResponse<string>> CreateRecordByBookingAsync(int bookingId, string token)
         {
-            var booking = await _bookingRepository.GetByIdAsync(bookingId);
+            var booking = await _bookingRepository.GetBookingDetail(bookingId);
             var doctor = await _doctorRepository.GetDoctorByUserId(CommonHelpers.GetUserIdByToken(token));
             string message = "Create record Fails";
             bool result = false;
@@ -81,6 +81,24 @@ namespace PetCareSystem.Services.Services.Records
                     };
                     result = await _recordRepository.AddAsync(record);
                     if(result){
+                        var savedRecord = await _recordRepository.GetByIdAsync(record.Id);
+                        savedRecord.RecordDetails = new List<RecordDetail>();
+                        if(booking.BookingServices.Count > 0)
+                        {
+                            foreach(var service in booking.BookingServices)
+                            {
+                                // var serviceDetail = service.Service;
+                                var recordDetail = new RecordDetail
+                                {
+                                    RecordId = record.Id,
+                                    ServiceId = service.ServiceId,
+                                    Quantity = service.Quantity,
+                                };
+                                savedRecord.RecordDetails.Add(recordDetail);
+                                await _recordDetailRepository.AddAsync(recordDetail);
+                            }
+                            result = await _recordRepository.UpdateAsync(savedRecord);
+                        }
                         message = "Create record success!";
                     }
                 }
