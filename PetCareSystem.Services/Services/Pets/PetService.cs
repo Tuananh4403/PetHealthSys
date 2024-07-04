@@ -158,5 +158,17 @@ namespace PetCareSystem.Services.Services.Pets
 
             }
         }
+
+        public async Task<ApiResponse<List<Pet>>> GetListPetByUserId(string token)
+        {
+            int? userId = CommonHelpers.GetUserIdByToken(token);
+            if(userId != null)
+            {
+            var cus = await _customerRepository.GetCusByUserId((int)userId);
+            var listPet = await _petRepository.GetListPetByUserId(cus.Id);
+            return new ApiResponse<List<Pet>>(listPet);
+            }
+            return new ApiResponse<List<Pet>>(null);
+        }
     }
 }

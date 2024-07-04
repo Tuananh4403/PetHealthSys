@@ -103,6 +103,23 @@ namespace PetCareSystem.Data.Repositories.Pets
             return pet;
         }
 
+        public async Task<List<Pet>> GetListPetByUserId(int? cusId)
+        {
+            var result = await dbContext.Pets
+        .Where(p => p.CustomerId == cusId)
+        .Select(p => new Pet
+        {
+            Id = p.Id,
+            PetName = p.PetName,
+            KindOfPet = p.KindOfPet,
+            Gender = p.Gender,
+            Birthday = p.Birthday,
+            Species = p.Species
+        })
+        .ToListAsync();
+            return result;
+        }
+
         //public async Task<bool> UpdatePet(int id, string petName, string kindOfPet, bool gender, DateTime birthday, string species)
         //{
         //    var pet = await _dbContext.Pets.FirstOrDefaultAsync(p => p.Id == id);

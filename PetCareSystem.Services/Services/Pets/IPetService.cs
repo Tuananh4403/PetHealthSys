@@ -18,5 +18,6 @@ namespace PetCareSystem.Services.Services.Pets
         Task<bool> UpdatePetAsync(int id, PetRequest updatePet);
         Task<bool> DeletePetAsync(int id);
         Task<ApiResponse<Pet?>> GetPetRecordHis(int petId);
+        Task<ApiResponse<List<Pet>>> GetListPetByUserId(string token);
     }
 }

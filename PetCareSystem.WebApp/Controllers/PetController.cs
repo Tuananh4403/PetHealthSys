@@ -77,6 +77,25 @@ namespace PetCareSystem.WebApp.Controllers
             }
         }
 
+        [HttpGet("get-list-pet-by-user")]
+        public async Task<IActionResult> GetListPetByUserId()
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            try
+            {
+                var token = Request.Headers["Authorization"].ToString().Replace("Bearer ", "");
+                var result = await _petService.GetListPetByUserId(token);
+                return Ok(result);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new { message = "An error occurred while retrieving the pet details", details = ex.Message });
+            }
+        }
         [HttpGet("getListPet")]
         public async Task<IActionResult> GetListPet(string petName, string nameOfCustomer, string kindOfPet, string speciesOfPet, bool? genderOfPet, DateTime? birthdayOfPet)
         {
