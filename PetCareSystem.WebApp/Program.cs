@@ -26,6 +26,9 @@ using PetCareSystem.Data.Repositories.UserRoles;
 using PetCareSystem.Data.Repositories.Staffs;
 using PetCareSystem.Services.Services.Barns;
 using PetCareSystem.Data.Repositories.Barns;
+using PetCareSystem.Services.Services.Records;
+using PetCareSystem.Data.Repositories.Records;
+using PetCareSystem.Data.Repositories.RecordDetails;
 
 
 IConfiguration configuration = new ConfigurationBuilder()
@@ -94,6 +97,7 @@ builder.Services.AddSwaggerGen(swagger =>
 builder.Services.AddDbContext<PetHealthDBContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("PetHealthCareDb")));
 
+
 builder.Services.AddControllersWithViews();
 builder.Services.AddSingleton<ITempDataDictionaryFactory, TempDataDictionaryFactory>();
 builder.Services.AddScoped<IUserRepository, UserRepository>();
@@ -107,6 +111,8 @@ builder.Services.AddScoped<IServicesRepository, ServicesRepository>();
 builder.Services.AddScoped<IPetRepository, PetRepository>();
 builder.Services.AddScoped<IStaffRepository, StaffRepository>();
 builder.Services.AddScoped<IBarnRepository, BarnRepository>();
+builder.Services.AddScoped<IRecordRepository, RecordRepository>();
+builder.Services.AddScoped<IRecordDetailRepository, RecordDetailRepository>();
 
 
 builder.Services.AddScoped<IAuthService, AuthService>();
@@ -114,6 +120,7 @@ builder.Services.AddScoped<IBookingServices, BookingServices>();
 builder.Services.AddScoped<IServiceServices, ServiceServices>();
 builder.Services.AddScoped<IPetService, PetService>();
 builder.Services.AddScoped<IBarnService, BarnService>();
+builder.Services.AddScoped<IRecordServices, RecordServices>();
 
 // Configure JWT authentication
 var key = Encoding.ASCII.GetBytes(appSetting);

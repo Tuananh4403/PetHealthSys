@@ -13,7 +13,7 @@ namespace PetCareSystem.Data.EF
 {
     public class PetHealthDBContext : DbContext
     {
-        public PetHealthDBContext(DbContextOptions options) : base(options)
+        public PetHealthDBContext(DbContextOptions<PetHealthDBContext> options) : base(options)
         {
         }
         public DbSet<Customer> Customers { get; set; }

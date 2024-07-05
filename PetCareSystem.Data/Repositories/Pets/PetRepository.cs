@@ -51,6 +51,21 @@ namespace PetCareSystem.Data.Repositories.Pets
             return query.ToList<Pet>();
         }
 
+        public async Task<IList<Pet>> GetListPetRecord(int petId)
+        {
+            return await dbContext.Pets
+                .Where(p => p.Id == petId)
+                .Select(p => new Pet
+                {
+                    PetName = p.PetName,
+                    KindOfPet = p.KindOfPet,
+                    Gender = p.Gender,
+                    Birthday = p.Birthday,
+                    Species = p.Species
+                })
+                .ToListAsync();
+        }
+
         //public async Task<bool> UpdatePet(int id, string petName, string kindOfPet, bool gender, DateTime birthday, string species)
         //{
         //    var pet = await _dbContext.Pets.FirstOrDefaultAsync(p => p.Id == id);
@@ -59,7 +74,7 @@ namespace PetCareSystem.Data.Repositories.Pets
         //        return false; 
         //    }
 
-            
+
         //    pet.PetName = petName;
         //    pet.KindOfPet = kindOfPet;
         //    pet.Gender = gender; 

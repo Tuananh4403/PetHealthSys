@@ -2,24 +2,30 @@
 using PetCareSystem.Data.Repositories.Doctors;
 using PetCareSystem.Data.Repositories.RecordDetails;
 using PetCareSystem.Data.Repositories.Records;
+using PetCareSystem.Data.Repositories.Pets;
+using PetCareSystem.Data.Repositories.Users;
 using PetCareSystem.Services.Helpers;
 using PetCareSystem.Services.Models;
 using PetCareSystem.Services.Services.Models.Recording;
+using PetCareSystem.Services.Services.Bookings;
 using System.Threading.Tasks;
 
 
 namespace PetCareSystem.Services.Services.Records
 {
-    public class RecordServices(IRecordRepository recordRepository, IDoctorRepository doctorRepository, IRecordDetailRepository recordDetailRepository) : IRecordServices
+    public class RecordServices(IRecordRepository recordRepository, IDoctorRepository doctorRepository, IRecordDetailRepository recordDetailRepository, IPetRepository petRepository,IBookingServices bookingServices,IUserRepository userRepository): IRecordServices
     {
         private readonly IRecordRepository _recordRepository = recordRepository;
         private readonly IDoctorRepository _doctorRepository = doctorRepository;
         private readonly IRecordDetailRepository _recordDetailRepository = recordDetailRepository;
+        private readonly IPetRepository _petRepository = petRepository;
+        private readonly IBookingServices _bookingServices;
+        private readonly IUserRepository _userRepository;
 
-        public async Task<ApiResponse<string>> CreateRecordAsync(CreateRecordingReq createRecordReq, string token)
+        public async Task<ApiResponse<string>> CreateRecordAsync(CreateRecordingReq createRecordReq, string token) 
         {
             int? userId = CommonHelpers.GetUserIdByToken(token);
-            var doctor = _doctorRepository.GetDoctorByUserId(userId);
+            var doctor =await _doctorRepository.GetDoctorByUserId(userId);
             if(doctor == null)
             {
                 return new ApiResponse<string>("Doctor not exist", true);
@@ -56,6 +62,43 @@ namespace PetCareSystem.Services.Services.Records
                 return new ApiResponse<string>("Create Success!");
             }
             return new ApiResponse<string>("Create Record fail!", true);
+        }
+
+        public async Task<ApiResponse<object>> GetRecordById(int recordId, string token)
+        {
+            int? userId = CommonHelpers.GetUserIdByToken(token);
+            if (!userId.HasValue || userId <= 0)
+            {
+                throw new ArgumentException("Invalid token");
+            }
+
+            var isDoctor = await _doctorRepository.GetDoctorByUserId(userId.Value);
+            if (isDoctor == null)
+            {
+                throw new ArgumentException("Doctor does not exist");
+            }
+
+            var isRecord = await _recordRepository.GetByIdAsync(recordId);
+            if (isRecord == null)
+            {
+                throw new ArgumentException("Record not found");
+            }
+
+            var record = await _recordRepository.GetRecordForm(recordId);
+            var serviceList = await _recordDetailRepository.GetServiceList(recordId);
+            
+            //Get Pet's ìnnor
+            var pet = await _petRepository.GetByIdAsync((int)isRecord.PetId);
+
+            var user = await _userRepository.GetUserByPet((int)pet.CustomerId);
+
+            var response = new 
+            {
+                Pet = pet,
+                Record = record,
+                BookingServices = bookingServices
+            };
+            return new ApiResponse<object>(response);
         }
     }
 }

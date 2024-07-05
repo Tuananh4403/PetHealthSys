@@ -11,5 +11,7 @@ namespace PetCareSystem.Services.Services.Records
     public interface IRecordServices
     {
         Task<ApiResponse<string>> CreateRecordAsync(CreateRecordingReq createRecordReq, string token);
+
+        Task<ApiResponse<object>> GetRecordById(int recordId,string token);
     }
 }

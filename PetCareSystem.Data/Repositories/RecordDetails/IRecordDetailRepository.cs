@@ -9,5 +9,6 @@ namespace PetCareSystem.Data.Repositories.RecordDetails
 {
     public interface IRecordDetailRepository : IRepository<RecordDetail>
     {
+        Task<int[]>GetServiceList(int recordDetailId);
     }
 }

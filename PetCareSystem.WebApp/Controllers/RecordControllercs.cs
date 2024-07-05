@@ -42,5 +42,30 @@ namespace PetCareSystem.WebApp.Controllers
                 return StatusCode(500, "Internal server error");
             }
         }
+
+        [HttpPost("getRecord")]
+        public async Task<IActionResult> GetRecord(int recordId)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+            var token = Request.Headers["Authorization"].ToString().Replace("Bearer ", "");
+            try
+            {
+                var response = await _recordService.GetRecordById(recordId,token);
+                if (response == null)
+                {
+                    return NotFound("Record not found");
+                }
+                return Ok(response);
+            }
+            catch (Exception ex)
+            {
+                // Log the exception (ex) here if needed
+                return StatusCode(500, "Internal server error");
+            }
+        }
+
     }
 }

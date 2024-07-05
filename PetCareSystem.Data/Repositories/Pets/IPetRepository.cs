@@ -12,5 +12,7 @@ namespace PetCareSystem.Data.Repositories.Pets
     {
         Task<bool> PetExists(int petId);
         Task<IList<Pet>> GetListPet(string petName, string nameOfCustomer, string kindOfPet, string speciesOfPet, bool? genderOfPet, DateTime? birthdayOfPet);
+
+        Task<IList<Pet>> GetListPetRecord(int petId);
     }
 }
