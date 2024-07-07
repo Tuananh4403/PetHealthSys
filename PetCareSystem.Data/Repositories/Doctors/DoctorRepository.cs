@@ -17,5 +17,24 @@ namespace PetCareSystem.Data.Repositories.Doctors
         {
             return await dbContext.Doctors.SingleOrDefaultAsync(u => u.UserId == id);
         }
+
+        public async Task<(IEnumerable<Doctor> doctors, int totalCount)> GetListDoctor(string? searchString, int pageNumber = 1, int pageSize = 10)
+        {
+            var query = dbContext.Doctors.AsQueryable()
+                                         .Include(d => d.User);
+
+            if (!string.IsNullOrEmpty(searchString))
+            {
+                query = (Microsoft.EntityFrameworkCore.Query.IIncludableQueryable<Doctor, User>)query.Where(d => d.User.FirstName.Contains(searchString) || d.User.LastName.Contains(searchString));
+            }
+
+            var totalCount = await query.CountAsync();
+            var doctors = await query
+                .Skip((pageNumber - 1) * pageSize)
+                .Take(pageSize)
+                .ToListAsync();
+
+            return (doctors, totalCount);
+        }
     }
 }

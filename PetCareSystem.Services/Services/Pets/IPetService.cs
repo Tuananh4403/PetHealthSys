@@ -12,12 +12,12 @@ namespace PetCareSystem.Services.Services.Pets
 {
     public interface IPetService
     {
-        Task<bool> RegisterPetAsync(PetRequest model, string token);
+        Task<ApiResponse<string>> RegisterPetAsync(PetRequest model, string token);
         Task<PetRequest> GetPetDetailsAsync(int petId);
         Task<IList<Pet>> GetListPet(string petName, string nameOfCustomer, string kindOfPet, string speciesOfPet, bool? genderOfPet, DateTime? birthdayOfPet);
         Task<bool> UpdatePetAsync(int id, PetRequest updatePet);
         Task<bool> DeletePetAsync(int id);
         Task<ApiResponse<Pet?>> GetPetRecordHis(int petId);
-        Task<ApiResponse<List<Pet>>> GetListPetByUserId(string token);
+        Task<PaginatedApiResponse<Pet>> GetListPetByUserId(string token, int pageNumber = 1, int pageSize = 10);
     }
 }

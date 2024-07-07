@@ -27,42 +27,42 @@ namespace PetCareSystem.Services.Services.Pets
             _petRepository = petRepository;
             _customerRepository = customerRepository;
         }
-        public async Task<bool> RegisterPetAsync(PetRequest model, string token)
+        public async Task<ApiResponse<string>> RegisterPetAsync(PetRequest model, string token)
         {
             int? userId = CommonHelpers.GetUserIdByToken(token);
             if (!userId.HasValue || userId <= 0)
             {
                 throw new ArgumentException("Invalid token");
             }
-
+            string message = "";
             var customer = await _customerRepository.GetCusByUserId((int)userId);
             if (customer == null)
             {
-                throw new ArgumentException("Customer does not exist! You need to register");
+                message = "Customer does not exist! You need to register";
             }
 
            
             if (string.IsNullOrEmpty(model.PetName))
             {
-                throw new ArgumentException("Name of Pet cannot be blank");
+                message = "Name of Pet cannot be blank";
             }
             if (string.IsNullOrEmpty(model.KindOfPet))
             {
-                throw new ArgumentException("Kind of Pet cannot be blank");
+                message = "Kind of Pet cannot be blank";
             }
             if (string.IsNullOrEmpty(model.Species))
             {
-                throw new ArgumentException("Species cannot be blank");
+                message = "Species cannot be blank";
             }
             if (model.Birthday == DateTime.MinValue)
             {
-                throw new ArgumentException("Birthday is invalid value");
+                message = "Birthday is invalid value";
             }
             if (model.Birthday > DateTime.Now)
             {
-                throw new ArgumentException("Birthday cannot be in the future");
+                message = "Birthday cannot be in the future";
             }
-
+            
             
             var pet = new Pet
             {
@@ -74,11 +74,13 @@ namespace PetCareSystem.Services.Services.Pets
                 CustomerId = customer.Id 
             };
 
+           var result = await _petRepository.AddAsync(pet);
+            if (result)
+            {
+                return new ApiResponse<string>("Create pet success");
+            }
             
-            await _petRepository.AddAsync(pet);
-
-            
-            return true;
+            return new ApiResponse<string>(message, true);
         }
 
         public async Task<PetRequest> GetPetDetailsAsync(int petId)
@@ -159,16 +161,16 @@ namespace PetCareSystem.Services.Services.Pets
             }
         }
 
-        public async Task<ApiResponse<List<Pet>>> GetListPetByUserId(string token)
+        public async Task<PaginatedApiResponse<Pet>> GetListPetByUserId(string token, int pageNumber = 1, int pageSize = 10)
         {
             int? userId = CommonHelpers.GetUserIdByToken(token);
             if(userId != null)
             {
             var cus = await _customerRepository.GetCusByUserId((int)userId);
-            var listPet = await _petRepository.GetListPetByUserId(cus.Id);
-            return new ApiResponse<List<Pet>>(listPet);
+            var (listPet, totalCount) = await _petRepository.GetListPetByUserId(cus.Id);
+            return new PaginatedApiResponse<Pet>(listPet.ToList(), totalCount);
             }
-            return new ApiResponse<List<Pet>>(null);
+            return new PaginatedApiResponse<Pet>("No servicpetes found", true);
         }
     }
 }

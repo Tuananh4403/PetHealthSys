@@ -35,15 +35,8 @@ namespace PetCareSystem.WebApp.Controllers
 
             try
             {
-                bool isRegistered = await _petService.RegisterPetAsync(model, token);
-                if (isRegistered)
-                {
-                    return Ok(new { message = "Pet registration successful" });
-                }
-                else
-                {
-                    return BadRequest(new { message = "Pet registration failed" });
-                }
+                var response = await _petService.RegisterPetAsync(model, token);
+                return Ok(response);
             }
             catch (Exception ex)
             {

@@ -110,7 +110,6 @@ namespace PetCareSystem.Services.Services.Serivces
                 service.Name,
                 service.TypeId,
                 CategoryName = (await Task.Run(() => GetServiceCategoryById(service.TypeId))).ToString()
-                // Map other properties if needed
             }).ToList();
             var servicesWithCategory = await Task.WhenAll(servicesWithCategoryTasks);
             return new PaginatedApiResponse<Service>(services, totalCount);

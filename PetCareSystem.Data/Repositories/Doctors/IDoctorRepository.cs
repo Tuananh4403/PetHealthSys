@@ -11,5 +11,6 @@ namespace PetCareSystem.Data.Repositories.Doctors
     public interface IDoctorRepository : IRepository<Doctor>
     {
         Task<Doctor> GetDoctorByUserId(int? id);
+        Task<(IEnumerable<Doctor> doctors, int totalCount)> GetListDoctor(string? searchString, int pageNumber = 1, int pageSize = 10);
     }
 }

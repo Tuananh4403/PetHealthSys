@@ -24,6 +24,7 @@ using Microsoft.OpenApi.Models;
 using PetCareSystem.Data.Repositories.BookingServices;
 using PetCareSystem.Data.Repositories.UserRoles;
 using PetCareSystem.Data.Repositories.Staffs;
+using PetCareSystem.Services.Services.Doctors;
 
 
 IConfiguration configuration = new ConfigurationBuilder()
@@ -106,6 +107,7 @@ builder.Services.AddScoped<IPetRepository, PetRepository>();
 builder.Services.AddScoped<IStaffRepository, StaffRepository>();
 
 builder.Services.AddScoped<IAuthService, AuthService>();
+builder.Services.AddScoped<IDoctorServices, DoctorServices>();
 builder.Services.AddScoped<IBookingServices, BookingServices>();
 builder.Services.AddScoped<IServiceServices, ServiceServices>();
 builder.Services.AddScoped<IPetService, PetService>();

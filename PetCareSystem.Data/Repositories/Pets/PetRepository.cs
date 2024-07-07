@@ -103,21 +103,35 @@ namespace PetCareSystem.Data.Repositories.Pets
             return pet;
         }
 
-        public async Task<List<Pet>> GetListPetByUserId(int? cusId)
+        public async Task<(IEnumerable<Pet> pets, int totalCount)> GetListPetByUserId(int? cusId, int pageNumber = 1, int pageSize = 10)
         {
             var result = await dbContext.Pets
-        .Where(p => p.CustomerId == cusId)
-        .Select(p => new Pet
-        {
-            Id = p.Id,
-            PetName = p.PetName,
-            KindOfPet = p.KindOfPet,
-            Gender = p.Gender,
-            Birthday = p.Birthday,
-            Species = p.Species
-        })
-        .ToListAsync();
-            return result;
+            .Include(p => p.Customer)
+                .ThenInclude(cus => cus.User)
+            .Where(p => p.CustomerId == cusId)
+            .Select(p => new Pet
+            {
+                Id = p.Id,
+                PetName = p.PetName,
+                Customer = new Customer
+                {
+                    Id = p.Customer.Id,
+                    User = p.Customer.User != null ? new User
+                    {
+                        Id = p.Customer.User.Id,
+                        FirstName = p.Customer.User.FirstName,
+                        LastName = p.Customer.User.LastName
+                    } : null
+                },
+                Gender = p.Gender,
+                Birthday = p.Birthday,
+                Species = p.Species
+            })
+            .Skip((pageNumber - 1) * pageSize)
+            .Take(pageSize)
+            .ToListAsync();
+            var total = result.Count();
+            return (result, total);
         }
 
         //public async Task<bool> UpdatePet(int id, string petName, string kindOfPet, bool gender, DateTime birthday, string species)

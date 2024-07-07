@@ -9,15 +9,10 @@ namespace PetCareSystem.Services.Models.Pet
 {
     public class PetRequest
     {
-        [Required]
         public string? PetName { get; set; }
-        [Required]
         public string? KindOfPet { get; set; }
-        [Required]
         public Boolean Gender { get; set; }
-        [Required]
         public DateTime Birthday { get; set; }
-        [Required]
         public string? Species { get; set; }
     }
 }

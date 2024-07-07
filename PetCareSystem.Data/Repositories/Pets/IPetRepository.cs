@@ -13,6 +13,6 @@ namespace PetCareSystem.Data.Repositories.Pets
         Task<bool> PetExists(int petId);
         Task<IList<Pet>> GetListPet(string petName, string nameOfCustomer, string kindOfPet, string speciesOfPet, bool? genderOfPet, DateTime? birthdayOfPet);
         Task<Pet?> GetMedicalHis(int petId);
-        Task<List<Pet>> GetListPetByUserId(int? userId);
+        Task<(IEnumerable<Pet> pets, int totalCount)> GetListPetByUserId(int? cusId, int pageNumber = 1, int pageSize = 10);
     }
 }
