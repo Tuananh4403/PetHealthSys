@@ -13,5 +13,6 @@ namespace PetCareSystem.Data.Repositories.Bookings
     {
         public Task<(IEnumerable<Booking> Bookings, int TotalCount)> GetListBooking(DateTime? searchString = null, BookingStatus Status = BookingStatus.Review, int pageNumber = 1, int pageSize = 10);
         public Task<bool> CheckReviewBooking(Booking booking);
+
     }
 }

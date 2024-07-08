@@ -29,7 +29,7 @@ namespace PetCareSystem.Data.Repositories.Records
             throw new NotImplementedException();
         }
 
-        public async Task<Object> GetRecordForm(int recordId)
+        public async Task<object> GetRecord(int recordId)
         {
             try
             {
@@ -37,12 +37,27 @@ namespace PetCareSystem.Data.Repositories.Records
                     .Where(r => r.Id == recordId)
                     .Select(r => new
                     {
-                        DateStart = r.Barn.DateStart,
-                        DoctorName = r.Doctor.User.FirstName + " " + r.Doctor.User.LastName,
-                        SaveBarn = r.saveBarn,
-                        Barn = r.Barn,
-                        DetailPrediction = r.DetailPrediction,
-                        Conclude = r.Conclude
+                        r.Pet.PetName,
+                        r.Pet.KindOfPet,
+                        r.Pet.Gender,
+                        r.Pet.Birthday,
+                        r.Pet.Species,
+
+                        // Customer ìno
+                        r.Pet.Customer.User.FirstName,
+                        r.Pet.Customer.User.LastName,
+                        r.Pet.Customer.User.Email,
+                        r.Pet.Customer.User.PhoneNumber,
+                        r.Pet.Customer.User.Address,
+
+                        //Medical
+                        r.CreatedAt,
+                        DoctorName = r.Doctor.User.FirstName +" "+r.Doctor.User.LastName,
+                        r.saveBarn,
+                        r.Barn.Result,
+                        r.DetailPrediction,
+                        r.Conclude
+
                     })
                     .FirstOrDefaultAsync();
 

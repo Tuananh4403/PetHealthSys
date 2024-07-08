@@ -68,31 +68,6 @@ namespace PetCareSystem.Data.Repositories.Users
                                .FirstOrDefaultAsync(u => u.Id == id);
         }
 
-        public async Task<User> GetUserByPet(int petId)
-        {
-            try
-            {
-                var user = await dbContext.Pets
-                    .Where(p => p.Id == petId)
-                    .Include(p => p.Customer)
-                    .ThenInclude(c => c.User)
-                    .Select(p => new User
-                    {
-                        FirstName = p.Customer.User.FirstName,
-                        LastName = p.Customer.User.LastName,
-                        PhoneNumber = p.Customer.User.PhoneNumber,
-                        Email = p.Customer.User.Email,
-                        Address = p.Customer.User.Address
-                    })
-                    .FirstOrDefaultAsync();
-
-                return user;
-            }
-            catch (Exception ex)
-            {
-                logger.LogError($"Error fetching user for petId {petId}: {ex.Message}", ex);
-                throw;
-            }
-        }
+       
     }
 }

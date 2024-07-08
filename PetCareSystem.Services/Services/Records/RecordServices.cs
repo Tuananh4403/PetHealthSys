@@ -83,21 +83,9 @@ namespace PetCareSystem.Services.Services.Records
             {
                 throw new ArgumentException("Record not found");
             }
-
-            var record = await _recordRepository.GetRecordForm(recordId);
-            var serviceList = await _recordDetailRepository.GetServiceList(recordId);
             
-            //Get Pet's ìnnor
-            var pet = await _petRepository.GetByIdAsync((int)isRecord.PetId);
 
-            var user = await _userRepository.GetUserByPet((int)pet.CustomerId);
-
-            var response = new 
-            {
-                Pet = pet,
-                Record = record,
-                BookingServices = bookingServices
-            };
+            var response = await _recordRepository.GetRecord(recordId);
             return new ApiResponse<object>(response);
         }
     }
