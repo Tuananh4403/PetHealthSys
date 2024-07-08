@@ -12,29 +12,14 @@ using PetCareSystem.Data.Repositories.Users;
 namespace PetCareSystem.Data.Repositories.Records
 {
 
-    public class RecordRepository(PetHealthDBContext dbContext, ILogger<RecordRepository> logger) : BaseRepository<Barn>(dbContext, logger), IRecordRepository
+    public class RecordRepository(PetHealthDBContext dbContext, ILogger<RecordRepository> logger) : BaseRepository<Record>(dbContext, logger), IRecordRepository
     {
-        public Task<bool> AddAsync(Record entity)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task<bool> DeleteAsync(Record entity)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task<IEnumerable<Record>> FindAsync(Expression<Func<Record, bool>> predicate)
-        {
-            throw new NotImplementedException();
-        }
-
-        public async Task<object> GetRecord(int recordId)
+        public async Task<object> GetInfor(int petId)
         {
             try
             {
                 var recordForm = await dbContext.Records
-                    .Where(r => r.Id == recordId)
+                    .Where(r => r.Id == petId)
                     .Select(r => new
                     {
                         r.Pet.PetName,
@@ -50,45 +35,54 @@ namespace PetCareSystem.Data.Repositories.Records
                         r.Pet.Customer.User.PhoneNumber,
                         r.Pet.Customer.User.Address,
 
-                        //Medical
-                        r.CreatedAt,
-                        DoctorName = r.Doctor.User.FirstName +" "+r.Doctor.User.LastName,
-                        r.saveBarn,
-                        r.Barn.Result,
-                        r.DetailPrediction,
-                        r.Conclude
-
                     })
                     .FirstOrDefaultAsync();
 
                 if (recordForm == null)
                 {
-                    throw new KeyNotFoundException($"Record with Id {recordId} not found.");
+                    throw new KeyNotFoundException($"Record with PetId {petId} not found.");
                 }
 
                 return recordForm;
             }
             catch (Exception ex)
             {
-                logger.LogError($"Error fetching record form for recordId {recordId}: {ex.Message}", ex);
+                logger.LogError($"Error fetching record form for recordId {petId}: {ex.Message}", ex);
                 throw;
             }
         }
 
-        public Task<bool> UpdateAsync(Record entity)
+        public async Task<IList<dynamic>> GetMedicalHistory(int petId)
         {
-            throw new NotImplementedException();
+            try
+            {
+                var medicalHistory = await dbContext.Records
+                    .Where(r => r.PetId == petId)
+                    .OrderByDescending(r => r.CreatedAt)
+                    .Select(r => new
+                    {
+                        r.CreatedAt,
+                        r.saveBarn,
+                        r.BarnId,
+                        r.DetailPrediction,
+                        r.Conclude
+                    })
+                    .ToListAsync();
+
+                if (medicalHistory == null || !medicalHistory.Any())
+                {
+                    throw new KeyNotFoundException($"No medical records found for PetId {petId}.");
+                }
+
+                return medicalHistory.Cast<dynamic>().ToList();
+            }
+            catch (Exception ex)
+            {
+                logger.LogError($"Error fetching medical history for PetId {petId}: {ex.Message}", ex);
+                throw;
+            }
         }
 
-        Task<IEnumerable<Record>> IRepository<Record>.GetAllAsync()
-        {
-            throw new NotImplementedException();
-        }
-
-        Task<Record> IRepository<Record>.GetByIdAsync(int id)
-        {
-            throw new NotImplementedException();
-        }
     }
 
 }

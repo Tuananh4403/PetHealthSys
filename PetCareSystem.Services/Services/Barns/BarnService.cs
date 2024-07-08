@@ -28,11 +28,12 @@ namespace PetCareSystem.Services.Services.Barns
         public async Task<bool> CreateBarnsAsync(BarnRequest barnRequest, string token)
         {
             int? userId = CommonHelpers.GetUserIdByToken(token);
+            int id = userId.Value;
             if (!userId.HasValue || userId <= 0)
             {
                 throw new ArgumentException("Invalid token");
             }
-            else if (!await _doctorRepository.CheckRoleAsync(userId)|| await _staffRepository.CheckRoleAsync(userId))
+            else if (await _doctorRepository.GetByIdAsync(id) == null||await _staffRepository.GetByIdAsync(id) == null)
                 {
                 throw new ArgumentException("Just doctor or staff can create barn");
             }

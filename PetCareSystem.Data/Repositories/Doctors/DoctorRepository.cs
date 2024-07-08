@@ -18,19 +18,5 @@ namespace PetCareSystem.Data.Repositories.Doctors
             return await dbContext.Doctors.SingleOrDefaultAsync(u => u.UserId == id);
         }
 
-        public async Task<bool> CheckRoleAsync(int? userId)
-        {
-            try
-            {
-                bool isDoctor = await dbContext.Doctors
-                    .AnyAsync(d => d.UserId == userId.Value);
-                return isDoctor;
-            }
-            catch (Exception ex)
-            {
-                logger.LogError($"Error at CheckRoleAsync with userId {userId}: {ex.Message}");
-                return false;
-            }
-        }
     }
 }

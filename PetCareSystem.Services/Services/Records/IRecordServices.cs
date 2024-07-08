@@ -12,6 +12,6 @@ namespace PetCareSystem.Services.Services.Records
     {
         Task<ApiResponse<string>> CreateRecordAsync(CreateRecordingReq createRecordReq, string token);
 
-        Task<ApiResponse<object>> GetRecordById(int recordId,string token);
+        Task<ApiResponse<object>> GetMedicalHistory(int petId,string token);
     }
 }

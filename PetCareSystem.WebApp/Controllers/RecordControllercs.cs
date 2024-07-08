@@ -43,8 +43,8 @@ namespace PetCareSystem.WebApp.Controllers
             }
         }
 
-        [HttpPost("getRecord")]
-        public async Task<IActionResult> GetRecord(int recordId)
+        [HttpGet("getMedicalHistory/{petId}")]
+        public async Task<IActionResult> GetRecord(int petId)
         {
             if (!ModelState.IsValid)
             {
@@ -53,7 +53,7 @@ namespace PetCareSystem.WebApp.Controllers
             var token = Request.Headers["Authorization"].ToString().Replace("Bearer ", "");
             try
             {
-                var response = await _recordService.GetRecordById(recordId,token);
+                var response = await _recordService.GetMedicalHistory(petId, token);
                 if (response == null)
                 {
                     return NotFound("Record not found");

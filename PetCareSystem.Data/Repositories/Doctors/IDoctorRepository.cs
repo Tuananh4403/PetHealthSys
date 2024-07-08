@@ -12,6 +12,5 @@ namespace PetCareSystem.Data.Repositories.Doctors
     {
         Task<Doctor> GetDoctorByUserId(int? id);
 
-        Task<bool> CheckRoleAsync(int? userId);
     }
 }
