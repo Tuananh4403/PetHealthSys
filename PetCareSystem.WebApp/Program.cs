@@ -25,6 +25,7 @@ using PetCareSystem.Data.Repositories.BookingServices;
 using PetCareSystem.Data.Repositories.UserRoles;
 using PetCareSystem.Data.Repositories.Staffs;
 using PetCareSystem.Services.Services.Doctors;
+using PetCareSystem.WebApp.Hubs;
 
 
 IConfiguration configuration = new ConfigurationBuilder()
@@ -36,7 +37,7 @@ var appSetting = configuration["AppSettings:Secret"];
 var builder = WebApplication.CreateBuilder(args);
 builder.Services.Configure<GoogleKeys>(builder.Configuration.GetSection("GoogleKeys"));
 builder.Services.AddControllersWithViews().AddRazorRuntimeCompilation();
-
+builder.Services.AddSignalR();
 builder.Services.AddAuthentication(option =>
 {
     option.DefaultScheme = CookieAuthenticationDefaults.AuthenticationScheme;
@@ -92,7 +93,8 @@ builder.Services.AddSwaggerGen(swagger =>
 // Register the DbContext, Repositories, and Services
 builder.Services.AddDbContext<PetHealthDBContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("PetHealthCareDb")));
-
+builder.Services.AddDbContext<ChatContext>(options =>
+    options.UseInMemoryDatabase("ChatDb"));
 builder.Services.AddControllersWithViews();
 builder.Services.AddSingleton<ITempDataDictionaryFactory, TempDataDictionaryFactory>();
 builder.Services.AddScoped<IUserRepository, UserRepository>();
