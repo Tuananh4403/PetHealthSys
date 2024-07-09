@@ -113,9 +113,10 @@ namespace PetCareSystem.Data.Repositories.Pets
             {
                 Id = p.Id,
                 PetName = p.PetName,
+                CustomerId = p.CustomerId,
                 Customer = new Customer
                 {
-                    Id = p.Customer.Id,
+                    Id = p.CustomerId,
                     User = p.Customer.User != null ? new User
                     {
                         Id = p.Customer.User.Id,
@@ -123,6 +124,7 @@ namespace PetCareSystem.Data.Repositories.Pets
                         LastName = p.Customer.User.LastName
                     } : null
                 },
+                KindOfPet = p.KindOfPet,
                 Gender = p.Gender,
                 Birthday = p.Birthday,
                 Species = p.Species

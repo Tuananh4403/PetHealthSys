@@ -27,7 +27,10 @@ namespace PetCareSystem.Data.Configurations
 
             builder.Property(b => b.Status)
                    .HasConversion<string>();
-
+            
+            builder.Property(b => b.Shift)
+                   .HasConversion<int>();
+            
             builder.Property(b => b.Note)
                    .HasMaxLength(200);
 

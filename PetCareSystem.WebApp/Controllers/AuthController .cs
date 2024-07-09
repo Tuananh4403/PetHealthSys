@@ -9,7 +9,6 @@ using Microsoft.AspNetCore.Authentication.Google;
 using Microsoft.AspNetCore.Authentication;
 using Newtonsoft.Json;
 using System.Net.Http.Headers;
-using PetCareSystem.Services.Models.Auth;
 
 namespace PetCareSystem.WebApp.Controllers
 {

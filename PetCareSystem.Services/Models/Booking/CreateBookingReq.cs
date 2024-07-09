@@ -8,7 +8,8 @@ namespace PetCareSystem.Services.Models.Booking
         public int PetId { get; set; }
         public int DoctorId { get; set; }
         public int[]? ServiceIds { get; set; }
-        public DateTime BookingDate { get; set;}
-        public string Note { get; set;}
+        public int Shift { get; set; }
+        public string? BookingDate { get; set;}
+        public string? Note { get; set;}
     }
 }

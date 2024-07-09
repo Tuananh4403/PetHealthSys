@@ -21,7 +21,7 @@ namespace PetCareSystem.Data.EF
         public DbSet<Staff> Staffs { get; set; }
         public DbSet<Service> Services { get; set; }
         public DbSet<Booking> Bookings { get; set; }
-        public DbSet<BookingService> BookingService { get; set; }   
+        public DbSet<BookingService> BookingService { get; set; }
         public DbSet<Doctor> Doctors { get; set; }
         public DbSet<Record> Records { get; set; }
         public DbSet<RecordDetail> RecordDetails { get; set; }
@@ -79,6 +79,6 @@ namespace PetCareSystem.Data.EF
             }
             return base.SaveChanges();
         }
-    
+
     }
 }

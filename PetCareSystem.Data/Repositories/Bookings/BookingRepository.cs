@@ -15,26 +15,38 @@ namespace PetCareSystem.Data.Repositories.Bookings
 {
     public class BookingRepository(PetHealthDBContext dbContext, ILogger<BookingRepository> logger) : BaseRepository<Booking>(dbContext, logger), IBookingRepository
     {
-        public async Task<bool> CheckReviewBooking(Booking booking)
+        public async Task<(bool, string)> CheckReviewBooking(Booking booking)
         {
             try
             {
                 int result;
                 DateTime checkTime = booking.BookingTime;
                 var query = dbContext.Bookings.AsQueryable();
-                query = query.Where(b => b.DoctorId == booking.DoctorId)
-                             .Where(b => b.BookingTime >= checkTime.AddMinutes(30) || b.BookingTime <= checkTime.AddMinutes(30));
-                result = await query.CountAsync();
-                if (result > 0)
+                query = query.Where(b => b.Status == BookingStatus.Review)
+                             .Where(b => b.Shift == booking.Shift);
+                if (await query.CountAsync() <= 20)
                 {
-                    return false;
+                    result = await query.Where(b => b.DoctorId == booking.DoctorId)
+                                        .CountAsync();
+                    if (result <= 5)
+                    {
+                        return (true, "Create Booking success");
+                    }
+                    else
+                    {
+                        return (false, "Doctor cant receive more!");
+                    }
                 }
-                return true;
+                else
+                {
+                    return (false, "shift is full!");
+
+                }
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 logger.LogInformation($"Error at BookingRepository with ID {booking.Id} error {ex}");
-                return false;
+                return (false,"Internal Error occur");
             }
         }
 
@@ -80,24 +92,25 @@ namespace PetCareSystem.Data.Repositories.Bookings
                     Id = b.Id,
                     BookingTime = b.BookingTime,
                     Status = b.Status,
+                    Note = b.Note,
                     // Include Pet details
                     Pet = new Pet
                     {
-                        Id          = b.Pet.Id,
-                        PetName     = b.Pet.PetName,
-                        KindOfPet   = b.Pet.KindOfPet,
-                        Gender      = b.Pet.Gender,
-                        Birthday    = b.Pet.Birthday,
-                        Species     = b.Pet.Species,
-                        CustomerId  = b.Pet.CustomerId,
-                        Customer    = new Customer
+                        Id = b.Pet.Id,
+                        PetName = b.Pet.PetName,
+                        KindOfPet = b.Pet.KindOfPet,
+                        Gender = b.Pet.Gender,
+                        Birthday = b.Pet.Birthday,
+                        Species = b.Pet.Species,
+                        CustomerId = b.Pet.CustomerId,
+                        Customer = new Customer
                         {
-                            Id      = b.Pet.Customer.Id,
-                            User    = b.Pet.Customer.User != null ? new User
+                            Id = b.Pet.Customer.Id,
+                            User = b.Pet.Customer.User != null ? new User
                             {
-                                Id        = b.Pet.Customer.User.Id,
+                                Id = b.Pet.Customer.User.Id,
                                 FirstName = b.Pet.Customer.User.FirstName,
-                                LastName  = b.Pet.Customer.User.LastName
+                                LastName = b.Pet.Customer.User.LastName
                             } : null
                         }
                     },

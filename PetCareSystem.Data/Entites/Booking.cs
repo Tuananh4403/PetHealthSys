@@ -17,6 +17,7 @@ namespace PetCareSystem.Data.Entites
         public int? Number { get; set; }
         public decimal Total { get; set; }
         public DateTime BookingTime { get; set; }
+        public BookingShift? Shift { get; set; }
         public int? CustomerId { get; set; }
         public BookingStatus Status { get; set; }        
         public virtual Customer Customer { get; set; }

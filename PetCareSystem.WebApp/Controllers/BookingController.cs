@@ -8,6 +8,11 @@ using System;
 using System.Threading.Tasks;
 using PetCareSystem.Data.Entites;
 using Sprache;
+using PetCareSystem.Data.Enums;
+using PetCareSystem.Services.Models;
+using Newtonsoft.Json;
+using ILogger = Serilog.ILogger;
+using Serilog;
 
 
 namespace PetCareSystem.WebApp.Controllers
@@ -18,10 +23,14 @@ namespace PetCareSystem.WebApp.Controllers
     public class BookingController : ControllerBase
     {
         private readonly IBookingServices _bookingServices;
+        private readonly ILogger _logger;
+
 
         public BookingController(IBookingServices bookingServices)
         {
             _bookingServices = bookingServices;
+            _logger = Log.Logger;
+
         }
 
         // POST: api/booking/create
@@ -36,12 +45,7 @@ namespace PetCareSystem.WebApp.Controllers
             {
                 var token = Request.Headers["Authorization"].ToString().Replace("Bearer ", "");
                 var result = await _bookingServices.CreateBookingAsync(model, token);
-                if (result)
-                {
-                    Console.WriteLine(result);
-                    return Ok("Booking created successfully");
-                }
-                return BadRequest("Failed to create booking");
+                return Ok(result);
             }
             catch (Exception ex)
             {
@@ -131,7 +135,7 @@ namespace PetCareSystem.WebApp.Controllers
             catch (Exception ex)
             {
                 // Log the exception (ex) here if needed
-                
+
                 return StatusCode(500, "Internal server error");
             }
         }
@@ -153,6 +157,13 @@ namespace PetCareSystem.WebApp.Controllers
                 // Log the exception (ex) here if needed
                 return StatusCode(500, "Internal server error");
             }
+        }
+        [HttpGet("get-shift")]
+        public IActionResult GetShift()
+        {
+            var shifts = BookingShiftExtensions.GetAllBookingShifts();
+
+            return Ok(new ApiResponse<IList<BookingShiftDto>>(data: shifts));
         }
     }
 }
