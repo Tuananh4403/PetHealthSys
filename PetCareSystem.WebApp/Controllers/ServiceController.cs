@@ -41,7 +41,7 @@ namespace PetCareSystem.WebApp.Controllers
             }
         }
         [HttpGet("get-service")]
-        public async Task<IActionResult> GetService([FromQuery] string? searchOption)
+        public async Task<IActionResult> GetService([FromQuery] string? searchOption, int? typeId)
         {
             if (!ModelState.IsValid)
             {
@@ -49,7 +49,7 @@ namespace PetCareSystem.WebApp.Controllers
             }
             try
             {
-                var response = await _serviceServices.GetListServiceAsync(searchOption, 1, 1, 20);
+                var response = await _serviceServices.GetListServiceAsync(searchOption, typeId);
                 return Ok(response);
             }
             catch (Exception ex)

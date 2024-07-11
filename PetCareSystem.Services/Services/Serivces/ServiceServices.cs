@@ -97,7 +97,7 @@ namespace PetCareSystem.Services.Services.Serivces
             var category = GetServiceCategoryById(typeId);
             return category.ToString(); // Assuming you just need the name of the enum  
         }
-        public async Task<PaginatedApiResponse<Service>> GetListServiceAsync(string? searchString, int typeId = 1, int pageNumber = 1, int pageSize = 10)
+        public async Task<PaginatedApiResponse<Service>> GetListServiceAsync(string? searchString, int? typeId, int pageNumber = 1, int pageSize = 10)
         {
             var (services, totalCount) = await _servicesRepository.GetListService(searchString, typeId, pageNumber, pageSize);
             if (!services.Any())
