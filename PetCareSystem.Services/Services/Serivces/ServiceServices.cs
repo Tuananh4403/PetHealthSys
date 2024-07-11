@@ -84,7 +84,7 @@ namespace PetCareSystem.Services.Services.Serivces
             // Implementation
             return new { Description = "Vaccine service" };
         }
-        public ServiceCategory GetServiceCategoryById(int id)
+        public static ServiceCategory GetServiceCategoryById(int id)
         {
             if (!Enum.IsDefined(typeof(ServiceCategory), id))
             {
@@ -92,27 +92,39 @@ namespace PetCareSystem.Services.Services.Serivces
             }
             return (ServiceCategory)id;
         }
+        public static ServiceUnit GetServiceUnitById(int id)
+        {
+            if (!Enum.IsDefined(typeof(ServiceUnit), id))
+            {
+                throw new ArgumentOutOfRangeException(nameof(id), id, "Invalid service unit ID");
+            }
+            return (ServiceUnit)id;
+        }
         public async Task<string> GetServiceCategoryNameAsync(int typeId)
         {
             var category = GetServiceCategoryById(typeId);
             return category.ToString(); // Assuming you just need the name of the enum  
         }
-        public async Task<PaginatedApiResponse<Service>> GetListServiceAsync(string? searchString, int? typeId, int pageNumber = 1, int pageSize = 10)
+        public async Task<PaginatedApiResponse<Object>> GetListServiceAsync(string? searchString, int? typeId, int pageNumber = 1, int pageSize = 10)
         {
             var (services, totalCount) = await _servicesRepository.GetListService(searchString, typeId, pageNumber, pageSize);
             if (!services.Any())
             {
-                return new PaginatedApiResponse<Service>("No services found", true);
+                return new PaginatedApiResponse<Object>("No services found", true);
             }
             var servicesWithCategoryTasks = services.Select(async service => new
             {
                 service.Id,
                 service.Name,
                 service.TypeId,
-                CategoryName = (await Task.Run(() => GetServiceCategoryById(service.TypeId))).ToString()
+                Type = (await Task.Run(() => GetServiceCategoryById(service.TypeId))).ToString(),
+                service.Price,
+                UnitId = service.Unit,
+                Unit = (await Task.Run(() => GetServiceUnitById((int)service.Unit))).ToString(),
+                service.Note
             }).ToList();
             var servicesWithCategory = await Task.WhenAll(servicesWithCategoryTasks);
-            return new PaginatedApiResponse<Service>(services, totalCount, pageNumber, pageSize);
+            return new PaginatedApiResponse<Object>(servicesWithCategory, totalCount, pageNumber, pageSize);
         }
     }
 }
