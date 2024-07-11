@@ -161,7 +161,7 @@ namespace PetCareSystem.Services.Services.Bookings
             {
                 return new PaginatedApiResponse<Booking>("No Booking found", true);
             }
-            return new PaginatedApiResponse<Booking>(booking, totalCount);
+            return new PaginatedApiResponse<Booking>(booking, totalCount, pageNumber, pageSize);
         }
         public static BookingShift GetBookingShiftById(int id)
         {

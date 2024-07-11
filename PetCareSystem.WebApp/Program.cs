@@ -25,6 +25,9 @@ using PetCareSystem.Data.Repositories.BookingServices;
 using PetCareSystem.Data.Repositories.UserRoles;
 using PetCareSystem.Data.Repositories.Staffs;
 using PetCareSystem.Services.Services.Doctors;
+using PetCareSystem.Data.Repositories.Records;
+using PetCareSystem.Data.Repositories.RecordDetails;
+using PetCareSystem.Services.Services.Records;
 
 
 IConfiguration configuration = new ConfigurationBuilder()
@@ -98,6 +101,8 @@ builder.Services.AddSingleton<ITempDataDictionaryFactory, TempDataDictionaryFact
 builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<IUserRolesRepository, UserRolesRepository>();
 builder.Services.AddScoped<IRoleRepository, RoleRepository>();
+builder.Services.AddScoped<IRecordRepository, RecordRepository>();
+builder.Services.AddScoped<IRecordDetailRepository, RecordDetailRepository>();
 builder.Services.AddScoped<IDoctorRepository, DoctorRepository>();
 builder.Services.AddScoped<IBookingServiceRepository, BookingServiceRepository>();
 builder.Services.AddScoped<IBookingRepository, BookingRepository>();
@@ -111,6 +116,7 @@ builder.Services.AddScoped<IDoctorServices, DoctorServices>();
 builder.Services.AddScoped<IBookingServices, BookingServices>();
 builder.Services.AddScoped<IServiceServices, ServiceServices>();
 builder.Services.AddScoped<IPetService, PetService>();
+builder.Services.AddScoped<IRecordServices, RecordServices>();
 
 
 // Configure JWT authentication

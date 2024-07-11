@@ -168,7 +168,7 @@ namespace PetCareSystem.Services.Services.Pets
             {
             var cus = await _customerRepository.GetCusByUserId((int)userId);
             var (listPet, totalCount) = await _petRepository.GetListPetByUserId(cus.Id);
-            return new PaginatedApiResponse<Pet>(listPet.ToList(), totalCount);
+            return new PaginatedApiResponse<Pet>(listPet.ToList(), totalCount, pageNumber, pageSize);
             }
             return new PaginatedApiResponse<Pet>("No servicpetes found", true);
         }

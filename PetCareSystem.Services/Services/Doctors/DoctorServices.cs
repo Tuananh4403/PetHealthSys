@@ -25,7 +25,7 @@ namespace PetCareSystem.Services.Services.Doctors
             {
                 return new PaginatedApiResponse<Doctor>("No Doctor found", true);
             }
-            return new PaginatedApiResponse<Doctor>(doctors, totalCount);
+            return new PaginatedApiResponse<Doctor>(doctors, totalCount, pageNumber, pageSize);
         }
     }
 }

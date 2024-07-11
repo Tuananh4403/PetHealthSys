@@ -106,6 +106,16 @@ namespace PetCareSystem.Services.Services.Records
             return new ApiResponse<string>(message, result);
         }
 
+        public async Task<PaginatedApiResponse<Record>> GetListRecord(string? petName, string? nameOfCustomer, int pageNumber = 1, int pageSize = 10)
+        {
+             var (records, totalCount) = await _recordRepository.GetListRecord(petName, nameOfCustomer, pageNumber, pageSize);
+            if (!records.Any())
+            {
+                return new PaginatedApiResponse<Record>("No Record found", true);
+            }
+            return new PaginatedApiResponse<Record>(records, totalCount,pageNumber, pageSize);
+        }
+
         public async Task<ApiResponse<Record?>> GetRecordHis(int petId)
         {
             try

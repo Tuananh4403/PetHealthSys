@@ -14,6 +14,6 @@ namespace PetCareSystem.Services.Services.Records
         Task<ApiResponse<string>> CreateRecordAsync(CreateRecordingReq createRecordReq, string token);
         Task<ApiResponse<Record?>> GetRecordHis(int petId);
         Task<ApiResponse<string>> CreateRecordByBookingAsync(int bookingId, string token);
-        Task<PaginatedApiResponse> GetListRecord(string? petName, string? nameOfCustomer);
+        Task<PaginatedApiResponse<Record>> GetListRecord(string? petName, string? nameOfCustomer, int pageNumber = 1, int pageSize = 10);
     }
 }
