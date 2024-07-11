@@ -51,5 +51,34 @@ namespace PetCareSystem.WebApp.Controllers
                 return StatusCode(500, new { message = "An error occurred while creating the barn", details = ex.Message });
             }
         }
+
+        [HttpPost("update")]
+        public async Task<IActionResult> UpdateBarn(BarnRequest model, int barnId)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+
+            var token = Request.Headers["Authorization"].ToString().Replace("Bearer ", "");
+
+            try
+            {
+                bool isCreated = await _barnservice.UpdateBarnsAsync(barnId, model, token);
+                if (isCreated)
+                {
+                    return Ok(new { message = "Barn uodate successful" });
+                }
+                else
+                {
+                    return BadRequest(new { message = "Barn update failed" });
+                }
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new { message = "An error occurred while updating the barn", details = ex.Message });
+            }
+        }
     }
 }

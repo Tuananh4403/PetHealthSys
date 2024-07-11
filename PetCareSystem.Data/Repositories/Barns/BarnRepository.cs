@@ -13,7 +13,11 @@ namespace PetCareSystem.Data.Repositories.Barns
 {
     public class BarnRepository(PetHealthDBContext dbContext, ILogger<BarnRepository> logger) : BaseRepository<Barn>(dbContext, logger), IBarnRepository
     {
+        public async Task<Barn> GetBarnByIdAsync(int? barnId)
+        {
+            return await dbContext.Barns.Where(b => b.Id == barnId).FirstOrDefaultAsync();  
+        }
 
-        
+
     }
 }

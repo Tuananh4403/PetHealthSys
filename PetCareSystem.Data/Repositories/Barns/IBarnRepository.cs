@@ -9,5 +9,6 @@ namespace PetCareSystem.Data.Repositories.Barns
 {
     public interface IBarnRepository : IRepository<Barn>
     {
+        Task<Barn> GetBarnByIdAsync(int? barnId);
     }
 }

@@ -47,8 +47,33 @@ namespace PetCareSystem.Services.Services.Barns
                 return false;
             }
             return true;
+        }
 
+        public async Task<bool> UpdateBarnsAsync(int barnId, BarnRequest barnRequest, string token)
+        {
+            int? userId = CommonHelpers.GetUserIdByToken(token);
+            int id = userId.Value;
+            if (!userId.HasValue || userId <= 0)
+            {
+                throw new ArgumentException("Invalid token");
+            }
+            else if (await _doctorRepository.GetByIdAsync(id) == null || await _staffRepository.GetByIdAsync(id) == null)
+            {
+                throw new ArgumentException("Just doctor or staff can create barn");
+            }
 
+            var barn = new Barn()
+            {
+                DateStart = barnRequest.DateStart,
+                DateEnd = barnRequest.DateEnd,
+                Status = barnRequest.Status
+            };
+            if (!await _barnsRepository.UpdateAsync(barn))
+            {
+                return false;
+            }
+
+            return false;
         }
     }
 }
