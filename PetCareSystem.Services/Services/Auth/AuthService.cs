@@ -176,9 +176,10 @@ namespace PetCareSystem.Services.Services.Auth
             return BCrypt.Net.BCrypt.HashPassword(password);
         }
 
-        public Task<User?> GetById(int userId)
+        public async Task<User?> GetById(int userId)
         {
-            return _userRepository.GetByIdAsync(userId);
+            var user = await _userRepository.GetByIdAsync((int)userId);
+            return user;
         }
 
         public async Task CreateRole(CreateRoleReq model)

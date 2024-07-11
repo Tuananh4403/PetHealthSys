@@ -62,7 +62,8 @@ namespace PetCareSystem.WebApp.Controllers
             }
             try
             {
-                var response = await _bookingServices.GetListBookingAsync();
+                var token = Request.Headers["Authorization"].ToString().Replace("Bearer ", "");
+                var response = await _bookingServices.GetListBookingAsync(status: BookingStatus.Confirmed, token: token);
 
                 return Ok(response);
             }

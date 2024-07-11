@@ -154,9 +154,11 @@ namespace PetCareSystem.Services.Services.Bookings
                 return new ApiResponse<string>("Error system", true);
             }
         }
-        public async Task<PaginatedApiResponse<Booking>> GetListBookingAsync(DateTime? bookingDate = null, BookingStatus status = BookingStatus.Review, int pageNumber = 1, int pageSize = 10)
+        public async Task<PaginatedApiResponse<Booking>> GetListBookingAsync(DateTime? bookingDate = null, string token = "", BookingStatus status = BookingStatus.Review, int pageNumber = 1, int pageSize = 10)
         {
-            var (booking, totalCount) = await _bookingRepository.GetListBooking(bookingDate, status, pageNumber, pageSize);
+            var user = CommonHelpers.GetUserIdByToken(token);
+            var cus = await _customerRepository.GetCusByUserId((int)user);
+            var (booking, totalCount) = await _bookingRepository.GetListBooking(bookingDate, status, pageNumber, pageSize, cus);
             if (!booking.Any())
             {
                 return new PaginatedApiResponse<Booking>("No Booking found", true);

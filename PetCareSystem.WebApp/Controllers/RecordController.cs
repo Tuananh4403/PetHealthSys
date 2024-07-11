@@ -47,8 +47,8 @@ namespace PetCareSystem.WebApp.Controllers
                 return StatusCode(500, "Internal server error");
             }
         }
-         [HttpPost("creat-by-booking")]
-        public async Task<IActionResult> CreateByBooking([FromQuery]int bookingId)
+         [HttpPost("creat-by-booking/{id}")]
+        public async Task<IActionResult> CreateByBooking(int id)
         {
             if (!ModelState.IsValid)
             {
@@ -57,7 +57,7 @@ namespace PetCareSystem.WebApp.Controllers
             var token = Request.Headers["Authorization"].ToString().Replace("Bearer ", "");
             try
             {
-                var response = await _recordService.CreateRecordByBookingAsync(bookingId, token);
+                var response = await _recordService.CreateRecordByBookingAsync(id, token);
                 return Ok(response);
             }
             catch (Exception ex)

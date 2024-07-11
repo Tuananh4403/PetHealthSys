@@ -9,6 +9,7 @@ using Microsoft.AspNetCore.Authentication.Google;
 using Microsoft.AspNetCore.Authentication;
 using Newtonsoft.Json;
 using System.Net.Http.Headers;
+using PetCareSystem.Services.Helpers;
 
 namespace PetCareSystem.WebApp.Controllers
 {
@@ -146,6 +147,17 @@ namespace PetCareSystem.WebApp.Controllers
             }
 
             var response = await _authService.UpdateUserRole(model);
+            return Ok(response);
+        }
+        [HttpGet("get-detail")]
+        public async Task<IActionResult> getUserDetail(){
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+            var token = Request.Headers["Authorization"].ToString().Replace("Bearer ", "");
+            var userId =CommonHelpers.GetUserIdByToken(token);
+            var response = await _authService.GetById((int)userId);
             return Ok(response);
         }
     }

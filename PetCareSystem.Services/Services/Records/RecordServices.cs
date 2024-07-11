@@ -68,7 +68,7 @@ namespace PetCareSystem.Services.Services.Records
             var doctor = await _doctorRepository.GetDoctorByUserId(CommonHelpers.GetUserIdByToken(token));
             string message = "Create record Fails";
             bool result = false;
-            if(booking.Status != BookingStatus.Completed){
+            if(booking.Status != BookingStatus.Confirmed){
                 message = "Booking not confirmed!";
             }else{
                 if(doctor == null){

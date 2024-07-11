@@ -63,7 +63,7 @@ namespace PetCareSystem.Data.Repositories.Bookings
             return result;
         }
 
-        public async Task<(IEnumerable<Booking> Bookings, int TotalCount)> GetListBooking(DateTime? bookingDate = null, BookingStatus status = BookingStatus.Review, int pageNumber = 1, int pageSize = 10)
+        public async Task<(IEnumerable<Booking> Bookings, int TotalCount)> GetListBooking(DateTime? bookingDate = null, BookingStatus status = BookingStatus.Review, int pageNumber = 1, int pageSize = 10, Customer cus = null)
         {
             var query = dbContext.Bookings.AsQueryable();
 
@@ -71,7 +71,9 @@ namespace PetCareSystem.Data.Repositories.Bookings
             {
                 query = query.Where(b => b.BookingTime == bookingDate);
             }
-
+            if(cus != null) { 
+                query = query.Where(b => b.CustomerId == cus.Id);
+            }
             // Include related BookingServices
             query = query.Include(b => b.BookingServices)
                          .Include(b => b.Pet)
@@ -91,6 +93,7 @@ namespace PetCareSystem.Data.Repositories.Bookings
                 {
                     Id = b.Id,
                     BookingTime = b.BookingTime,
+                    Shift = b.Shift,
                     Status = b.Status,
                     Note = b.Note,
                     // Include Pet details
