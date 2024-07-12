@@ -116,6 +116,7 @@ namespace PetCareSystem.Services.Services.Serivces
             {
                 service.Id,
                 service.Name,
+                service.Code,
                 service.TypeId,
                 Type = (await Task.Run(() => GetServiceCategoryById(service.TypeId))).ToString(),
                 service.Price,
