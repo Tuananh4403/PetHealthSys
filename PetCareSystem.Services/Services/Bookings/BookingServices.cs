@@ -114,9 +114,9 @@ namespace PetCareSystem.Services.Services.Bookings
             return true;
         }
 
-        Task<Booking> IBookingServices.GetBookingById(int BookingId)
+        async Task<Booking> IBookingServices.GetBookingById(int BookingId)
         {
-            throw new NotImplementedException();
+            return await _bookingRepository.GetByIdAsync(BookingId);
         }
 
         public async Task<ApiResponse<string>> ConfirmBooking(int bookingId)

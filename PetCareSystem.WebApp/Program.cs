@@ -28,6 +28,7 @@ using PetCareSystem.Services.Services.Doctors;
 using PetCareSystem.Data.Repositories.Records;
 using PetCareSystem.Data.Repositories.RecordDetails;
 using PetCareSystem.Services.Services.Records;
+using PetCareSystem.Data.Repositories.Barns;
 
 
 IConfiguration configuration = new ConfigurationBuilder()
@@ -106,6 +107,7 @@ builder.Services.AddScoped<IRecordDetailRepository, RecordDetailRepository>();
 builder.Services.AddScoped<IDoctorRepository, DoctorRepository>();
 builder.Services.AddScoped<IBookingServiceRepository, BookingServiceRepository>();
 builder.Services.AddScoped<IBookingRepository, BookingRepository>();
+builder.Services.AddScoped<IBarnRepository, BarnRepository>();
 builder.Services.AddScoped<ICustomerRepository, CustomerRepository>();
 builder.Services.AddScoped<IServicesRepository, ServicesRepository>();
 builder.Services.AddScoped<IPetRepository, PetRepository>();

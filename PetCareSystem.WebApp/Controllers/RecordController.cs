@@ -31,13 +31,16 @@ namespace PetCareSystem.WebApp.Controllers
         [HttpPost("create")]
         public async Task<IActionResult> Create(CreateRecordingReq model)
         {
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
-            }
+                Console.WriteLine("test");
+
+            // if (!ModelState.IsValid)
+            // {
+            //     return BadRequest(ModelState);
+            // }
             var token = Request.Headers["Authorization"].ToString().Replace("Bearer ", "");
             try
             {
+                Console.WriteLine("test");
                 var response = await _recordService.CreateRecordAsync(model, token);
                 return Ok(response);
             }

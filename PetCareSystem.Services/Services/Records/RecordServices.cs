@@ -1,5 +1,6 @@
 ﻿using PetCareSystem.Data.Entites;
 using PetCareSystem.Data.Enums;
+using PetCareSystem.Data.Repositories.Barns;
 using PetCareSystem.Data.Repositories.Bookings;
 using PetCareSystem.Data.Repositories.Doctors;
 using PetCareSystem.Data.Repositories.RecordDetails;
@@ -13,12 +14,13 @@ using System.Threading.Tasks;
 
 namespace PetCareSystem.Services.Services.Records
 {
-    public class RecordServices(IRecordRepository recordRepository, IDoctorRepository doctorRepository, IRecordDetailRepository recordDetailRepository, IBookingRepository bookingRepository) : IRecordServices
+    public class RecordServices(IRecordRepository recordRepository, IDoctorRepository doctorRepository, IRecordDetailRepository recordDetailRepository, IBookingRepository bookingRepository, IBarnRepository barnRepository) : IRecordServices
     {
         private readonly IRecordRepository _recordRepository = recordRepository;
         private readonly IDoctorRepository _doctorRepository = doctorRepository;
         private readonly IRecordDetailRepository _recordDetailRepository = recordDetailRepository;
         private readonly IBookingRepository _bookingRepository = bookingRepository;
+        private readonly IBarnRepository _barnRepository = barnRepository;
 
         public async Task<ApiResponse<string>> CreateRecordAsync(CreateRecordingReq createRecordReq, string token)
         {
@@ -34,30 +36,43 @@ namespace PetCareSystem.Services.Services.Records
                 PetId = createRecordReq.PetId,
                 PetHeight = createRecordReq.Height,
                 PetWeigth = createRecordReq.Weight,
-                BarnId = createRecordReq.BarnId,
+                SaveBarn = createRecordReq.SaveBarn,
                 DetailPrediction = createRecordReq.DetailPrediction,
                 Conclude = createRecordReq.Conclude 
             };
             bool result = await _recordRepository.AddAsync(record);
-            if(result && createRecordReq.ServiceQuantities != null){
-                if(createRecordReq.ServiceQuantities.Count > 0)
-                {
-                    foreach(var detail in createRecordReq.ServiceQuantities)
-                    {
-                        if(detail.Value == 0)
-                        {
-                            return new ApiResponse<string>("Quantity cannot be zero!");
-                        }
-                        var recordDetail = new RecordDetail
-                        {
-                            RecordId = record.Id,
-                            ServiceId = detail.Key,
-                            Quantity = detail.Value,
+            if(result){
+                if(createRecordReq.SaveBarn){
+                    var barn = _barnRepository.GetByIdAsync((int)createRecordReq.BarnId);
+                    if(barn == null){
+                        return new ApiResponse<string>("Barn does not exist", true);
+                    }else{
+                        record.BarnId = record.BarnId = barn.Id;
+                        if(!await _recordRepository.UpdateAsync(record)){
+                            return new ApiResponse<string>("Can not create Barn", true);
                         };
-                        await _recordDetailRepository.AddAsync(recordDetail);
                     }
                 }
-                return new ApiResponse<string>("Create Success!");
+                if(createRecordReq.ServiceQuantities != null){
+                                if(createRecordReq.ServiceQuantities.Count > 0)
+                                {
+                                    foreach(var detail in createRecordReq.ServiceQuantities)
+                                    {
+                                        if(detail.Value == 0)
+                                        {
+                                            return new ApiResponse<string>("Quantity cannot be zero!");
+                                        }
+                                        var recordDetail = new RecordDetail
+                                        {
+                                            RecordId = record.Id,
+                                            ServiceId = detail.Key,
+                                            Quantity = detail.Value,
+                                        };
+                                        await _recordDetailRepository.AddAsync(recordDetail);
+                                    }
+                                }
+                                return new ApiResponse<string>("Create Success!");
+                            }
             }
             return new ApiResponse<string>("Create Record fail!", true);
         }
