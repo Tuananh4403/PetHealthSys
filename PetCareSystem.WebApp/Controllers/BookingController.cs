@@ -54,7 +54,7 @@ namespace PetCareSystem.WebApp.Controllers
             }
         }
         [HttpGet("review-booking")]
-        public async Task<IActionResult> GetReviewBooking()
+        public async Task<IActionResult> GetReviewBooking(string? status)
         {
             if (!ModelState.IsValid)
             {
@@ -63,7 +63,8 @@ namespace PetCareSystem.WebApp.Controllers
             try
             {
                 var token = Request.Headers["Authorization"].ToString().Replace("Bearer ", "");
-                var response = await _bookingServices.GetListBookingAsync(status: BookingStatus.Confirmed, token: token);
+                var bookingStatus = (BookingStatus)Enum.Parse(typeof(BookingStatus), status) != null ? (BookingStatus)Enum.Parse(typeof(BookingStatus), status) : BookingStatus.Review;
+                var response = await _bookingServices.GetListBookingAsync(status: bookingStatus, token: token);
 
                 return Ok(response);
             }

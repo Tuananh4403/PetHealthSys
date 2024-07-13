@@ -33,10 +33,10 @@ namespace PetCareSystem.WebApp.Controllers
         {
                 Console.WriteLine("test");
 
-            // if (!ModelState.IsValid)
-            // {
-            //     return BadRequest(ModelState);
-            // }
+            if (!ModelState.IsValid)
+            {
+                return BadRequest("test");
+            }
             var token = Request.Headers["Authorization"].ToString().Replace("Bearer ", "");
             try
             {

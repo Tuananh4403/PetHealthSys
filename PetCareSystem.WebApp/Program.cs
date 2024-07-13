@@ -159,7 +159,7 @@ app.UseCors(x => x
 
 app.UseHttpsRedirection();
 app.UseRouting();
-app.UseSwagger();
+app.UseSwagger();   
 
 app.UseAuthentication(); // Add this line
 app.UseAuthorization(); // Add this line
@@ -174,5 +174,5 @@ app.MapControllerRoute(
                 pattern: "{controller=Home}/{action=Index}/{id?}");
 
 
-app.Run("http://*:4000");
+app.Run("http://localhost:4000");
 

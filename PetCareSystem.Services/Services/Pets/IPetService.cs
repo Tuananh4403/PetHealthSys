@@ -14,7 +14,7 @@ namespace PetCareSystem.Services.Services.Pets
     {
         Task<ApiResponse<string>> RegisterPetAsync(PetRequest model, string token);
         Task<PetRequest> GetPetDetailsAsync(int petId);
-        Task<IList<Pet>> GetListPet(string petName, string nameOfCustomer, string kindOfPet, string speciesOfPet, bool? genderOfPet, DateTime? birthdayOfPet);
+        Task<PaginatedApiResponse<Object>> GetListPet(string? petName, string? nameOfCustomer, int pageNumber = 1, int pageSize = 10);
         Task<bool> UpdatePetAsync(int id, PetRequest updatePet);
         Task<bool> DeletePetAsync(int id);
         Task<ApiResponse<Pet?>> GetPetRecordHis(int petId);

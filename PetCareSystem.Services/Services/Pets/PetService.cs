@@ -111,9 +111,25 @@ namespace PetCareSystem.Services.Services.Pets
             return petRequest;
         }
 
-        public async Task<IList<Pet>> GetListPet(string petName, string nameOfCustomer, string kindOfPet, string speciesOfPet, bool? genderOfPet, DateTime? birthdayOfPet)
+        public async Task<PaginatedApiResponse<Object>> GetListPet(string? petName, string? nameOfCustomert, int pageNumber = 1, int pageSize = 10)
         {
-            return await _petRepository.GetListPet(petName, nameOfCustomer, kindOfPet, speciesOfPet, genderOfPet, birthdayOfPet);
+            var (pets, totalCount) = await _petRepository.GetListPet(petName, nameOfCustomert);
+             if (!pets.Any())
+            {
+                return new PaginatedApiResponse<Object>("No pet found", true);
+            }
+            var result = pets.Select(async pets => new
+            {
+                pets.Id,
+                pets.PetName,
+                pets.KindOfPet,
+                pets.Species,
+                pets.Gender,
+                pets.Birthday,
+                customerName = pets.Customer.User.FirstName + " " + pets.Customer.User.LastName,
+            }).ToList();
+            var petsOpt = await Task.WhenAll(result);
+            return new PaginatedApiResponse<Object>(petsOpt, totalCount, pageNumber, pageSize);
         }
 
         public async Task<bool> UpdatePetAsync(int id, PetRequest updatePet)

@@ -19,36 +19,25 @@ namespace PetCareSystem.Data.Repositories.Pets
             return await dbContext.Pets.AnyAsync(p => p.Id == petId);
         }
 
-        public async Task<IList<Pet>> GetListPet(string petName, string nameOfCustomer, string kindOfPet, string speciesOfPet, bool? genderOfPet, DateTime? birthdayOfPet)
+        public async Task<(IEnumerable<Pet> pets, int totalCount)> GetListPet(string? petName, string? nameOfCustomer,  int pageNumber = 1, int pageSize = 10)
         {
             var query = dbContext.Pets.AsQueryable();
-
+            query = query.Include(p =>p.Customer)
+                            .ThenInclude(c => c.User);
             if (!string.IsNullOrEmpty(petName))
             {
                 query = query.Where(p => p.PetName.Contains(petName));
             }
             if (!string.IsNullOrEmpty(nameOfCustomer))
             {
-                query = query.Include(p => p.Customer).Where(p => p.Customer.User.Username.Contains(nameOfCustomer));
+                query = query.Where(p => p.Customer.User.FirstName.Contains(nameOfCustomer) || p.Customer.User.LastName.Contains(nameOfCustomer));
             }
-            if (!string.IsNullOrEmpty(kindOfPet))
-            {
-                query = query.Where(p => p.KindOfPet.Contains(kindOfPet));
-            }
-            if (!string.IsNullOrEmpty(speciesOfPet))
-            {
-                query = query.Where(p => p.Species.Contains(speciesOfPet));
-            }
-            if (genderOfPet.HasValue)
-            {
-                query = query.Where(p => p.Gender == genderOfPet.Value);
-            }
-            if (birthdayOfPet.HasValue)
-            {
-                query = query.Where(p => p.Birthday.Date == birthdayOfPet.Value.Date);
-            }
-
-            return query.ToList<Pet>();
+            var pets = await query
+                .Skip((pageNumber - 1) * pageSize)
+                .Take(pageSize)
+                .ToListAsync();
+            var totalCount = await query.CountAsync();
+            return (pets, totalCount);
         }
 
         public async Task<Pet?> GetMedicalHis(int petId)

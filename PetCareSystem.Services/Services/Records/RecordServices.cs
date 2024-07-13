@@ -60,8 +60,9 @@ namespace PetCareSystem.Services.Services.Records
                                     {
                                         if(detail.Value == 0)
                                         {
-                                            return new ApiResponse<string>("Quantity cannot be zero!");
+                                            return new ApiResponse<string>("Quantity cannot be zero!", true);
                                         }
+                                        
                                         var recordDetail = new RecordDetail
                                         {
                                             RecordId = record.Id,
@@ -71,7 +72,7 @@ namespace PetCareSystem.Services.Services.Records
                                         await _recordDetailRepository.AddAsync(recordDetail);
                                     }
                                 }
-                                return new ApiResponse<string>("Create Success!");
+                                return new ApiResponse<string>(message:"Create Success!", false);
                             }
             }
             return new ApiResponse<string>("Create Record fail!", true);

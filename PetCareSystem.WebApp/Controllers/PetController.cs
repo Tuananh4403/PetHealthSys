@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using PetCareSystem.Data.Entites;
+using PetCareSystem.Services.Models;
 using PetCareSystem.Services.Models.Booking;
 using PetCareSystem.Services.Models.Pet;
 using PetCareSystem.Services.Services.Auth;
@@ -89,8 +90,8 @@ namespace PetCareSystem.WebApp.Controllers
                 return StatusCode(500, new { message = "An error occurred while retrieving the pet details", details = ex.Message });
             }
         }
-        [HttpGet("getListPet")]
-        public async Task<IActionResult> GetListPet(string petName, string nameOfCustomer, string kindOfPet, string speciesOfPet, bool? genderOfPet, DateTime? birthdayOfPet)
+        [HttpGet("get-list-pet")]
+        public async Task<IActionResult> GetListPet(string? petName, string? nameOfCustomer)
         {
             if (!ModelState.IsValid)
             {
@@ -99,12 +100,8 @@ namespace PetCareSystem.WebApp.Controllers
 
             try
             {
-                var pets = await _petService.GetListPet(petName, nameOfCustomer, kindOfPet, speciesOfPet, genderOfPet, birthdayOfPet);
-                if (pets.Any())
-                {
-                    return Ok(pets);
-                }
-                return NotFound("No pets found matching the search criteria.");
+                var pets = await _petService.GetListPet(petName, nameOfCustomer);
+                return Ok(pets);
             }
             catch (Exception ex)
             {
@@ -143,9 +140,9 @@ namespace PetCareSystem.WebApp.Controllers
                 var result = await _petService.DeletePetAsync(id);
                 if (result)
                 {
-                    return Ok("Pet deleted successfully");
+                    return Ok(new ApiResponse<string>("Pet deleted successfully", false));
                 }
-                return NotFound("Pet not found");
+                return Ok(new ApiResponse<string>("Pet not found", true));
             }
             catch (Exception ex)
             {
