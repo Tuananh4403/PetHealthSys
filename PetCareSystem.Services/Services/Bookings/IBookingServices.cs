@@ -17,6 +17,6 @@ namespace PetCareSystem.Services.Services.Bookings
         Task<PaginatedApiResponse<Booking>> GetListBookingAsync(DateTime? bookingDate = null, string token = "", BookingStatus status = BookingStatus.Review, int pageNumber = 1, int pageSize = 10);
         Task<Booking> GetBookingById(int BookingId);
         Task<bool> DeleteBooking(int BookingId);
-        Task<ApiResponse<string>> ConfirmBooking(int bookingId);
+        Task<ApiResponse<string>> ConfirmBooking(int bookingId, string token);
     }
 }

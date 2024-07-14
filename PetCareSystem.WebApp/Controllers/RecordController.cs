@@ -4,6 +4,7 @@ using Newtonsoft.Json;
 using PetCareSystem.Data.Entites;
 using PetCareSystem.Services.Services.Models.Recording;
 using PetCareSystem.Services.Services.Records;
+using PetCareSystem.Services.Services.Serivces;
 using PetCareSystem.WebApp.Helpers;
 using Serilog;
 using System;
@@ -18,12 +19,14 @@ namespace PetCareSystem.WebApp.Controllers
     public class RecordController : ControllerBase
     {
         private readonly IRecordServices _recordService;
+        private readonly IBarnService _barnService;
         private readonly ILogger _logger;
 
 
-        public RecordController(IRecordServices recordServices)
+        public RecordController(IRecordServices recordServices, IBarnService barnService)
         {
             _recordService = recordServices;
+            _barnService = barnService;
             _logger = Log.Logger;
         }
 
@@ -99,6 +102,18 @@ namespace PetCareSystem.WebApp.Controllers
             try
             {
                 var response = await _recordService.GetListRecord(petName, nameOfCustomer);
+                return Ok(response);
+            }catch(Exception ex)
+            {
+                return StatusCode(500, "Internal server error");
+            }
+        }
+        [HttpGet("get-list-barn")]
+        public async Task<IActionResult> GetListBarn(){
+            var token = Request.Headers["Authorization"].ToString().Replace("Bearer ", "");
+            try
+            {
+                var response = await _barnService.GetListBarn();
                 return Ok(response);
             }catch(Exception ex)
             {

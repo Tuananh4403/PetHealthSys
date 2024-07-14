@@ -9,5 +9,8 @@ namespace PetCareSystem.Data.Repositories.Staffs
 {
     public interface IStaffRepository : IRepository<Staff>
     {
+        Task<(IEnumerable<Staff> staffs, int totalCount)> GetListStaff(string? searchString, int pageNumber = 1, int pageSize = 10);
+
+        Task<Staff> GetStaffByUserId(int userId);
     }
 }

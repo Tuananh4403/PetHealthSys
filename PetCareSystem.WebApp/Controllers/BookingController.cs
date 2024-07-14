@@ -151,7 +151,8 @@ namespace PetCareSystem.WebApp.Controllers
             try
             {
                 var token = Request.Headers["Authorization"].ToString().Replace("Bearer ", "");
-                var response = await _bookingServices.ConfirmBooking(id);
+                
+                var response = await _bookingServices.ConfirmBooking(id, token);
                 return Ok(response);
             }
             catch (Exception ex)

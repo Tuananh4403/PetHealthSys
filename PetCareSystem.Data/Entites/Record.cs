@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Numerics;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -19,6 +20,7 @@ namespace PetCareSystem.Data.Entites
         public Pet? Pet { get; set; }
         public int? BarnId { get; set; }
         public Barn? Barn { get; set; }
+        public decimal Total { get; set; }
         public ICollection<RecordDetail>? RecordDetails { get; set; }
     }
 }

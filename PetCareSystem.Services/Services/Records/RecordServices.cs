@@ -5,22 +5,25 @@ using PetCareSystem.Data.Repositories.Bookings;
 using PetCareSystem.Data.Repositories.Doctors;
 using PetCareSystem.Data.Repositories.RecordDetails;
 using PetCareSystem.Data.Repositories.Records;
+using PetCareSystem.Data.Repositories.Services;
 using PetCareSystem.Services.Helpers;
 using PetCareSystem.Services.Models;
 using PetCareSystem.Services.Services.Models.Recording;
+using PetCareSystem.Services.Services.Serivces;
 using System.Reflection.Metadata.Ecma335;
 using System.Threading.Tasks;
 
 
 namespace PetCareSystem.Services.Services.Records
 {
-    public class RecordServices(IRecordRepository recordRepository, IDoctorRepository doctorRepository, IRecordDetailRepository recordDetailRepository, IBookingRepository bookingRepository, IBarnRepository barnRepository) : IRecordServices
+    public class RecordServices(IRecordRepository recordRepository, IDoctorRepository doctorRepository, IRecordDetailRepository recordDetailRepository, IBookingRepository bookingRepository, IBarnRepository barnRepository, IServicesRepository servicesRepository) : IRecordServices
     {
         private readonly IRecordRepository _recordRepository = recordRepository;
         private readonly IDoctorRepository _doctorRepository = doctorRepository;
         private readonly IRecordDetailRepository _recordDetailRepository = recordDetailRepository;
         private readonly IBookingRepository _bookingRepository = bookingRepository;
         private readonly IBarnRepository _barnRepository = barnRepository;
+        private readonly IServicesRepository _servicesRepository = servicesRepository;
 
         public async Task<ApiResponse<string>> CreateRecordAsync(CreateRecordingReq createRecordReq, string token)
         {
@@ -30,6 +33,7 @@ namespace PetCareSystem.Services.Services.Records
             {
                 return new ApiResponse<string>("Doctor not exist", true);
             }
+            decimal total = 0;
             var record = new Record
             {
                 DoctorId = doctor.Id,
@@ -62,16 +66,19 @@ namespace PetCareSystem.Services.Services.Records
                                         {
                                             return new ApiResponse<string>("Quantity cannot be zero!", true);
                                         }
-                                        
+                                        var servcie = await _servicesRepository.GetByIdAsync((int)detail.Key);
                                         var recordDetail = new RecordDetail
                                         {
                                             RecordId = record.Id,
                                             ServiceId = detail.Key,
                                             Quantity = detail.Value,
                                         };
+                                        total += (decimal)servcie.Price * (decimal)detail.Value;
                                         await _recordDetailRepository.AddAsync(recordDetail);
                                     }
                                 }
+                                record.Total = total;
+                                await _recordRepository.UpdateAsync(record);
                                 return new ApiResponse<string>(message:"Create Success!", false);
                             }
             }

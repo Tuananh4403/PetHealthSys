@@ -11,6 +11,7 @@ namespace PetCareSystem.Data.Entites
     {
         public int UserId { get; set; }
         public virtual User? User { get; set; }
+        public bool Status { get; set; }
         public ICollection<Booking>? Bookings { get; set; }
     }
 }

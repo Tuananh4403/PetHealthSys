@@ -29,6 +29,7 @@ using PetCareSystem.Data.Repositories.Records;
 using PetCareSystem.Data.Repositories.RecordDetails;
 using PetCareSystem.Services.Services.Records;
 using PetCareSystem.Data.Repositories.Barns;
+using PetCareSystem.Services.Services.Barns;
 
 
 IConfiguration configuration = new ConfigurationBuilder()
@@ -119,6 +120,8 @@ builder.Services.AddScoped<IBookingServices, BookingServices>();
 builder.Services.AddScoped<IServiceServices, ServiceServices>();
 builder.Services.AddScoped<IPetService, PetService>();
 builder.Services.AddScoped<IRecordServices, RecordServices>();
+builder.Services.AddScoped<IBarnService, BarnService>();
+
 
 
 // Configure JWT authentication

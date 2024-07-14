@@ -127,5 +127,23 @@ namespace PetCareSystem.Services.Services.Serivces
             var servicesWithCategory = await Task.WhenAll(servicesWithCategoryTasks);
             return new PaginatedApiResponse<Object>(servicesWithCategory, totalCount, pageNumber, pageSize);
         }
+
+        public async Task<ApiResponse<string>> UpdateServcieAsync(int id, UpdateServiceReq model)
+        {
+
+            var servcie = await _servicesRepository.GetByIdAsync(id);
+            string message = "";
+            bool check = true;
+            if(servcie == null){
+                message = "Service not success!";
+            }else{
+                servcie.Price = model.Price != null ? model.Price : servcie.Price ;
+                servcie.TypeId = model.TypeOfService != null ? model.TypeOfService : servcie.TypeId ;
+                servcie.Name = model.Name != null != null ? model.Name : servcie.Name;
+                servcie.Note = model.Note != null ?  model.Note : servcie.Note;
+                servcie.Unit = model.UnitId != null ? GetServiceUnitById((int)model.UnitId) : ServiceUnit.None;
+            }
+            return new ApiResponse<string>("Update service success!", false);
+        }
     }
 }

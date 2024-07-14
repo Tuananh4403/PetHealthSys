@@ -123,7 +123,7 @@ namespace PetCareSystem.Services.Services.Auth
                     }
                     if (role.Title == "ST")
                     {
-                        Staff staff = new Staff { UserId = user.Id };
+                        Staff staff = new Staff { UserId = user.Id , Status = false};
                         var check = await _staffRepository.AddAsync(staff);
                         if (check)
                         {

@@ -1,3 +1,5 @@
+using PetCareSystem.Data.Entites;
+
 namespace PetCareSystem.Services.Models
 {
     public class PaginatedApiResponse<T>

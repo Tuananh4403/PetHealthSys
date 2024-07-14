@@ -16,5 +16,6 @@ namespace PetCareSystem.Services.Services.Serivces
         Task<PaginatedApiResponse<Object>> GetListServiceAsync(string? searchString, int? typeId, int pageNumber = 1, int pageSize = 10);
         object GetServiceByCategory(int id);
         Task<string> GetServiceCategoryNameAsync(int typeId);
+        Task<ApiResponse<string>> UpdateServcieAsync(int id, UpdateServiceReq model);
     }
 }

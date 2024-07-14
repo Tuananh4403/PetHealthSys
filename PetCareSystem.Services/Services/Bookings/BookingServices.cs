@@ -4,6 +4,7 @@ using PetCareSystem.Data.Enums;
 using PetCareSystem.Data.Repositories.Bookings;
 using PetCareSystem.Data.Repositories.BookingServices;
 using PetCareSystem.Data.Repositories.Customers;
+using PetCareSystem.Data.Repositories.Staffs;
 using PetCareSystem.Services.Helpers;
 using PetCareSystem.Services.Models;
 using PetCareSystem.Services.Models.Booking;
@@ -11,6 +12,7 @@ using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
+using System.Net;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -21,12 +23,14 @@ namespace PetCareSystem.Services.Services.Bookings
         private readonly IBookingRepository _bookingRepository;
         private readonly ICustomerRepository _customerRepository;
         private readonly IBookingServiceRepository _bookingServiceRepository;
+        private readonly IStaffRepository _staffRepository;
 
-        public BookingServices(IBookingRepository bookingRepository, ICustomerRepository customerRepository, IBookingServiceRepository bookingService)
+        public BookingServices(IBookingRepository bookingRepository, ICustomerRepository customerRepository, IBookingServiceRepository bookingService, IStaffRepository staffRepository)
         {
             _bookingRepository = bookingRepository;
             _customerRepository = customerRepository;
             _bookingServiceRepository = bookingService;
+            _staffRepository = staffRepository;
         }
 
         public async Task<ApiResponse<string>> CreateBookingAsync(CreateBookingReq bookingReq, string token)
@@ -119,11 +123,18 @@ namespace PetCareSystem.Services.Services.Bookings
             return await _bookingRepository.GetByIdAsync(BookingId);
         }
 
-        public async Task<ApiResponse<string>> ConfirmBooking(int bookingId)
+        public async Task<ApiResponse<string>> ConfirmBooking(int bookingId, string token)
         {
             try
             {
                 Booking booking = await _bookingRepository.GetByIdAsync(bookingId);
+                var uid = CommonHelpers.GetUserIdByToken(token);
+                var staff = _staffRepository.GetStaffByUserId((int)uid);
+
+                if(staff == null)
+                {
+                    return new ApiResponse<string>("Staff not exist!", true);
+                }
                 if (booking == null)
                 {
                     return new ApiResponse<string>("Booking not exist! ", true);
@@ -137,6 +148,7 @@ namespace PetCareSystem.Services.Services.Bookings
                 if (checkBooking)
                 {
                     booking.Status = BookingStatus.Confirmed;
+                    booking.StaffId = staff.Id;
                     bool result = await _bookingRepository.UpdateAsync(booking);
                     if (result)
                     {

@@ -58,5 +58,23 @@ namespace PetCareSystem.WebApp.Controllers
                 return StatusCode(500, "Internal server error");
             }
         }
+         [HttpPost("upate/{id}")]
+        public async Task<IActionResult> UpdateService(int id, [FromBody] UpdateServiceReq model)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+            try
+            {
+                var response = await _serviceServices.UpdateServcieAsync(id, model);
+                return Ok(response);
+            }
+            catch (Exception ex)
+            {
+                // Log the exception (ex) here if needed
+                return StatusCode(500, "Internal server error");
+            }
+        }
     }
 }
