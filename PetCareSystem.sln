@@ -9,7 +9,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PetCareSystem.Data", "PetCa
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PetCareSystem.Services", "PetCareSystem.Services\PetCareSystem.Services.csproj", "{BA8C7911-9CAA-4022-A653-EE8B25ABBDD3}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestProject", "TestProject\TestProject.csproj", "{A6287AB5-9E62-4B87-A54A-46A1F1D8F7E0}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TestProject", "TestProject\TestProject.csproj", "{A6287AB5-9E62-4B87-A54A-46A1F1D8F7E0}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

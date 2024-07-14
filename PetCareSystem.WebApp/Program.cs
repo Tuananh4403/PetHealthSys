@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication.Google;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -6,58 +7,49 @@ using Microsoft.IdentityModel.Tokens;
 using PetCareSystem.Data.EF;
 using PetCareSystem.Data.Repositories.Bookings;
 using PetCareSystem.Data.Repositories.Users;
-using PetCareSystem.Services.Services.Auth;
-using PetCareSystem.Services.Helpers;
-using PetCareSystem.Services.Services.Bookings;
-using System.Text;
-using Microsoft.AspNetCore.Mvc.ViewFeatures;
 using PetCareSystem.Data.Repositories.Customers;
-using PetCareSystem.Services.Services.Serivces;
 using PetCareSystem.Data.Repositories.Services;
-using PetCareSystem.Services.Services.Pets;
-using PetCareSystem.Data.Entites;
 using PetCareSystem.Data.Repositories.Pets;
 using PetCareSystem.Data.Repositories.Roles;
 using PetCareSystem.Data.Repositories.Doctors;
-using PetCareSystem.WebApp.Helpers;
-using Microsoft.OpenApi.Models;
 using PetCareSystem.Data.Repositories.BookingServices;
 using PetCareSystem.Data.Repositories.UserRoles;
 using PetCareSystem.Data.Repositories.Staffs;
-using PetCareSystem.Services.Services.Doctors;
 using PetCareSystem.Data.Repositories.Records;
 using PetCareSystem.Data.Repositories.RecordDetails;
-using PetCareSystem.Services.Services.Records;
 using PetCareSystem.Data.Repositories.Barns;
+using PetCareSystem.Services.Models.Momo;
+using PetCareSystem.Services.Services.Auth;
+using PetCareSystem.Services.Helpers;
+using PetCareSystem.Services.Services.Bookings;
+using PetCareSystem.Services.Services.Serivces;
+using PetCareSystem.Services.Services.Pets;
+using PetCareSystem.Services.Services.Doctors;
+using PetCareSystem.Services.Services.Records;
 using PetCareSystem.Services.Services.Barns;
-
+using PetCareSystem.Services.Services.Momo;
+using Microsoft.OpenApi.Models;
+using System.Text;
+using PetCareSystem.WebApp.Helpers;
 
 IConfiguration configuration = new ConfigurationBuilder()
-            .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
-            .Build();
+    .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
+    .Build();
 
 // Access configuration settings
 var appSetting = configuration["AppSettings:Secret"];
 var builder = WebApplication.CreateBuilder(args);
-builder.Services.Configure<GoogleKeys>(builder.Configuration.GetSection("GoogleKeys"));
-builder.Services.AddControllersWithViews().AddRazorRuntimeCompilation();
 
-builder.Services.AddAuthentication(option =>
-{
-    option.DefaultScheme = CookieAuthenticationDefaults.AuthenticationScheme;
-    option.DefaultChallengeScheme = GoogleDefaults.AuthenticationScheme;
-})
-    .AddCookie()
-    .AddGoogle(GoogleDefaults.AuthenticationScheme, options =>
-    {
-        options.ClientId = "548056226336-9r91b1s78lcvvefd4chijuo0hb09gs25.apps.googleusercontent.com";
-        options.ClientSecret = "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";
-        options.CallbackPath = "/signin-google"; // Ensure this matches the registered redirect URI
-        options.SaveTokens = true;
-    });
+// Add Momo API configuration
+builder.Services.Configure<MomoConfig>(builder.Configuration.GetSection("MomoAPI"));
+
+// Add Google Authentication configuration
+builder.Services.Configure<GoogleKeys>(builder.Configuration.GetSection("GoogleKeys"));
 
 // Add services to the container.
-builder.Services.AddControllers();
+builder.Services.AddControllersWithViews().AddRazorRuntimeCompilation();
+
+// Add Swagger for API documentation
 builder.Services.AddSwaggerGen(swagger =>
 {
     swagger.SwaggerDoc("v1", new OpenApiInfo
@@ -67,7 +59,7 @@ builder.Services.AddSwaggerGen(swagger =>
         Description = ".NET 8 Web API"
     });
     // To Enable authorization using Swagger (JWT)
-    swagger.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme()
+    swagger.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
     {
         Name = "Authorization",
         Type = SecuritySchemeType.ApiKey,
@@ -77,29 +69,25 @@ builder.Services.AddSwaggerGen(swagger =>
         Description = "JWT Authorization header using the Bearer scheme. \r\n\r\n Enter 'Bearer' [space] and then your token in the text input below.\r\n\r\nExample: \"Bearer 12345abcdef\"",
     });
     swagger.AddSecurityRequirement(new OpenApiSecurityRequirement
+    {
+        {
+            new OpenApiSecurityScheme
+            {
+                Reference = new OpenApiReference
                 {
-                    {
-                          new OpenApiSecurityScheme
-                            {
-                                Reference = new OpenApiReference
-                                {
-                                    Type = ReferenceType.SecurityScheme,
-                                    Id = "Bearer"
-                                }
-                            },
-                            Array.Empty<string>()
-
-                    }
-                });
-}
-);
+                    Type = ReferenceType.SecurityScheme,
+                    Id = "Bearer"
+                }
+            },
+            Array.Empty<string>()
+        }
+    });
+});
 
 // Register the DbContext, Repositories, and Services
 builder.Services.AddDbContext<PetHealthDBContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("PetHealthCareDb")));
 
-builder.Services.AddControllersWithViews();
-builder.Services.AddSingleton<ITempDataDictionaryFactory, TempDataDictionaryFactory>();
 builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<IUserRolesRepository, UserRolesRepository>();
 builder.Services.AddScoped<IRoleRepository, RoleRepository>();
@@ -121,15 +109,21 @@ builder.Services.AddScoped<IServiceServices, ServiceServices>();
 builder.Services.AddScoped<IPetService, PetService>();
 builder.Services.AddScoped<IRecordServices, RecordServices>();
 builder.Services.AddScoped<IBarnService, BarnService>();
+builder.Services.AddScoped<IMomoPaymentService, MomoPaymentService>(); // Add MomoPaymentService
 
-
-
-// Configure JWT authentication
-var key = Encoding.ASCII.GetBytes(appSetting);
-builder.Services.AddAuthentication(x =>
+// Configure Authentication and Authorization
+builder.Services.AddAuthentication(options =>
 {
-    x.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
-    x.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+    options.DefaultScheme = CookieAuthenticationDefaults.AuthenticationScheme;
+    options.DefaultChallengeScheme = GoogleDefaults.AuthenticationScheme;
+})
+.AddCookie()
+.AddGoogle(GoogleDefaults.AuthenticationScheme, options =>
+{
+    options.ClientId = builder.Configuration["GoogleKeys:ClientId"];
+    options.ClientSecret = builder.Configuration["GoogleKeys:ClientSecret"];
+    options.CallbackPath = "/signin-google"; // Ensure this matches the registered redirect URI
+    options.SaveTokens = true;
 })
 .AddJwtBearer(x =>
 {
@@ -138,15 +132,23 @@ builder.Services.AddAuthentication(x =>
     x.TokenValidationParameters = new TokenValidationParameters
     {
         ValidateIssuerSigningKey = true,
-        IssuerSigningKey = new SymmetricSecurityKey(key),
+        IssuerSigningKey = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(appSetting)),
         ValidateIssuer = false,
         ValidateAudience = false
     };
 });
-builder.Services.AddCors();
+
+builder.Services.AddCors(options =>
+{
+    options.AddDefaultPolicy(builder =>
+    {
+        builder.AllowAnyOrigin()
+               .AllowAnyMethod()
+               .AllowAnyHeader();
+    });
+});
+
 var app = builder.Build();
-
-
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
@@ -154,28 +156,22 @@ if (app.Environment.IsDevelopment())
     app.UseDeveloperExceptionPage();
 }
 
-app.UseCors(x => x
-        .AllowAnyOrigin()
-        .AllowAnyMethod()
-        .AllowAnyHeader());
-
+app.UseCors();
 
 app.UseHttpsRedirection();
 app.UseRouting();
-app.UseSwagger();   
-
-app.UseAuthentication(); // Add this line
-app.UseAuthorization(); // Add this line
-app.UseMiddleware<JwtMiddleware>();
+app.UseSwagger();
 app.UseSwaggerUI(c =>
 {
     c.SwaggerEndpoint("/swagger/v1/swagger.json", "My API V1");
 });
+
+app.UseAuthentication(); // Add this line
+app.UseAuthorization();  // Add this line
+app.UseMiddleware<JwtMiddleware>(); // Add custom JWT middleware if necessary
 app.MapControllers();
 app.MapControllerRoute(
-                name: "default",
-                pattern: "{controller=Home}/{action=Index}/{id?}");
-
+    name: "default",
+    pattern: "{controller=Home}/{action=Index}/{id?}");
 
 app.Run("http://localhost:4000");
-

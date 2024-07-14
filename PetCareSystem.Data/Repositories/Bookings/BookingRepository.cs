@@ -153,13 +153,6 @@ namespace PetCareSystem.Data.Repositories.Bookings
             return (bookings, totalCount);
         }
 
-        public async Task<decimal> CalculateTotalBookingAsync(int bookingId)
-        {
-            decimal total = await dbContext.Records
-                               .Where(r => dbContext.Bookings.Any(b => b.PetId == r.PetId && b.Id == bookingId))
-                               .SumAsync(r => r.Total);
-
-            return total;
-        }
+        
     }
 }
