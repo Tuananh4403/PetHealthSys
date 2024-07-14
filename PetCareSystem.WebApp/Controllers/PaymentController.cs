@@ -26,14 +26,14 @@ namespace PetCareSystem.WebApp.Controllers
             _momoService = momoService;
         }
 
-        [HttpPost]
+        [HttpPost("create")]
         public async Task<IActionResult> CreatePaymentUrl(OrderInfoModel model)
         {
             var payUrl = await _momoService.CreatePaymentAsync(model);
             return Redirect(payUrl);
         }
 
-        [HttpGet]
+        [HttpGet("get")]
         public IActionResult PaymentCallBack()
         {
             var response = _momoService.PaymentExecuteAsync(HttpContext.Request.Query);
