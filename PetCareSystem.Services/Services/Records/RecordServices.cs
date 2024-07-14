@@ -42,7 +42,7 @@ namespace PetCareSystem.Services.Services.Records
                 PetWeigth = createRecordReq.Weight,
                 SaveBarn = createRecordReq.SaveBarn,
                 DetailPrediction = createRecordReq.DetailPrediction,
-                Conclude = createRecordReq.Conclude 
+                Conclude = createRecordReq.Conclude,
             };
             bool result = await _recordRepository.AddAsync(record);
             if(result){
