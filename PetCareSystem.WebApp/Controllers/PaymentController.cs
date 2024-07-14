@@ -17,6 +17,7 @@ namespace PetCareSystem.WebApp.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
+    [Authorize]
     public class PaymentController : ControllerBase
     {
         private readonly IMomoPaymentService _momoService;
@@ -30,6 +31,7 @@ namespace PetCareSystem.WebApp.Controllers
         public async Task<IActionResult> CreatePaymentUrl(OrderInfoModel model)
         {
             var payUrl = await _momoService.CreatePaymentAsync(model);
+
             return Redirect(payUrl);
         }
 

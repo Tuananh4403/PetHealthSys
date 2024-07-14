@@ -101,6 +101,7 @@ builder.Services.AddScoped<ICustomerRepository, CustomerRepository>();
 builder.Services.AddScoped<IServicesRepository, ServicesRepository>();
 builder.Services.AddScoped<IPetRepository, PetRepository>();
 builder.Services.AddScoped<IStaffRepository, StaffRepository>();
+builder.Services.Configure<MomoConfig>(builder.Configuration.GetSection("MomoConfig"));
 
 builder.Services.AddScoped<IAuthService, AuthService>();
 builder.Services.AddScoped<IDoctorServices, DoctorServices>();
@@ -109,7 +110,7 @@ builder.Services.AddScoped<IServiceServices, ServiceServices>();
 builder.Services.AddScoped<IPetService, PetService>();
 builder.Services.AddScoped<IRecordServices, RecordServices>();
 builder.Services.AddScoped<IBarnService, BarnService>();
-builder.Services.AddScoped<IMomoPaymentService, MomoPaymentService>(); // Add MomoPaymentService
+builder.Services.AddScoped<IMomoPaymentService, MomoPaymentService>();
 
 // Configure Authentication and Authorization
 builder.Services.AddAuthentication(options =>

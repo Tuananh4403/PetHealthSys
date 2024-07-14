@@ -10,7 +10,7 @@ namespace PetCareSystem.Services.Services.Momo
 {
     public interface IMomoPaymentService
     {
-        Task<string> CreatePaymentAsync(OrderInfoModel model);
         MomoExecuteResponseModel PaymentExecuteAsync(IQueryCollection collection);
+        Task<string> CreatePaymentAsync(OrderInfoModel model);
     }
 }

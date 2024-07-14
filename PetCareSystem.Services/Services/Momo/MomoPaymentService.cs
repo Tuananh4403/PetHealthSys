@@ -8,6 +8,7 @@ using PetCareSystem.Services.Models.Momo;
 using PetCareSystem.Services.Services.Momo;
 using RestSharp;
 using Microsoft.AspNetCore.Http;
+using QRCoder;
 public class MomoPaymentService : IMomoPaymentService
 {
     private readonly IOptions<MomoConfig> _options;
@@ -32,7 +33,7 @@ public class MomoPaymentService : IMomoPaymentService
     public async Task<string> CreatePaymentAsync(OrderInfoModel model)
     {
         model.OrderId = DateTime.UtcNow.Ticks.ToString();
-        model.OrderInfo = "Khách hàng: " + model.FullName + ". Nội dung: " + model.OrderInfo;
+        model.OrderInfo = "Customer: " + model.FullName + ". Content: " + model.OrderInfo;
 
         var rawData = $"partnerCode={_options.Value.PartnerCode}&accessKey={_options.Value.AccessKey}&requestId={model.OrderId}&amount={model.Amount}&orderId={model.OrderId}&orderInfo={model.OrderInfo}&returnUrl={_options.Value.ReturnUrl}&notifyUrl={_options.Value.NotifyUrl}&extraData=";
         var signature = ComputeHmacSha256(rawData, _options.Value.SecretKey);
@@ -56,7 +57,9 @@ public class MomoPaymentService : IMomoPaymentService
             amount = model.Amount.ToString(),
             orderInfo = model.OrderInfo,
             requestId = model.OrderId,
+            ipnUrl = "",
             extraData = "",
+            lang = "",
             signature = signature
         };
 
