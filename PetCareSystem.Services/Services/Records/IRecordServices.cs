@@ -12,7 +12,7 @@ namespace PetCareSystem.Services.Services.Records
     public interface IRecordServices
     {
         Task<ApiResponse<string>> CreateRecordAsync(CreateRecordingReq createRecordReq, string token);
-        Task<ApiResponse<Record?>> GetRecordHis(int petId);
+        Task<ApiResponse<Object>> GetRecordHis(int petId);
         Task<ApiResponse<string>> CreateRecordByBookingAsync(int bookingId, string token);
         Task<PaginatedApiResponse<Record>> GetListRecord(string? petName, string? nameOfCustomer, int pageNumber = 1, int pageSize = 10);
     }

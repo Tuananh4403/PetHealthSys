@@ -19,7 +19,7 @@ namespace PetCareSystem.Data.Repositories.Pets
             return await dbContext.Pets.AnyAsync(p => p.Id == petId);
         }
 
-        public async Task<(IEnumerable<Pet> pets, int totalCount)> GetListPet(string? petName, string? nameOfCustomer,  int pageNumber = 1, int pageSize = 10)
+        public async Task<(IEnumerable<Pet> pets, int totalCount)> GetListPet(string? petName, string? nameOfCustomer, bool? saveBarn, int pageNumber = 1, int pageSize = 10)
         {
             var query = dbContext.Pets.AsQueryable();
             query = query.Include(p =>p.Customer)
@@ -32,6 +32,10 @@ namespace PetCareSystem.Data.Repositories.Pets
             {
                 query = query.Where(p => p.Customer.User.FirstName.Contains(nameOfCustomer) || p.Customer.User.LastName.Contains(nameOfCustomer));
             }
+            if(saveBarn != null){
+                query = query.Where(p => p.Records.Any(r => r.SaveBarn && r.Status != Enums.RecordStautus.Completed));
+            }
+
             var pets = await query
                 .Skip((pageNumber - 1) * pageSize)
                 .Take(pageSize)
@@ -92,13 +96,17 @@ namespace PetCareSystem.Data.Repositories.Pets
             return pet;
         }
 
-        public async Task<(IEnumerable<Pet> pets, int totalCount)> GetListPetByUserId(int? cusId, int pageNumber = 1, int pageSize = 10)
+        public async Task<(IEnumerable<Pet> pets, int totalCount)> GetListPetByUserId(int? cusId, bool? saveBarn, int pageNumber = 1, int pageSize = 10)
         {
-            var result = await dbContext.Pets
-            .Include(p => p.Customer)
-                .ThenInclude(cus => cus.User)
-            .Where(p => p.CustomerId == cusId)
-            .Select(p => new Pet
+            var query = dbContext.Pets.AsQueryable()
+                                      .Include(p => p.Customer)
+                                            .ThenInclude(cus => cus.User)
+                                            .Where(p => p.CustomerId == cusId);
+            
+                if(saveBarn != null){
+                query = query.Where(p => p.Records.Any(r => r.SaveBarn && r.Status != Enums.RecordStautus.Completed));
+            }
+            var result = await query.Select(p => new Pet
             {
                 Id = p.Id,
                 PetName = p.PetName,
@@ -121,7 +129,7 @@ namespace PetCareSystem.Data.Repositories.Pets
             .Skip((pageNumber - 1) * pageSize)
             .Take(pageSize)
             .ToListAsync();
-            var total = result.Count();
+            var total = query.Count();
             return (result, total);
         }
 

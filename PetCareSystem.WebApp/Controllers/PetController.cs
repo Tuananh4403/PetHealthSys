@@ -72,7 +72,7 @@ namespace PetCareSystem.WebApp.Controllers
         }
 
         [HttpGet("get-list-pet-by-user")]
-        public async Task<IActionResult> GetListPetByUserId()
+        public async Task<IActionResult> GetListPetByUserId([FromQuery]bool? saveBarn)
         {
             if (!ModelState.IsValid)
             {
@@ -82,7 +82,7 @@ namespace PetCareSystem.WebApp.Controllers
             try
             {
                 var token = Request.Headers["Authorization"].ToString().Replace("Bearer ", "");
-                var result = await _petService.GetListPetByUserId(token);
+                var result = await _petService.GetListPetByUserId(token, saveBarn);
                 return Ok(result);
             }
             catch (Exception ex)
@@ -91,7 +91,7 @@ namespace PetCareSystem.WebApp.Controllers
             }
         }
         [HttpGet("get-list-pet")]
-        public async Task<IActionResult> GetListPet(string? petName, string? nameOfCustomer)
+        public async Task<IActionResult> GetListPet(string? petName, string? nameOfCustomer, bool? saveBarn)
         {
             if (!ModelState.IsValid)
             {
@@ -100,7 +100,7 @@ namespace PetCareSystem.WebApp.Controllers
 
             try
             {
-                var pets = await _petService.GetListPet(petName, nameOfCustomer);
+                var pets = await _petService.GetListPet(petName, nameOfCustomer, saveBarn);
                 return Ok(pets);
             }
             catch (Exception ex)
@@ -145,6 +145,23 @@ namespace PetCareSystem.WebApp.Controllers
                 return Ok(new ApiResponse<string>("Pet not found", true));
             }
             catch (Exception ex)
+            {
+                return StatusCode(500, "Internal server error");
+            }
+        }
+        [HttpGet("get-record-history")]
+        public async Task<IActionResult> GetRecordHis([FromQuery]int petId)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+            var token = Request.Headers["Authorization"].ToString().Replace("Bearer ", "");
+            try
+            {
+                var response = await _petService.GetPetRecordHis(petId);
+                return Ok(response);
+            }catch(Exception ex)
             {
                 return StatusCode(500, "Internal server error");
             }

@@ -10,6 +10,6 @@ namespace PetCareSystem.Services.Services.Doctors
 {
     public interface IDoctorServices
     {
-        Task<PaginatedApiResponse<Doctor>> GetListDoctorAsync(string? searchString, int pageNumber = 1, int pageSize = 10);
+        Task<PaginatedApiResponse<Object>> GetListDoctorAsync(string? searchString, int pageNumber = 1, int pageSize = 10);
     }
 }

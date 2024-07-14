@@ -18,14 +18,25 @@ namespace PetCareSystem.Services.Services.Doctors
         {
             _doctorRepository = doctorRepository;
         }
-        public async Task<PaginatedApiResponse<Doctor>> GetListDoctorAsync(string? searchString, int pageNumber = 1, int pageSize = 10)
+        public async Task<PaginatedApiResponse<Object>> GetListDoctorAsync(string? searchString, int pageNumber = 1, int pageSize = 10)
         {
                var (doctors, totalCount) = await _doctorRepository.GetListDoctor(searchString);
             if (!doctors.Any())
             {
-                return new PaginatedApiResponse<Doctor>("No Doctor found", true);
+                return new PaginatedApiResponse<Object>("No Doctor found", true);
             }
-            return new PaginatedApiResponse<Doctor>(doctors, totalCount, pageNumber, pageSize);
+            var listDoctor = doctors.Select(async doctor => new
+            {
+                doctor.Id,
+                name = doctor.User.FirstName + " " + doctor.User.LastName,
+                doctor.Specialty,
+                email = doctor.User.Email,
+                phone = doctor.User.PhoneNumber,
+                doctor.Status
+            }).ToList();
+             var result = await Task.WhenAll(listDoctor);
+
+            return new PaginatedApiResponse<Object>(result, totalCount, pageNumber, pageSize);
         }
     }
 }

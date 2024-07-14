@@ -142,15 +142,15 @@ namespace PetCareSystem.Services.Services.Records
             return new PaginatedApiResponse<Record>(records, totalCount,pageNumber, pageSize);
         }
 
-        public async Task<ApiResponse<Record?>> GetRecordHis(int petId)
+        public async Task<ApiResponse<Object>> GetRecordHis(int petId)
         {
             try
             {
                 var record = await _recordRepository.GetRecordDetail(petId);
-                return new ApiResponse<Record?>(record, "Get data success");
+                return new ApiResponse<Object>(record, "Get data success");
             }catch
             {
-                return new ApiResponse<Record?>(null, message: "Get data fails!");
+                return new ApiResponse<Object>(null, message: "Get data fails!");
 
             }
         }

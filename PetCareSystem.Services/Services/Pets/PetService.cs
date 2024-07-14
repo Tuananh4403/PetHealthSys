@@ -111,9 +111,9 @@ namespace PetCareSystem.Services.Services.Pets
             return petRequest;
         }
 
-        public async Task<PaginatedApiResponse<Object>> GetListPet(string? petName, string? nameOfCustomert, int pageNumber = 1, int pageSize = 10)
+        public async Task<PaginatedApiResponse<Object>> GetListPet(string? petName, string? nameOfCustomert, bool? saveBarn, int pageNumber = 1, int pageSize = 10)
         {
-            var (pets, totalCount) = await _petRepository.GetListPet(petName, nameOfCustomert);
+            var (pets, totalCount) = await _petRepository.GetListPet(petName, nameOfCustomert, saveBarn);
              if (!pets.Any())
             {
                 return new PaginatedApiResponse<Object>("No pet found", true);
@@ -168,6 +168,7 @@ namespace PetCareSystem.Services.Services.Pets
             try
             {
                 var record = await _petRepository.GetMedicalHis(petId);
+
                 return new ApiResponse<Pet?>(record, "Get data success");
             }
             catch
@@ -177,13 +178,13 @@ namespace PetCareSystem.Services.Services.Pets
             }
         }
 
-        public async Task<PaginatedApiResponse<Pet>> GetListPetByUserId(string token, int pageNumber = 1, int pageSize = 10)
+        public async Task<PaginatedApiResponse<Pet>> GetListPetByUserId(string token, bool? saveBarn, int pageNumber = 1, int pageSize = 10)
         {
             int? userId = CommonHelpers.GetUserIdByToken(token);
             if(userId != null)
             {
             var cus = await _customerRepository.GetCusByUserId((int)userId);
-            var (listPet, totalCount) = await _petRepository.GetListPetByUserId(cus.Id);
+            var (listPet, totalCount) = await _petRepository.GetListPetByUserId(cus.Id, saveBarn);
             return new PaginatedApiResponse<Pet>(listPet.ToList(), totalCount, pageNumber, pageSize);
             }
             return new PaginatedApiResponse<Pet>("No servicpetes found", true);

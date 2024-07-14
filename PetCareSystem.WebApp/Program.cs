@@ -95,8 +95,10 @@ builder.Services.AddSwaggerGen(swagger =>
 );
 
 // Register the DbContext, Repositories, and Services
+var connectionString = configuration.GetConnectionString("PetHealthCareDb");
+Console.WriteLine($"Connection string: {connectionString}");
 builder.Services.AddDbContext<PetHealthDBContext>(options =>
-    options.UseSqlServer(builder.Configuration.GetConnectionString("PetHealthCareDb")));
+    options.UseSqlServer(connectionString));
 
 builder.Services.AddControllersWithViews();
 builder.Services.AddSingleton<ITempDataDictionaryFactory, TempDataDictionaryFactory>();
