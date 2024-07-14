@@ -58,7 +58,6 @@ namespace PetCareSystem.Services.Services.Bookings
             (result, message) = await _bookingRepository.CheckReviewBooking(booking);
             if (result)
             {
-                decimal total = 0;
                 if (await _bookingRepository.AddAsync(booking))
                 {
                     foreach (var serviceId in bookingReq.ServiceIds)
@@ -76,13 +75,7 @@ namespace PetCareSystem.Services.Services.Bookings
                             result = false;
                             message = "Create booking detail fails!";
                         }
-                        if (total == 0)
-                        {
-                            total = await _bookingRepository.CalculateTotalBookingAsync(bookingService.BookingId);
-                        }
                     }
-                    booking.Total = total;
-                    await _bookingRepository.UpdateAsync(booking);
                 }
                 else{ 
                     result = false;

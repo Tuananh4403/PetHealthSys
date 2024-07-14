@@ -15,6 +15,5 @@ namespace PetCareSystem.Data.Repositories.Bookings
         public Task<(bool, string)> CheckReviewBooking(Booking booking);
         public Task<Booking?> GetBookingDetail(int bookingId);
 
-        public Task<decimal> CalculateTotalBookingAsync(int bookingId);
     }
 }

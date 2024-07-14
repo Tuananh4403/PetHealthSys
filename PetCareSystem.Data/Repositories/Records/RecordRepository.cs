@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.ChangeTracking.Internal;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.Extensions.Logging;
 using Microsoft.IdentityModel.Tokens;
@@ -47,5 +48,19 @@ namespace PetCareSystem.Data.Repositories.Records
             var recordsDetail = await query.SingleOrDefaultAsync();
             return recordsDetail;
         }
+
+        public async Task<decimal> CalculateTotalBookingAsync(int petId)
+        {
+            decimal total = 0;
+            var query = dbContext.Records.AsQueryable();
+
+            total = await query.Include(x => x.Pet)
+                               .Include(x => x.Barn)
+                               .Where(r => r.PetId == petId && r.BarnId == r.Barn.Id && r.Barn.Status == true)
+                               .SumAsync(r => r.Total); 
+            return total;
+        }
     }
 }
+
+
