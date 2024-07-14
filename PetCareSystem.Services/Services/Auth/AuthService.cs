@@ -110,7 +110,7 @@ namespace PetCareSystem.Services.Services.Auth
                 }
                 else
                 {
-                    Role role = await _roleRepository.GetRoleByIdAsync(model.RoleId ?? 4);
+                    Role role = await _roleRepository.GetRoleByIdAsync(model.RoleId ?? 2);
                     if (role.Title == "DT")
                     {
                         Doctor doc = new Doctor { UserId = user.Id };
