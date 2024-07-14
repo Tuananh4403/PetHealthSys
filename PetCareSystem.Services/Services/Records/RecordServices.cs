@@ -41,17 +41,20 @@ namespace PetCareSystem.Services.Services.Records
                 PetHeight = createRecordReq.Height,
                 PetWeigth = createRecordReq.Weight,
                 SaveBarn = createRecordReq.SaveBarn,
+                Status = RecordStautus.Continue,
                 DetailPrediction = createRecordReq.DetailPrediction,
                 Conclude = createRecordReq.Conclude 
             };
             bool result = await _recordRepository.AddAsync(record);
             if(result){
                 if(createRecordReq.SaveBarn){
-                    var barn = _barnRepository.GetByIdAsync((int)createRecordReq.BarnId);
-                    if(barn == null){
+                    var barn = await _barnRepository.GetByIdAsync((int)createRecordReq.BarnId);
+                    if(barn == null || (bool)barn.Status){
                         return new ApiResponse<string>("Barn does not exist", true);
                     }else{
                         record.BarnId = record.BarnId = barn.Id;
+                        barn.Status = false;
+                        await _barnRepository.UpdateAsync(barn);
                         if(!await _recordRepository.UpdateAsync(record)){
                             return new ApiResponse<string>("Can not create Barn", true);
                         };
@@ -150,6 +153,22 @@ namespace PetCareSystem.Services.Services.Records
                 return new ApiResponse<Record?>(null, message: "Get data fails!");
 
             }
+        }
+        public async Task<ApiResponse<string>> FinishRecord(int recordId){
+            Record record = await _recordRepository.GetByIdAsync(recordId);
+            decimal total = 0;
+            if(record.Status == RecordStautus.Completed)
+            {
+                return new ApiResponse<string>("Record was completed!",true);
+            }
+            foreach(var detail  in record.RecordDetails){
+                total += (decimal)detail.Service.Price * (decimal)detail.Quantity;
+            }
+            record.Status = RecordStautus.Completed;
+            if(await _recordRepository.UpdateAsync(record)){
+                return new ApiResponse<string>("Record has finished", false);
+            }
+            return new ApiResponse<string>("Finish record fail!",true);
         }
     }
 }

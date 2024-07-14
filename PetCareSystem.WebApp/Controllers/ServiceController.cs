@@ -4,6 +4,8 @@ using Microsoft.AspNetCore.Mvc;
 using PetCareSystem.Data.Entites;
 using PetCareSystem.Services.Models.Services;
 using PetCareSystem.Services.Services.Serivces;
+using PetCareSystem.Services.Models.Booking;
+using PetCareSystem.Services.Enums;
 
 namespace PetCareSystem.WebApp.Controllers
 {
@@ -75,6 +77,12 @@ namespace PetCareSystem.WebApp.Controllers
                 // Log the exception (ex) here if needed
                 return StatusCode(500, "Internal server error");
             }
+        }
+         [HttpGet("get-category")]
+        public async Task<IActionResult> GetCategory()
+        {   
+            var respone = await _serviceServices.GetAllCategory();
+            return Ok(respone);
         }
     }
 }

@@ -19,6 +19,7 @@ namespace PetCareSystem.Data.Configurations
             // Properties
             builder.Property(d => d.UserId)
                    .IsRequired();
+            builder.Property(d => d.Status);
 
             // Relationships
             builder.HasMany(d => d.Records)

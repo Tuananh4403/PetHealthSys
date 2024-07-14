@@ -1,6 +1,7 @@
 ﻿using PetCareSystem.Data.Entites;
 using PetCareSystem.Services.Enums;
 using PetCareSystem.Services.Models;
+using PetCareSystem.Services.Models.Booking;
 using PetCareSystem.Services.Models.Services;
 using System;
 using System.Collections.Generic;
@@ -17,5 +18,6 @@ namespace PetCareSystem.Services.Services.Serivces
         object GetServiceByCategory(int id);
         Task<string> GetServiceCategoryNameAsync(int typeId);
         Task<ApiResponse<string>> UpdateServcieAsync(int id, UpdateServiceReq model);
+        Task<ApiResponse<List<ServiceCategoryDto>>> GetAllCategory();
     }
 }

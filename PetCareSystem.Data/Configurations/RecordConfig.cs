@@ -33,6 +33,9 @@ namespace PetCareSystem.Data.Configurations
 
                      builder.Property(r => r.PetWeigth)
                             .IsRequired(false);
+                            
+                     builder.Property(r => r.Status)
+                            .HasConversion<string>();
 
                      builder.Property(r => r.Conclude)
                             .HasMaxLength(1000);

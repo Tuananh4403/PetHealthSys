@@ -13,5 +13,7 @@ namespace PetCareSystem.Services.Services.Serivces
     public interface IBarnService 
     {
         Task<PaginatedApiResponse<Object>> GetListBarn( int pageNumber = 1, int pageSize = 10);
+        Task<ApiResponse<string>> Create(string note , string? date);
+
     }
 }

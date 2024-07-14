@@ -108,17 +108,5 @@ namespace PetCareSystem.WebApp.Controllers
                 return StatusCode(500, "Internal server error");
             }
         }
-        [HttpGet("get-list-barn")]
-        public async Task<IActionResult> GetListBarn(){
-            var token = Request.Headers["Authorization"].ToString().Replace("Bearer ", "");
-            try
-            {
-                var response = await _barnService.GetListBarn();
-                return Ok(response);
-            }catch(Exception ex)
-            {
-                return StatusCode(500, "Internal server error");
-            }
-        }
     }
 }

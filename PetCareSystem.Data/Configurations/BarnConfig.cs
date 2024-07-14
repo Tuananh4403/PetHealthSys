@@ -27,7 +27,7 @@ namespace PetCareSystem.Data.Configurations
             builder.Property(b => b.Status)
                    .IsRequired(false);
 
-            builder.Property(b => b.Result)
+            builder.Property(b => b.Note)
                    .IsRequired(false);
 
 

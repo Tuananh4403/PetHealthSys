@@ -4,6 +4,7 @@ using System.Linq;
 using System.Numerics;
 using System.Text;
 using System.Threading.Tasks;
+using PetCareSystem.Data.Enums;
 
 namespace PetCareSystem.Data.Entites
 {
@@ -14,6 +15,7 @@ namespace PetCareSystem.Data.Entites
         public Doctor? Doctor { get; set; }
         public float? PetWeigth { get; set; }
         public float? PetHeight { get; set; }
+        public RecordStautus? Status{ get; set; }
         public string? DetailPrediction { get; set; }
         public string? Conclude { get; set; }
         public int? PetId { get; set; }

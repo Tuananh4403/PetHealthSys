@@ -18,5 +18,6 @@ namespace PetCareSystem.Services.Services.Bookings
         Task<Booking> GetBookingById(int BookingId);
         Task<bool> DeleteBooking(int BookingId);
         Task<ApiResponse<string>> ConfirmBooking(int bookingId, string token);
+        Task<ApiResponse<string>> Cancel(int id, string token);
     }
 }

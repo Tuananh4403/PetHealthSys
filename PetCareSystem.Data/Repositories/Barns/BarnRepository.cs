@@ -15,6 +15,6 @@ using System.Threading.Tasks;
 namespace PetCareSystem.Data.Repositories.Bookings
 {
     public class BarnRepository(PetHealthDBContext dbContext, ILogger<BarnRepository> logger) : BaseRepository<Barn>(dbContext, logger), IBarnRepository
-    {
+    { 
     }
 }

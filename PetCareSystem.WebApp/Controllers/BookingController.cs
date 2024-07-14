@@ -161,6 +161,26 @@ namespace PetCareSystem.WebApp.Controllers
                 return StatusCode(500, "Internal server error");
             }
         }
+        [HttpPost("Cancel/{id}")]
+        public async Task<IActionResult> Cancel(int id)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+            try
+            {
+                var token = Request.Headers["Authorization"].ToString().Replace("Bearer ", "");
+                
+                var response = await _bookingServices.Cancel(id, token);
+                return Ok(response);
+            }
+            catch (Exception ex)
+            {
+                // Log the exception (ex) here if needed
+                return StatusCode(500, "Internal server error");
+            }
+        }
         [HttpGet("get-shift")]
         public IActionResult GetShift()
         {

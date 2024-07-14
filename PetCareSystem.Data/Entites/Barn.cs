@@ -12,6 +12,6 @@ namespace PetCareSystem.Data.Entites
         public DateTime? DateEnd { get; set;}
         public bool? Status { get; set; }
         public ICollection<Record>? Records{ get; set;}
-        public string? Result { get; set; }
+        public string? Note { get; set; }
     }
 }

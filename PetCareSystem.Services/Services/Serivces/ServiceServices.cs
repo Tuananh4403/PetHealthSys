@@ -10,6 +10,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using PetCareSystem.Data.Enums;
+using PetCareSystem.Services.Models.Booking;
 
 namespace PetCareSystem.Services.Services.Serivces
 {
@@ -134,16 +135,39 @@ namespace PetCareSystem.Services.Services.Serivces
             var servcie = await _servicesRepository.GetByIdAsync(id);
             string message = "";
             bool check = true;
-            if(servcie == null){
+            if (servcie == null)
+            {
                 message = "Service not success!";
-            }else{
-                servcie.Price = model.Price != null ? model.Price : servcie.Price ;
-                servcie.TypeId = model.TypeOfService != null ? model.TypeOfService : servcie.TypeId ;
+            }
+            else
+            {
+                servcie.Price = model.Price != null ? model.Price : servcie.Price;
+                servcie.TypeId = model.TypeOfService != null ? model.TypeOfService : servcie.TypeId;
                 servcie.Name = model.Name != null != null ? model.Name : servcie.Name;
-                servcie.Note = model.Note != null ?  model.Note : servcie.Note;
+                servcie.Note = model.Note != null ? model.Note : servcie.Note;
                 servcie.Unit = model.UnitId != null ? GetServiceUnitById((int)model.UnitId) : ServiceUnit.None;
             }
             return new ApiResponse<string>("Update service success!", false);
+        }
+        public async Task<ApiResponse<List<ServiceCategoryDto>>> GetAllCategory()
+        {
+            var serviceCategories = Enum.GetValues(typeof(ServiceCategory));
+
+            // Print each value
+            var serviceCategoryDtos = new List<ServiceCategoryDto>();
+
+            foreach (ServiceCategory category in serviceCategories)
+            {
+                var dto = new ServiceCategoryDto
+                {
+                    Id = (int)category,
+                    Type = category.ToString()
+                };
+
+                serviceCategoryDtos.Add(dto);
+            }
+
+            return new ApiResponse<List<ServiceCategoryDto>>(serviceCategoryDtos);
         }
     }
 }

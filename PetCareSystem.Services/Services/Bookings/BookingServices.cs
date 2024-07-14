@@ -97,7 +97,6 @@ namespace PetCareSystem.Services.Services.Bookings
                 return false;
             }
             bookingToUpdate.BookingTime = DateTime.ParseExact(updateReq.BookingDate, "dd/MM/yyyy", CultureInfo.InvariantCulture);
-            //bookingToUpdate.
 
             return true;
         }
@@ -187,6 +186,21 @@ namespace PetCareSystem.Services.Services.Bookings
             {
                 throw new ArgumentOutOfRangeException(nameof(id), "Invalid booking shift ID.");
             }
+        }
+
+        public async Task<ApiResponse<string>> Cancel(int id, string token)
+        {
+            var booking = await _bookingRepository.GetBookingDetail(id);
+            var staff = await _staffRepository.GetStaffByUserId((int)CommonHelpers.GetUserIdByToken(token));
+            if(booking.Status != BookingStatus.Review || booking.Status != BookingStatus.Cancelled){
+                return new ApiResponse<string>("Booking not in Review State",true);
+            }
+            booking.Status = BookingStatus.Cancelled;
+            booking.StaffId = staff.Id;
+            if(await _bookingRepository.UpdateAsync(booking)){
+                return new ApiResponse<string>("Cancel booking success!", false);
+            }
+            return new ApiResponse<string>("Cancel booking fails", true);   
         }
     }
 }
