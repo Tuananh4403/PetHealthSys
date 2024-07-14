@@ -132,13 +132,13 @@ namespace PetCareSystem.Services.Services.Pets
             return new PaginatedApiResponse<Object>(petsOpt, totalCount, pageNumber, pageSize);
         }
 
-        public async Task<bool> UpdatePetAsync(int id, PetRequest updatePet)
+        public async Task<ApiResponse<string>> UpdatePetAsync(int id, PetRequest updatePet)
         {
             bool isUpdated = false;
             var pet = await _petRepository.GetByIdAsync(id);
             if (pet == null)
             {
-                return false;
+                return new ApiResponse<string>("Can not find pet", true);
             }
             else
             {
@@ -150,7 +150,7 @@ namespace PetCareSystem.Services.Services.Pets
                 isUpdated = await _petRepository.UpdateAsync(pet);
             }
 
-            return isUpdated;
+            return new ApiResponse<string>("Update pet success", !isUpdated);;
         }
 
         public async Task<bool> DeletePetAsync(int id)

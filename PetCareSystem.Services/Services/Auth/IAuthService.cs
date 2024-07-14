@@ -9,6 +9,7 @@ namespace PetCareSystem.Services.Services.Auth
     public interface IAuthService
     {
         Task<User?> GetById(int userId);
+        Task<ApiResponse<User>> GetProfile(int userId);
         Task<ApiResponse<AuthenticateResponse>> LoginAsync(string username, string password);
         Task<ApiResponse<string>> RegisterAsync(RegisterRequest model);
         Task CreateRole(CreateRoleReq model);

@@ -120,11 +120,8 @@ namespace PetCareSystem.WebApp.Controllers
             try
             {
                 var result = await _petService.UpdatePetAsync(id, model);
-                if (result)
-                {
-                    return Ok("Pet updated successfully");
-                }
-                return NotFound("Pet not found");
+
+                    return Ok(result);
             }
             catch (Exception ex)
             {

@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Storage.ValueConversion.Internal;
 using Microsoft.Extensions.Logging;
 using Microsoft.IdentityModel.Tokens;
 using PetCareSystem.Data.EF;
@@ -18,9 +19,6 @@ namespace PetCareSystem.Data.Repositories.Records
         {
              var query = dbContext.Records.AsQueryable();
             query = query.Include(x => x.Pet)
-                            .ThenInclude(p => p.Customer)
-                            .ThenInclude(c => c.User)
-                         .Include(x => x.Doctor)
                          .Include(x =>x.Barn);
             if(!petName.IsNullOrEmpty()){
                 query = query.Where(rc => rc.Pet.PetName.Contains(petName));
@@ -28,7 +26,23 @@ namespace PetCareSystem.Data.Repositories.Records
             if(!nameOfCustomer.IsNullOrEmpty()){
                 query = query.Where(rc => rc.Pet.Customer.User.FirstName.Contains(nameOfCustomer) || rc.Pet.Customer.User.LastName.Contains(nameOfCustomer));
             }
-            var result = await query.Skip((pageNumber - 1) * pageSize)
+            var result = await query.Select(r => new Record
+            {
+            Id = r.Id,
+            SaveBarn = r.SaveBarn,
+            DoctorId = r.DoctorId,
+            Doctor = r.Doctor,
+            PetWeigth = r.PetWeigth,
+            PetHeight = r.PetHeight,
+            Status = r.Status,
+            DetailPrediction = r.DetailPrediction,
+            Conclude = r.Conclude,
+            PetId = r.PetId,
+            Pet = r.Pet,
+            BarnId = r.BarnId,
+            Total = r.Total,
+
+        })
                 .Take(pageSize)
                 .ToListAsync();
             var count = await query.CountAsync();
@@ -46,6 +60,45 @@ namespace PetCareSystem.Data.Repositories.Records
                          .Where(x => x.PetId == petId);
             var recordsDetail = await query.SingleOrDefaultAsync();
             return recordsDetail;
+        }
+        public async Task<Record> GetById(int id){
+             var query = dbContext.Records.AsQueryable()
+                                          .Include(x => x.Pet)
+                                          .Include(x => x.RecordDetails)
+                                            .ThenInclude(rc => rc.Service)
+                                        .Where(x => x.Id == id);
+
+                                        query = query.Select(r => new Record
+            {
+            Id = r.Id,
+            SaveBarn = r.SaveBarn,
+            DoctorId = r.DoctorId,
+            Doctor = r.Doctor,
+            PetWeigth = r.PetWeigth,
+            PetHeight = r.PetHeight,
+            Status = r.Status,
+            DetailPrediction = r.DetailPrediction,
+            Conclude = r.Conclude,
+            PetId = r.PetId,
+            Pet = r.Pet,
+            BarnId = r.BarnId,
+            Total = r.Total,
+            RecordDetails = r.RecordDetails != null ? r.RecordDetails.Select(rd => new RecordDetail
+                {
+                    Id = rd.Id,
+                    Service = new Service
+                    {
+                            Name = rd.Service.Name,
+                            TypeId = rd.Service.TypeId,
+                            Unit = rd.Service.Unit,
+                            Price = rd.Service.Price,
+                    },
+                    Quantity = rd.Quantity
+                }).ToList() : null
+
+        });
+            var result = await query.FirstOrDefaultAsync();
+            return result;
         }
     }
 }

@@ -21,7 +21,7 @@ namespace PetCareSystem.WebApp.Controllers
         }
         [HttpPost]
         [Route("create")]
-        public async Task<IActionResult> GetListStaff([FromBody]string note,string? date){
+        public async Task<IActionResult> GetListStaff([FromBody] string? note, string? date){
             try 
             { 
             var result = await _barnService.Create(note, date);

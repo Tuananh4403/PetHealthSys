@@ -1,4 +1,5 @@
-﻿using PetCareSystem.Data.Entites;
+﻿using Newtonsoft.Json;
+using PetCareSystem.Data.Entites;
 using PetCareSystem.Data.Enums;
 using PetCareSystem.Data.Repositories.Barns;
 using PetCareSystem.Data.Repositories.Bookings;
@@ -29,7 +30,7 @@ namespace PetCareSystem.Services.Services.Records
         {
             int? userId = CommonHelpers.GetUserIdByToken(token);
             var doctor = _doctorRepository.GetDoctorByUserId(userId);
-            if(doctor == null)
+            if (doctor == null)
             {
                 return new ApiResponse<string>("Doctor not exist", true);
             }
@@ -43,47 +44,54 @@ namespace PetCareSystem.Services.Services.Records
                 SaveBarn = createRecordReq.SaveBarn,
                 Status = RecordStautus.Continue,
                 DetailPrediction = createRecordReq.DetailPrediction,
-                Conclude = createRecordReq.Conclude 
+                Conclude = createRecordReq.Conclude
             };
             bool result = await _recordRepository.AddAsync(record);
-            if(result){
-                if(createRecordReq.SaveBarn){
+            if (result)
+            {
+                if (createRecordReq.SaveBarn)
+                {
                     var barn = await _barnRepository.GetByIdAsync((int)createRecordReq.BarnId);
-                    if(barn == null || (bool)barn.Status){
+                    if (barn == null || (bool)barn.Status)
+                    {
                         return new ApiResponse<string>("Barn does not exist", true);
-                    }else{
+                    }
+                    else
+                    {
                         record.BarnId = record.BarnId = barn.Id;
                         barn.Status = false;
                         await _barnRepository.UpdateAsync(barn);
-                        if(!await _recordRepository.UpdateAsync(record)){
+                        if (!await _recordRepository.UpdateAsync(record))
+                        {
                             return new ApiResponse<string>("Can not create Barn", true);
                         };
                     }
                 }
-                if(createRecordReq.ServiceQuantities != null){
-                                if(createRecordReq.ServiceQuantities.Count > 0)
-                                {
-                                    foreach(var detail in createRecordReq.ServiceQuantities)
-                                    {
-                                        if(detail.Value == 0)
-                                        {
-                                            return new ApiResponse<string>("Quantity cannot be zero!", true);
-                                        }
-                                        var servcie = await _servicesRepository.GetByIdAsync((int)detail.Key);
-                                        var recordDetail = new RecordDetail
-                                        {
-                                            RecordId = record.Id,
-                                            ServiceId = detail.Key,
-                                            Quantity = detail.Value,
-                                        };
-                                        total += (decimal)servcie.Price * (decimal)detail.Value;
-                                        await _recordDetailRepository.AddAsync(recordDetail);
-                                    }
-                                }
-                                record.Total = total;
-                                await _recordRepository.UpdateAsync(record);
-                                return new ApiResponse<string>(message:"Create Success!", false);
+                if (createRecordReq.ServiceQuantities != null)
+                {
+                    if (createRecordReq.ServiceQuantities.Count > 0)
+                    {
+                        foreach (var detail in createRecordReq.ServiceQuantities)
+                        {
+                            if (detail.Value == 0)
+                            {
+                                return new ApiResponse<string>("Quantity cannot be zero!", true);
                             }
+                            var servcie = await _servicesRepository.GetByIdAsync((int)detail.Key);
+                            var recordDetail = new RecordDetail
+                            {
+                                RecordId = record.Id,
+                                ServiceId = detail.Key,
+                                Quantity = detail.Value,
+                            };
+                            total += (decimal)servcie.Price * (decimal)detail.Value;
+                            await _recordDetailRepository.AddAsync(recordDetail);
+                        }
+                    }
+                    record.Total = total;
+                    await _recordRepository.UpdateAsync(record);
+                    return new ApiResponse<string>(message: "Create Success!", false);
+                }
             }
             return new ApiResponse<string>("Create Record fail!", true);
         }
@@ -94,24 +102,32 @@ namespace PetCareSystem.Services.Services.Records
             var doctor = await _doctorRepository.GetDoctorByUserId(CommonHelpers.GetUserIdByToken(token));
             string message = "Create record Fails";
             bool result = false;
-            if(booking.Status != BookingStatus.Confirmed){
+            if (booking.Status != BookingStatus.Confirmed)
+            {
                 message = "Booking not confirmed!";
-            }else{
-                if(doctor == null){
+            }
+            else
+            {
+                if (doctor == null)
+                {
                     message = "Doctor does not exist!";
-                }else{
-                    Record record = new Record{
-                    DoctorId = doctor.Id,
-                    PetId = booking.PetId,
-                    SaveBarn = false
+                }
+                else
+                {
+                    Record record = new Record
+                    {
+                        DoctorId = doctor.Id,
+                        PetId = booking.PetId,
+                        SaveBarn = false
                     };
                     result = await _recordRepository.AddAsync(record);
-                    if(result){
+                    if (result)
+                    {
                         var savedRecord = await _recordRepository.GetByIdAsync(record.Id);
                         savedRecord.RecordDetails = new List<RecordDetail>();
-                        if(booking.BookingServices.Count > 0)
+                        if (booking.BookingServices.Count > 0)
                         {
-                            foreach(var service in booking.BookingServices)
+                            foreach (var service in booking.BookingServices)
                             {
                                 // var serviceDetail = service.Service;
                                 var recordDetail = new RecordDetail
@@ -134,12 +150,12 @@ namespace PetCareSystem.Services.Services.Records
 
         public async Task<PaginatedApiResponse<Record>> GetListRecord(string? petName, string? nameOfCustomer, int pageNumber = 1, int pageSize = 10)
         {
-             var (records, totalCount) = await _recordRepository.GetListRecord(petName, nameOfCustomer, pageNumber, pageSize);
+            var (records, totalCount) = await _recordRepository.GetListRecord(petName, nameOfCustomer, pageNumber, pageSize);
             if (!records.Any())
             {
                 return new PaginatedApiResponse<Record>("No Record found", true);
             }
-            return new PaginatedApiResponse<Record>(records, totalCount,pageNumber, pageSize);
+            return new PaginatedApiResponse<Record>(records, totalCount, pageNumber, pageSize);
         }
 
         public async Task<ApiResponse<Object>> GetRecordHis(int petId)
@@ -148,27 +164,44 @@ namespace PetCareSystem.Services.Services.Records
             {
                 var record = await _recordRepository.GetRecordDetail(petId);
                 return new ApiResponse<Object>(record, "Get data success");
-            }catch
+            }
+            catch
             {
                 return new ApiResponse<Object>(null, message: "Get data fails!");
 
             }
         }
-        public async Task<ApiResponse<string>> FinishRecord(int recordId){
+        public async Task<ApiResponse<Record>> GetDetail(int id)
+        {
+            try
+            {
+                var record = await _recordRepository.GetById(id);
+                return new ApiResponse<Record>(record, "Get data success");
+            }
+            catch
+            {
+                return new ApiResponse<Record>(null, message: "Get data fails!");
+
+            }
+        }
+        public async Task<ApiResponse<string>> FinishRecord(int recordId)
+        {
             Record record = await _recordRepository.GetByIdAsync(recordId);
             decimal total = 0;
-            if(record.Status == RecordStautus.Completed)
+            if (record.Status == RecordStautus.Completed)
             {
-                return new ApiResponse<string>("Record was completed!",true);
+                return new ApiResponse<string>("Record was completed!", true);
             }
-            foreach(var detail  in record.RecordDetails){
+            foreach (var detail in record.RecordDetails)
+            {
                 total += (decimal)detail.Service.Price * (decimal)detail.Quantity;
             }
             record.Status = RecordStautus.Completed;
-            if(await _recordRepository.UpdateAsync(record)){
+            if (await _recordRepository.UpdateAsync(record))
+            {
                 return new ApiResponse<string>("Record has finished", false);
             }
-            return new ApiResponse<string>("Finish record fail!",true);
+            return new ApiResponse<string>("Finish record fail!", true);
         }
     }
 }

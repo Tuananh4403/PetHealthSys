@@ -157,7 +157,7 @@ namespace PetCareSystem.WebApp.Controllers
             }
             var token = Request.Headers["Authorization"].ToString().Replace("Bearer ", "");
             var userId =CommonHelpers.GetUserIdByToken(token);
-            var response = await _authService.GetById((int)userId);
+            var response = await _authService.GetProfile((int)userId);
             return Ok(response);
         }
     }

@@ -181,7 +181,11 @@ namespace PetCareSystem.Services.Services.Auth
             var user = await _userRepository.GetByIdAsync((int)userId);
             return user;
         }
-
+        public async Task<ApiResponse<User>> GetProfile(int userId)
+                {
+                    var user = await _userRepository.GetByIdAsync((int)userId);
+                    return new ApiResponse<User>(user);
+                }
         public async Task CreateRole(CreateRoleReq model)
         {
             if (await _roleRepository.GetRoleByTitleAsync(model.Title) != null)

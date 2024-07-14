@@ -11,5 +11,6 @@ namespace PetCareSystem.Data.Repositories.Records
     {
         Task<(IEnumerable<Record> Records, int totalCount)> GetListRecord(string? petName, string? nameOfCustomer, int pageNumber, int pageSize);
         Task<Record?> GetRecordDetail(int petId);
+        Task<Record> GetById(int id);
     }
 }
