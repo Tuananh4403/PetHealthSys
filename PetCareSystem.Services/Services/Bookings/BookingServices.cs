@@ -76,13 +76,7 @@ namespace PetCareSystem.Services.Services.Bookings
                             result = false;
                             message = "Create booking detail fails!";
                         }
-                        if (total == 0)
-                        {
-                            total = await _bookingRepository.CalculateTotalBookingAsync(bookingService.BookingId);
-                        }
                     }
-                    booking.Total = total;
-                    await _bookingRepository.UpdateAsync(booking);
                 }
                 else{ 
                     result = false;
