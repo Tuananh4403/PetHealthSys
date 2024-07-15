@@ -39,7 +39,7 @@ namespace PetCareSystem.Services.Services.Records
             {
                 DoctorId = doctor.Id,
                 PetId = createRecordReq.PetId,
-                PetHeight = createRecordReq.Height,
+                PetHeight = createRecordReq.Height ?? 0,
                 PetWeigth = createRecordReq.Weight,
                 SaveBarn = createRecordReq.SaveBarn,
                 Status = RecordStautus.Continue,
