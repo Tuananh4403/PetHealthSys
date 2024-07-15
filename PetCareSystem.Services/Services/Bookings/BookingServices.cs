@@ -51,7 +51,8 @@ namespace PetCareSystem.Services.Services.Bookings
                 PetId = bookingReq.PetId,
                 BookingTime = DateTime.ParseExact(bookingReq.BookingDate, "dd/MM/yyyy", CultureInfo.InvariantCulture),
                 Shift = GetBookingShiftById(bookingReq.Shift),
-                Status = BookingStatus.Review
+                Status = BookingStatus.Review,
+                Note = bookingReq.Note,
                 // Set other properties of the Booking entity as needed
             };
             // Save the booking entity to the database
