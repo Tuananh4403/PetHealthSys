@@ -12,6 +12,8 @@ namespace PetCareSystem.Data.Entites
         public int UserId { get; set; }
         public virtual User User { get; set; }
         public string? Specialty { get; set; }
+        public List<DayOfWeek>? WorkingDay { get; set; }
+        public int? QuantityInShift { get; set; }
         public bool  Status { get; set; }
         public virtual ICollection<Record> Records { get; set; }
         public virtual ICollection<Booking> Bookings { get; set; }

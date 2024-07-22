@@ -29,7 +29,7 @@ namespace PetCareSystem.Services.Services.Records
         public async Task<ApiResponse<string>> CreateRecordAsync(CreateRecordingReq createRecordReq, string token)
         {
             int? userId = CommonHelpers.GetUserIdByToken(token);
-            var doctor = _doctorRepository.GetDoctorByUserId(userId);
+            var doctor = await _doctorRepository.GetDoctorByUserId(userId);
             if (doctor == null)
             {
                 return new ApiResponse<string>("Doctor not exist", true);
