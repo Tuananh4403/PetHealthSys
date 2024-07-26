@@ -30,6 +30,7 @@ using PetCareSystem.Data.Repositories.RecordDetails;
 using PetCareSystem.Services.Services.Records;
 using PetCareSystem.Data.Repositories.Barns;
 using PetCareSystem.Services.Services.Barns;
+using PetCareSystem.Services.Services.Mail;
 
 
 IConfiguration configuration = new ConfigurationBuilder()
@@ -123,7 +124,8 @@ builder.Services.AddScoped<IServiceServices, ServiceServices>();
 builder.Services.AddScoped<IPetService, PetService>();
 builder.Services.AddScoped<IRecordServices, RecordServices>();
 builder.Services.AddScoped<IBarnService, BarnService>();
-
+builder.Services.AddTransient<IMailService, MailService>();
+builder.Services.Configure<MailSettings>(builder.Configuration.GetSection("MailSettings"));
 
 
 // Configure JWT authentication

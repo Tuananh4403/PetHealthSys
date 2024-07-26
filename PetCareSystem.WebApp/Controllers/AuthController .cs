@@ -59,7 +59,7 @@ namespace PetCareSystem.WebApp.Controllers
             {
                 return BadRequest(ModelState);
             }
-
+            
             var respone = await _authService.RegisterAsync(model);
             return Ok(respone);
         }
